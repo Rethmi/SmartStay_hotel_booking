@@ -1,0 +1,28 @@
+<!-- src/main/resources/templates/paymentSuccess.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Success</title>
+</head>
+<body>
+<h1>Payment Notification</h1>
+<p>Your payment has been processed successfully.</p>
+<p>Payment ID: <span th:text="${paymentId}"></span></p>
+<p>Transaction ID: <span th:text="${transactionId}"></span></p>
+<p>Amount: <span th:text="${amount}"></span></p>
+<p>Status: <span th:text="${status}"></span></p>
+<p>Payment Method: <span th:text="${paymentMethod}"></span></p>
+<p>Booking ID: <span th:text="${bookingId}"></span></p>
+<p>Booking Date: <span th:text="${bookingDate}"></span></p>
+<p>Check-in Date: <span th:text="${checkInDate}"></span></p>
+<p>Check-out Date: <span th:text="${checkOutDate}"></span></p>
+<p>Customer Name: <span th:text="${customerName}"></span></p>
+<p>Customer Email: <span th:text="${customerEmail}"></span></p>
+<p>Customer Phone: <span th:text="${customerPhone}"></span></p>
+<p>Customer Address: <span th:text="${customerAddress}"></span></p>
+
+<p></p>
+</body>
+</html>

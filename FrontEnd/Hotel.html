@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Hotel </title>
+
+    <!--
+      - favicon
+    -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="shortcut icon" href="./favicon.svg" type="image/svg+xml">
+
+    <!--
+      - custom css link
+    -->
+    <link rel="stylesheet" href="css/hotelSearch.css">
+
+    <!--
+      - google font link
+    -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+            href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap"
+            rel="stylesheet">
+    <style>
+        .logo-hotel {
+            width: 300px;
+            height: 53px;
+        }
+
+        ol, ul {
+            padding-left: 0rem;
+        }
+
+        .btnn {
+            background-color: #0d6efd;
+            color: white;
+            border-radius: 15px;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+        }
+        .btnn-write{
+            background-color: #0d6efd;
+            color: white;
+            border-radius: 7px;
+            padding: 6px 11px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 10px;
+            margin: 4px 2px;
+            cursor: pointer;
+            position: absolute;
+            right: 20px;
+        }
+
+        .btnn:hover {
+            background-color: transparent;
+            border: solid 1px #0a0d14;
+            color: black;
+        }
+        .btnn-write:hover {
+            background-color: transparent;
+            border: solid 1px #0a0d14;
+            color: black;
+        }
+        .star-rating i {
+            color: gray;
+            cursor: pointer;
+        }
+
+        .star-rating .checked {
+            color: orange;
+        }
+    </style>
+</head>
+
+<body id="top">
+
+<!--
+  - #HEADER
+-->
+
+<header class="header" data-header>
+
+    <div class="overlay" data-overlay></div>
+
+    <div class="header-top">
+        <div class="container">
+
+            <a href="tel:+01123456790" class="helpline-box">
+
+                <div class="icon-box">
+                    <ion-icon name="call-outline"></ion-icon>
+                </div>
+
+                <div class="wrapper">
+                    <p class="helpline-title">For Further Inquires :</p>
+
+                    <p class="helpline-number">+01 (123) 4567 90</p>
+                </div>
+
+            </a>
+
+            <a href="CustomerDashboard.html" class="logo logo-hotel">
+                <img src="./assets/images/HotelLogo.png" alt="Tourly logo" class="logo-hotel">
+            </a>
+
+            <div class="header-btn-group">
+
+                <button class="search-btn" aria-label="Search">
+                    <ion-icon name="search"></ion-icon>
+                </button>
+
+                <button class="nav-open-btn" aria-label="Open Menu" data-nav-open-btn>
+                    <ion-icon name="menu-outline"></ion-icon>
+                </button>
+
+            </div>
+
+        </div>
+    </div>
+
+    <div class="header-bottom">
+        <div class="container">
+
+            <ul class="social-list">
+
+                <li>
+                    <a href="#" class="social-link">
+                        <ion-icon name="logo-facebook"></ion-icon>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#" class="social-link">
+                        <ion-icon name="logo-twitter"></ion-icon>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#" class="social-link">
+                        <ion-icon name="logo-youtube"></ion-icon>
+                    </a>
+                </li>
+
+            </ul>
+
+            <nav class="navbar" data-navbar>
+
+                <div class="navbar-top">
+
+                    <a href="#" class="logo">
+                        <img src="./assets/images/logo-blue.svg" alt="Tourly logo">
+                    </a>
+
+                    <button class="nav-close-btn" aria-label="Close Menu" data-nav-close-btn>
+                        <ion-icon name="close-outline"></ion-icon>
+                    </button>
+
+                </div>
+
+                <ul class="navbar-list">
+
+                    <li>
+                        <a href="CustomerDashboard.html" class="navbar-link" data-nav-link>home</a>
+                    </li>
+
+                    <li>
+                        <a href="#" class="navbar-link" data-nav-link>about us</a>
+                    </li>
+
+                    <li>
+                        <a href="#destination" class="navbar-link" data-nav-link>Stays</a>
+                    </li>
+
+                    <!-- <li>
+                      <a href="#package" class="navbar-link" data-nav-link></a>
+                    </li> -->
+
+
+                    <li>
+                        <a href="#contact" class="navbar-link" data-nav-link>contact us</a>
+                    </li>
+
+                </ul>
+
+            </nav>
+
+            <button class="btn btn-primary" onclick="logout()">Log Out</button>
+
+        </div>
+    </div>
+
+</header>
+
+
+<main>
+    <article>
+
+        <!--
+          - #HERO
+        -->
+
+        <section class="hero" id="home">
+            <div class="container">
+
+                <h2 class="h1 hero-title">Journey to explore Sri Lanka</h2>
+
+                <p class="hero-text">
+                    Discover the breathtaking beauty of Sri Lanka, where golden beaches, lush mountains, and rich
+                    heritage await. Whether you're seeking adventure, relaxation, or cultural experiences, your perfect
+                    getaway starts here
+                </p>
+
+                <div class="btn-group">
+                    <button class="btn btn-primary">Learn more</button>
+
+                    <button class="btn btn-primary" onclick="logout()">Log Out</button>
+                </div>
+
+            </div>
+        </section>
+
+
+        <!--
+          - #TOUR SEARCH
+        -->
+
+        <section class="tour-search">
+            <div class="container">
+
+                <form action="" class="tour-search-form">
+
+                    <div class="input-wrapper">
+                        <label for="destination" class="input-label">Search Destination*</label>
+
+                        <input type="text" name="destination" id="destination" required placeholder="Enter Destination"
+                               class="input-field">
+                    </div>
+
+                    <div class="input-wrapper">
+                        <label for="people" class="input-label">Room Type*</label>
+
+                        <select name="people" id="people" required class="input-field">
+                            <option value="" disabled selected>Select Room Type............</option>
+                            <option value="single">single</option>
+                            <option value="double">double</option>
+                            <option value="suite">suite</option>
+                        </select>
+                    </div>
+
+
+                    <div class="input-wrapper">
+                        <label for="checkin" class="input-label">Checkin Date**</label>
+
+                        <input type="date" name="checkin" id="checkin" required class="input-field">
+                    </div>
+
+                    <div class="input-wrapper">
+                        <label for="checkout" class="input-label">Checkout Date*</label>
+
+                        <input type="date" name="checkout" id="checkout" required class="input-field">
+                    </div>
+
+                    <button type="submit" class="btn btn-secondary">Search now</button>
+
+                </form>
+
+            </div>
+        </section>
+
+        <div class="HotelContainer m-5 ">
+
+            <h3 class="h3 text-center hero-title" id="HotelName" style="color: black">Journey to explore Sri Lanka</h3>
+
+            <div class="HotelContainerHeader">
+                <div class="grid text-center d-flex justify-content-center flex-wrap" id="roomImages">
+                    <div class="g-col-4">
+                        <img src="assets/images/travller.jpeg" class="img-thumbnail" alt="..."
+                             style="height: 200px;width: 200px">
+                    </div>
+                    <div class="g-col-4">
+                        <img src="assets/images/travller.jpeg" class="img-thumbnail" alt="..."
+                             style="height: 200px;width: 200px">
+                    </div>
+                    <div class="g-col-4">
+                        <img src="assets/images/travller.jpeg" class="img-thumbnail" alt="..."
+                             style="height: 200px;width: 200px">
+                    </div>
+                    <div class="g-col-4">
+                        <img src="assets/images/travller.jpeg" class="img-thumbnail" alt="..."
+                             style="height: 200px;width: 200px">
+                    </div>
+                </div>
+            </div>
+            <p class="mt-4 fw-lighter text-center">
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nihil enim architecto,<br> voluptatibus nobis
+                explicabo exercitationem aliquid voluptate quibusdam! Fuga facere quisquam sit quia culpa optio rerum
+                quis est architecto fugiat.
+            </p>
+
+            <div class="ReviewContainer d-flex justify-content-center flex-wrap mt-5">
+                <div class="card me-5 " style="width: 18rem;">
+                    <div class="card-body d-flex flex-column justify-content-center">
+                        <h5 class="card-title text-center">Reviews</h5>
+                        <p class="card-text">Enter Your Experience & View Reviews</p>
+                        <button class="btnn" type="button" data-bs-toggle="offcanvas"
+                                data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">View Reviews
+                        </button>
+                    </div>
+                </div>
+
+                <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight"
+                     aria-labelledby="offcanvasRightLabel">
+                    <div class="offcanvas-header">
+                        <h5 class="offcanvas-title" id="offcanvasRightLabel">Gust Reviews</h5>
+<!--                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>-->
+
+                        <button class="btnn-write"  data-bs-toggle="modal" data-bs-target="#staticBackdrop" type="button">Write a reviews
+                        </button>
+                    </div>
+                    <div class="offcanvas-body">
+                        <div class="card"id="review-list">
+                            <div class="card-header">
+                                Quote
+                            </div>
+                            <div class="card-body">
+                                <blockquote class="blockquote mb-0">
+                                    <p>A well-known quote, contained in a blockquote element.</p>
+                                    <footer class="blockquote-footer">Someone famous in <cite title="Source Title">Source
+                                        Title</cite></footer>
+                                </blockquote>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal -->
+                <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="staticBackdropLabel">Reviews</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+
+                                <div class="input-group">
+                                    <span class="input-group-text" >Write Your Comment</span>
+                                    <textarea class="form-control" id="ReviewComment" aria-label="With textarea"></textarea>
+                                </div>
+
+                                <h3 class="mt-3">Review Rating:</h3>
+                                <div class="star-rating" id="star-rating">
+                                    <i class="fa fa-star" data-value="1"></i>
+                                    <i class="fa fa-star" data-value="2"></i>
+                                    <i class="fa fa-star" data-value="3"></i>
+                                    <i class="fa fa-star" data-value="4"></i>
+                                    <i class="fa fa-star" data-value="5"></i>
+                                </div>
+                                <input type="hidden" id="ratingValue" value="0">
+
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="button" id="ReviewSend" class="btn btn-primary">Send</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="MapContainer">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d63371.80392188332!2d79.81500561883568!3d6.921922085302051!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae253d10f7a7003%3A0x320b2e4d32d3838d!2sColombo!5e0!3m2!1sen!2slk!4v1743135078141!5m2!1sen!2slk"
+                            width="100%" height="150px" style="border:solid 1px black;" allowfullscreen=""
+                            loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+            </div>
+
+            <div class="availableRooms border-top mt-5">
+                <h4 class="mt-5 fw-bold text-center ">
+                    Available Rooms
+                </h4>
+
+                <table class="table table-hover text-center mt-5">
+                    <thead class="table-primary table-gradient">
+                    <tr>
+                        <th scope="col">Room Type</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Room Number</th>
+                        <th scope="col">Booking</th>
+
+                        <!--                        <th scope="col">Your choices</th>-->
+                        <!--                        <th scope="col">Select amount</th>-->
+                    </tr>
+                    </thead>
+                    <tbody class="table-group-divider" id="roomTable">
+
+                    </tbody>
+                </table>
+
+            </div>
+
+
+        </div>
+        <!--
+          - #CTA
+        -->
+
+        <section class="cta" id="contact">
+            <div class="container">
+
+                <div class="cta-content">
+                    <p class="section-subtitle">Call To Action</p>
+
+                    <h2 class="h2 section-title">Ready For Unforgatable Travel. Remember Us!</h2>
+
+                    <p class="section-text">
+                        Fusce hic augue velit wisi quibusdam pariatur, iusto primis, nec nemo, rutrum. Vestibulum cumque
+                        laudantium. Sit ornare
+                        mollitia tenetur, aptent.
+                    </p>
+                </div>
+
+                <button class="btn btn-secondary">Contact Us !</button>
+
+            </div>
+        </section>
+
+    </article>
+</main>
+
+
+<!--
+  - #FOOTER
+-->
+
+<footer class="footer">
+
+    <div class="footer-top">
+        <div class="container">
+
+            <div class="footer-brand">
+
+                <a href="#" class="logo">
+                    <img src="./assets/images/HotelLogo.png" alt="Tourly logo">
+                </a>
+
+                <p class="footer-text">
+                    Urna ratione ante harum provident, eleifend, vulputate molestiae proin fringilla, praesentium magna
+                    conubia
+                    at
+                    perferendis, pretium, aenean aut ultrices.
+                </p>
+
+            </div>
+
+            <div class="footer-contact">
+
+                <h4 class="contact-title">Contact Us</h4>
+
+                <p class="contact-text">
+                    Feel free to contact and reach us !!
+                </p>
+
+                <ul>
+
+                    <li class="contact-item">
+                        <ion-icon name="call-outline"></ion-icon>
+
+                        <a href="tel:+01123456790" class="contact-link">+01 (123) 4567 90</a>
+                    </li>
+
+                    <li class="contact-item">
+                        <ion-icon name="mail-outline"></ion-icon>
+
+                        <a href="mailto:info.tourly.com" class="contact-link">SmartHotelBooking@gmail.com</a>
+                    </li>
+
+                    <li class="contact-item">
+                        <ion-icon name="location-outline"></ion-icon>
+
+                        <address>Sri Lanka</address>
+                    </li>
+
+                </ul>
+
+            </div>
+
+            <div class="footer-form">
+
+                <p class="formm-text">
+                    Subscribe our newsletter for more update & news !!
+                </p>
+
+                <form action="" class="form-wrapper">
+                    <input type="email" name="email" class="input-field" placeholder="Enter Your Email" required>
+
+                    <button type="submit" class="btn btn-secondary">Subscribe</button>
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+
+    <div class="footer-bottom">
+        <div class="container">
+
+            <p class="copyright">
+                &copy; 2025 <a href="">Smart Hotel Booking</a>. All rights reserved
+            </p>
+
+            <ul class="footer-bottom-list">
+
+                <li>
+                    <a href="#" class="footer-bottom-link">Privacy Policy</a>
+                </li>
+
+                <li>
+                    <a href="#" class="footer-bottom-link">Term & Condition</a>
+                </li>
+
+                <li>
+                    <a href="#" class="footer-bottom-link">FAQ</a>
+                </li>
+
+            </ul>
+
+        </div>
+    </div>
+
+</footer>
+
+
+<a href="#top" class="go-top" data-go-top>
+    <ion-icon name="chevron-up-outline"></ion-icon>
+</a>
+
+
+<!--
+  - custom js link
+-->
+<script src="js/CustomerDashboard.js"></script>
+
+<!--
+  - ionicon link
+-->
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+        integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
+        crossorigin="anonymous"></script>
+<script>
+    $(document).ready(function () {
+
+        let token = localStorage.getItem("jwtToken");
+
+        if (!token) {
+            alert("Please log in!");
+            window.location.href = "login.html";
+            return;
+        }
+
+        $("#destination").val(localStorage.getItem("destination"));
+        $("#checkin").val(localStorage.getItem("checkin"));
+        $("#checkout").val(localStorage.getItem("checkout"));
+        $("#people").val(localStorage.getItem("people"));
+        let Userid;
+
+        let ClickedHotelId = localStorage.getItem("ClickedHotelId");
+        console.log(ClickedHotelId);
+
+        let days = Number(localStorage.getItem("days"));
+        console.log("Days:", days);
+
+        let email = localStorage.getItem("emailUser");
+
+        $.ajax({
+            url: `http://localhost:8080/api/v1/user/get/${email}`,
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${localStorage.getItem("jwtToken")}`
+            },
+            contentType: "application/json",
+            success: function (data) {
+                console.log("Customer Data:", data);
+                if (data && data.data) {
+                    $("#name").val(data.data.username);
+                    $("#email").val(data.data.email);
+                    Userid = data.data.id;
+                } else {
+                    console.log("No customer data found.");
+                    alert("Customer not found.");
+                }
+            },
+            error: function (xhr, status, error) {
+                console.log("Error fetching customer:", error);
+                alert("Failed to fetch customer details.");
+            }
+        });
+
+        $.ajax({
+            url: "http://localhost:8080/api/v1/room/getAll",
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${localStorage.getItem("jwtToken")}`
+            },
+            contentType: "application/json",
+            success: (res) => {
+                $("#roomImages").empty();
+                $("#roomTable").empty();
+
+                let FilteredRooms = res.data.filter(room => room.hotelID == ClickedHotelId);
+                console.log($("#people").val());
+                if ($("#people").val() == "single") {
+                    console.log("Single");
+                    FilteredRooms = FilteredRooms.filter(room => room.roomType == "single");
+                } else if ($("#people").val() == "double") {
+                    FilteredRooms = FilteredRooms.filter(room => room.roomType == "double");
+                } else if ($("#people").val() == "suite") {
+                    FilteredRooms = FilteredRooms.filter(room => room.roomType == "suite");
+                }
+
+                FilteredRooms.forEach(room => {
+                    let roomPrice = days * room.price;
+
+                    $("#roomImages").append(`
+                <div class="g-col-4 m-3">
+                    <img src="assets/images/${room.image1}" class="img-thumbnail" alt="..." style="height: 200px;width: 200px">
+                </div>
+                <div class="g-col-4 m-3">
+                    <img src="assets/images/${room.image2}" class="img-thumbnail" alt="..." style="height: 200px;width: 200px">
+                </div>
+                <div class="g-col-4 m-3">
+                    <img src="assets/images/${room.image3}" class="img-thumbnail" alt="..." style="height: 200px;width: 200px">
+                </div>
+            `);
+
+                    $("#roomTable").append(`
+                <tr>
+                    <td>${room.roomType}</td>
+                    <td>${roomPrice}</td>
+                    <td>${room.roomNumber}</td>
+                    <td>
+                        <button style="padding: 4px 12px" class="btn btn-primary" onclick="bookRoom(${room.id})">Book Now</button>
+                    </td>
+
+                </tr>
+            `);
+                });
+                localStorage.removeItem("people");
+            }
+        });
+        $.ajax({
+            url: "http://localhost:8080/api/v1/hotel/getAll",
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${localStorage.getItem("jwtToken")}`
+            },
+            contentType: "application/json",
+            success: (res) => {
+                localStorage.removeItem("people");
+                localStorage.removeItem("destination");
+                let FilteredHotels = res.data.filter((hotel) => hotel.id == ClickedHotelId);
+                FilteredHotels.forEach(hotel => {
+                        $("#HotelName").text(hotel.name);
+                    }
+                )
+            }
+        });
+        $('#offcanvasRight').on('shown.bs.offcanvas', function () {
+            $.ajax({
+                url: "http://localhost:8080/api/v1/review/getAll",
+                method: "GET",
+                headers: {
+                    "Authorization": `Bearer ${localStorage.getItem("jwtToken")}`
+                },
+                contentType: "application/json",
+                success: (res) => {
+                    let reviews = res.data;
+                    console.log(reviews);
+                    console.log(ClickedHotelId)
+                    let filteredHotelReviews = reviews.filter(review => Number(review.hotelId) === Number(ClickedHotelId));
+                    console.log(filteredHotelReviews);
+                    $("#review-list").empty();
+
+
+
+                    filteredHotelReviews.forEach(review => {
+                         console.log(review.userId)
+                       let ID = review.userId
+                        $.ajax({
+                            url:`http://localhost:8080/api/v1/user/getName/${ID}`,
+                            method: "GET",
+                            headers: {
+                                "Authorization": `Bearer ${localStorage.getItem("jwtToken")}`
+                            },
+                            contentType: "application/json",
+                            success: (res) => {
+                                console.log(res.data);
+                              let UserName   = res.data.username;
+
+                                let reviewHtml = `
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <strong>${UserName}</strong>
+                        </div>
+                        <div class="card-body">
+                            <blockquote class="blockquote mb-0">
+                                <p style="font-size: 17px" class="fw-lighter">${review.comment}</p>  <!-- Review comment -->
+                                <footer class="blockquote-footer">Rated: ${review.rating} ★</footer>
+                            </blockquote>
+                        </div>
+                    </div>
+                `;
+                                $("#review-list").append(reviewHtml);
+                            }
+                        })
+
+                    });
+                },
+                error: (error) => {
+                    console.error("Error fetching reviews:", error);
+                    alert("Something went wrong while fetching reviews.");
+                }
+            });
+        });
+        $('#star-rating i').on('click', function() {
+            console.log("Star clicked");
+            let rating = $(this).data('value');
+            $('#ratingValue').val(rating); // Store the selected rating
+            console.log(rating)
+            // Update star colors
+            $('#star-rating i').each(function(index) {
+                if (index < rating) {
+                    $(this).addClass('checked'); // Highlight stars up to the selected rating
+                } else {
+                    $(this).removeClass('checked'); // Remove highlighting from remaining stars
+                }
+            });
+        });
+        $("#ReviewSend").click(function() {
+            $.ajax({
+                url: "http://localhost:8080/api/v1/review/save",
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${localStorage.getItem("jwtToken")}`
+                },
+                contentType: "application/json",
+                data: JSON.stringify({
+                    "comment": $("#ReviewComment").val(),
+                    "rating": $('#ratingValue').val(),
+                    "reviewDate": new Date().toISOString(),
+                    "hotelId": ClickedHotelId,
+                    "userId": Userid
+                }),
+                success: (res) => {
+                    console.log(res);
+                    alert("Review saved successfully.");
+                    location.reload();
+                },
+                error: (error) => {
+                    console.error("Error saving review:", error);
+                    alert("Failed to save review.");
+                }
+            });
+        });
+    });
+
+        function bookRoom(roomId) {
+        window.location.href = 'Booking.html?roomId=' + roomId;
+    }
+    function logout() {
+        localStorage.removeItem("jwtToken");
+        alert("Logged out successfully");
+        window.location.href = "Login.html";
+    }
+
+</script>
+</body>
+
+</html>

@@ -1,0 +1,410 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Hotel Payment </title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="shortcut icon" href="./favicon.svg" type="image/svg+xml">
+
+    <!--
+      - custom css link
+    -->
+    <link rel="stylesheet" href="css/booking.css">
+
+    <!--
+      - google font link
+    -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+            href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap"
+            rel="stylesheet">
+    <style>
+        .payment {
+            margin-top: 100px;
+            padding: 60px 0;
+            text-align: center;
+            color: #0a0d14;
+        }
+
+        .payment__container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #FFFFFF;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .form__group {
+            text-align: left;
+            margin-bottom: 15px;
+        }
+
+        .form__group label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .form__group input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .form-footer {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .logo-hotel {
+            width: 300px;
+            height: 53px;
+        }
+
+        ol, ul {
+            padding-left: 0rem;
+        }
+    </style>
+</head>
+
+<body id="top">
+
+<header class="header" data-header>
+
+    <div class="overlay" data-overlay></div>
+
+    <div class="header-top">
+        <div class="container">
+
+            <a href="tel:+01123456790" class="helpline-box">
+
+                <div class="icon-box">
+                    <ion-icon name="call-outline"></ion-icon>
+                </div>
+
+                <div class="wrapper">
+                    <p class="helpline-title">For Further Inquires :</p>
+
+                    <p class="helpline-number">+01 (123) 4567 90</p>
+                </div>
+
+            </a>
+
+            <a href="#" class="logo logo-hotel">
+                <img src="./assets/images/HotelLogo.png" alt="Tourly logo" class="logo-hotel">
+            </a>
+
+            <div class="header-btn-group">
+
+                <button class="search-btn" aria-label="Search">
+                    <ion-icon name="search"></ion-icon>
+                </button>
+
+                <button class="nav-open-btn" aria-label="Open Menu" data-nav-open-btn>
+                    <ion-icon name="menu-outline"></ion-icon>
+                </button>
+
+            </div>
+
+        </div>
+    </div>
+</header>
+<main>
+    <section class="payment">
+        <div class="payment__container">
+            <h2>Payment Details</h2>
+            <!--            <form id="paymentForm">-->
+
+            <!--                <div class="form__group">-->
+            <!--                    <label for="method">Payment Method:</label>-->
+            <!--                    <select id="method" name="method" required>-->
+            <!--                        <option value="CREDIT_CARD">Credit Card</option>-->
+            <!--                    </select>-->
+            <!--                </div>-->
+            <!--                <div class="form__group">-->
+            <!--                    <label for="amount">AMOUNT:</label>-->
+            <!--                    <input type="text" id="amount" name="amount" required placeholder="amount">-->
+            <!--                </div>-->
+
+            <!--                <div class="form-footer">-->
+            <!--                    <button type="submit" class="btn btn-primary" ">Pay Now</button>-->
+            <!--                </div>-->
+            <!--            </form>-->
+
+            <!--            <form method="post" action="https://sandbox.payhere.lk/pay/checkout">-->
+            <!--                <input type="hidden" name="merchant_id" value="1230019">    &lt;!&ndash; Replace your Merchant ID &ndash;&gt;-->
+            <!--                <input type="hidden" name="return_url" value="http://sample.com/return">-->
+            <!--                <input type="hidden" name="cancel_url" value="http://sample.com/cancel">-->
+            <!--                <input type="hidden" name="notify_url" value="http://sample.com/notify">-->
+            <!--                </br></br>Item Details</br>-->
+            <!--                <input type="text" name="order_id" value="ItemNo12345">-->
+            <!--                <input type="text" name="items" value="Door bell wireless">-->
+            <!--                <input type="text" name="currency" value="LKR">-->
+            <!--                <input type="text" name="amount" value="1000">-->
+            <!--                </br></br>Customer Details</br>-->
+            <!--                <input type="text" name="first_name" value="Saman">-->
+            <!--                <input type="text" name="last_name" value="Perera">-->
+            <!--                <input type="text" name="email" value="samanp@gmail.com">-->
+            <!--                <input type="text" name="phone" value="0771234567">-->
+            <!--                <input type="text" name="address" value="No.1, Galle Road">-->
+            <!--                <input type="text" name="city" value="Colombo">-->
+            <!--                <input type="hidden" name="country" value="Sri Lanka">-->
+            <!--                <input type="hidden" name="hash" value="098F6BCD4621D373CADE4E832627B4F6">    &lt;!&ndash; Replace with generated hash &ndash;&gt;-->
+            <!--                <input type="submit" value="Buy Now">-->
+            <!--            </form>-->
+            <form method="post" action="https://sandbox.payhere.lk/pay/checkout">
+                <input type="hidden" id="merchant_id" name="merchant_id">
+                <input type="hidden" id="return_url" name="return_url">
+                <input type="hidden" id="cancel_url" name="cancel_url">
+                <input type="hidden" id="notify_url" name="notify_url">
+                <input type="hidden" id="order_id" name="order_id">
+                <input type="hidden" id="items" name="items">
+                <input type="hidden" id="currency" name="currency">
+                <!--                <input type="hidden" id="amount" name="amount">-->
+                <div class="form__group">
+                    <label for="amount">AMOUNT:</label>
+                    <input type="text" id="amount" name="amount" required placeholder="amount">
+                </div>
+                <!--                <input type="hidden" id="first_name" name="first_name">-->
+                <div class="form__group">
+                    <label for="amount">first_name:</label>
+                    <input type="text" id="first_name" name="first_name" required placeholder="first_name">
+                </div>
+                <!--                <input type="hidden" id="last_name" name="last_name">-->
+                <div class="form__group">
+                    <label for="amount">last_name:</label>
+                    <input type="text" id="last_name" name="last_name" required placeholder="last_name">
+                </div>
+                <!--                <input type="hidden" id="email" name="email">-->
+                <div class="form__group">
+                    <label for="amount">Email:</label>
+                    <input type="text" id="email" name="email" required placeholder="email">
+                </div>
+                <!--                <input type="hidden" id="phone" name="phone">-->
+                <div class="form__group">
+                    <label for="phone">phone:</label>
+                    <input type="text" id="phone" name="phone" required placeholder="phone">
+                </div>
+                <!--                <input type="hidden" id="address" name="address">-->
+                <div class="form__group">
+                    <label for="phone">address:</label>
+                    <input type="text" id="address" name="address" required placeholder="address">
+                </div>
+                <!--                <input type="hidden" id="city" name="city">-->
+                <div class="form__group">
+                    <label for="city">city:</label>
+                    <input type="text" id="city" name="city" required placeholder="city">
+                </div>
+                <!--                <input type="hidden" id="country" name="country">-->
+                <div class="form__group">
+                    <label for="country">country:</label>
+                    <input type="text" id="country" name="country" required placeholder="country">
+                </div>
+                <input type="hidden" id="hash" name="hash">
+                <input type="submit" class="btn btn-primary" value="Buy Now">
+            </form>
+
+        </div>
+    </section>
+</main>
+
+<section class="cta" id="contact">
+    <div class="container">
+
+        <div class="cta-content">
+            <p class="section-subtitle">Call To Action</p>
+
+            <h2 class="h2 section-title">Ready For Unforgatable Travel. Remember Us!</h2>
+
+            <p class="section-text">
+                Fusce hic augue velit wisi quibusdam pariatur, iusto primis, nec nemo, rutrum. Vestibulum cumque
+                laudantium. Sit ornare
+                mollitia tenetur, aptent.
+            </p>
+        </div>
+
+        <button class="btn btn-secondary">Contact Us !</button>
+
+    </div>
+</section>
+
+<footer class="footer">
+
+    <div class="footer-top">
+        <div class="container">
+
+            <div class="footer-brand">
+
+                <a href="#" class="logo">
+                    <img src="./assets/images/HotelLogo.png" alt="Tourly logo">
+                </a>
+
+                <p class="footer-text">
+                    Urna ratione ante harum provident, eleifend, vulputate molestiae proin fringilla, praesentium magna
+                    conubia
+                    at
+                    perferendis, pretium, aenean aut ultrices.
+                </p>
+
+            </div>
+
+            <div class="footer-contact">
+
+                <h4 class="contact-title">Contact Us</h4>
+
+                <p class="contact-text">
+                    Feel free to contact and reach us !!
+                </p>
+
+                <ul>
+
+                    <li class="contact-item">
+                        <ion-icon name="call-outline"></ion-icon>
+
+                        <a href="tel:+01123456790" class="contact-link">+01 (123) 4567 90</a>
+                    </li>
+
+                    <li class="contact-item">
+                        <ion-icon name="mail-outline"></ion-icon>
+
+                        <a href="mailto:info.tourly.com" class="contact-link">SmartHotelBooking@gmail.com</a>
+                    </li>
+
+                    <li class="contact-item">
+                        <ion-icon name="location-outline"></ion-icon>
+
+                        <address>Sri Lanka</address>
+                    </li>
+
+                </ul>
+
+            </div>
+
+            <div class="footer-form">
+
+                <p class="formm-text">
+                    Subscribe our newsletter for more update & news !!
+                </p>
+
+                <form action="" class="form-wrapper">
+                    <input type="email" name="email" class="input-field" placeholder="Enter Your Email" required>
+
+                    <button type="submit" class="btn btn-secondary">Subscribe</button>
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+
+
+    <div class="footer-bottom">
+        <div class="container">
+
+            <p class="copyright">
+                &copy; 2025 <a href="">Smart Hotel Booking</a>. All rights reserved
+            </p>
+
+            <ul class="footer-bottom-list">
+
+                <li>
+                    <a href="#" class="footer-bottom-link">Privacy Policy</a>
+                </li>
+
+                <li>
+                    <a href="#" class="footer-bottom-link">Term & Condition</a>
+                </li>
+
+                <li>
+                    <a href="#" class="footer-bottom-link">FAQ</a>
+                </li>
+
+            </ul>
+
+        </div>
+    </div>
+
+</footer>
+
+
+<a href="#top" class="go-top" data-go-top>
+    <ion-icon name="chevron-up-outline"></ion-icon>
+</a>
+
+
+<!--
+  - custom js link
+-->
+
+<!--
+  - ionicon link
+-->
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+        integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+<script>
+    $(document).ready(function () {
+
+        // Import the md5 function
+        console.log("Paynow");
+
+        const method = "CREDIT_CARD";
+
+        $("#amount").on("blur", function () {
+            const amount1 = parseFloat($(this).val()); // Get amount from input
+            const bookingId = 2;//new URLSearchParams(window.location.search).get('bookingId'); // Get booking ID from URL
+            console.log("Booking ID: ", bookingId);
+
+            if (!amount1 || amount1 <= 0) {
+                alert("Please enter a valid amount.");
+                return;
+            }
+
+
+            // Payment details
+            let merchantSecret = 'MzY3MTUwNDg0MTIzMjQ5MDY3OTE1MTI1ODU3OTYxODc3MzY3Mjkx';
+            let merchantId = '1230019';
+            let orderId = bookingId;
+            console.log("order"+orderId);
+            let amount = amount1;
+            let amountFormatted = parseFloat(amount).toLocaleString('en-us', {minimumFractionDigits: 2}).replaceAll(',', ''); // Format amount
+            let currency = 'LKR';
+
+            // Generate hash
+            let hashedSecret = CryptoJS.MD5(merchantSecret).toString().toUpperCase();
+            let hash = CryptoJS.MD5(merchantId + orderId + amountFormatted + currency + hashedSecret).toString().toUpperCase();
+
+            console.log("Generated Hash: ", hash);
+
+            // Fill in the payment form with the generated data
+            document.getElementById('merchant_id').value = "1230019";
+            document.getElementById('return_url').value = "https://smart-hotel-booking-28c26.web.app/PaymentSuccess.html";
+            document.getElementById('cancel_url').value = "https://smart-hotel-booking-28c26.web.app/PaymentCancel.html";
+            document.getElementById('notify_url').value = "https://a6d9-2402-4000-2170-6d3-609f-35ae-c74d-5324.ngrok-free.app/api/v1/payment/notify";
+            document.getElementById('order_id').value = orderId;
+            document.getElementById('items').value = "Hotel Booking";
+            document.getElementById('currency').value = "LKR";
+            document.getElementById('hash').value = hash;
+
+            console.log("Payment initiation successful.");
+        });
+
+    });
+
+</script>
+</body>
+</html>

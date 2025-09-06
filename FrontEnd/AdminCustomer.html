@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Admin Dashboard | Korsat X Parmaga</title>
+    <!-- ======= Styles ====== -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="./css/AdminCustomer.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            /*padding: 20px;*/
+            text-align: center;
+        }
+
+        .fa-power-off {
+            font-size: 22px;
+            position: relative;
+            bottom: 6px;
+        }
+
+        /*.container {*/
+        /*    margin: auto;*/
+        /*    background: white;*/
+        /*    !*padding: 20px;*!*/
+        /*    border-radius: 8px;*/
+        /*    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);*/
+        /*}*/
+        .details {
+            /*position: relative;*/
+            /*width: 100%;*/
+            /*padding: 20px;*/
+            /*display: grid;*/
+            /*grid-template-columns: 2fr 1fr;*/
+            /*grid-gap: 30px;*/
+            /* margin-top: 10px; */
+        }
+
+        .details .recentOrders {
+            position: relative;
+            display: grid;
+            min-height: 500px;
+            background: var(--white);
+            padding: 20px;
+            box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08);
+            border-radius: 20px;
+        }
+
+        .details .cardHeader {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .cardHeader h2 {
+            font-weight: 600;
+            color: var(--blue);
+        }
+
+        .cardHeader .btn {
+            position: relative;
+            padding: 5px 10px;
+            background: var(--blue);
+            text-decoration: none;
+            color: var(--white);
+            border-radius: 6px;
+        }
+
+        .details table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        .details table thead td {
+            font-weight: 600;
+        }
+
+        .details .recentOrders table tr {
+            color: var(--black1);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .details .recentOrders table tr:last-child {
+            border-bottom: none;
+        }
+
+        .details .recentOrders table tbody tr:hover {
+            background: var(--blue);
+            color: var(--white);
+        }
+
+        .details .recentOrders table tr td {
+            padding: 10px;
+        }
+
+        .details .recentOrders table tr td:last-child {
+            text-align: end;
+        }
+
+        .details .recentOrders table tr td:nth-child(2) {
+            text-align: end;
+        }
+
+        .details .recentOrders table tr td:nth-child(3) {
+            text-align: center;
+        }
+
+        .profile-img {
+            width: 130px;
+            height: 130px;
+            margin-bottom: 20px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #909daa;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Soft shadow */
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+
+        .profile-img:hover {
+            transform: scale(1.1); /* Slight zoom on hover */
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .add-btn {
+            background: #28a745;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+
+        .add-btn:hover {
+            background: #218838;
+        }
+
+        .form-popup {
+            display: none;
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-popup input {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .form-popup button {
+            background: #007BFF;
+            color: white;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .form-popup button:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+<!-- =============== Navigation ================ -->
+<div class="Container">
+    <div class="navigation">
+        <ul style="padding-left: 0">
+            <li>
+                <a href="#">
+                        <span class="icon">
+                            <img style="width: 262px;height: 66px" src="assets/images/HotelLogo.png">
+                        </span>
+                </a>
+            </li>
+
+            <li>
+                <a href="AdminDashBoard.html">
+                        <span class="icon">
+                            <ion-icon name="home-outline"></ion-icon>
+                        </span>
+                    <span class="title">Dashboard</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="AdminCustomer.html">
+                        <span class="icon">
+                            <ion-icon name="people-outline"></ion-icon>
+                        </span>
+                    <span class="title">Customers</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="AdminHotel.html">
+                    <span class="icon">
+                        <ion-icon name="business-outline"></ion-icon> <!-- Best for hotels -->
+                    </span>
+                    <span class="title">Hotels</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="AdminRoom.html">
+                        <span class="icon">
+                            <ion-icon name="bed-outline"></ion-icon>
+                        </span>
+                    <span class="title">Rooms</span>
+                </a>
+            </li>
+            <li>
+                <a href="AdminBooking.html">
+            <span class="icon">
+                     <ion-icon name="calendar-outline"></ion-icon>
+             </span>
+                    <span class="title">Bookings</span>
+                </a>
+            </li>
+            <li>
+                <a href="AdminPayment.html">
+                        <span class="icon">
+                            <ion-icon name="card-outline"></ion-icon>
+                        </span>
+                    <span class="title">Payment</span>
+                </a>
+            </li>
+
+
+            <li>
+                <a href="#" onclick="logout()">
+                        <span class="icon">
+                            <i class="fas fa-power-off"></i> <!-- Logout icon -->
+                        </span>
+                    <span class="title">Sign Out</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- ========================= Main ==================== -->
+    <div class="main">
+        <div class="topbar">
+            <div class="toggle">
+                <ion-icon name="menu-outline"></ion-icon>
+            </div>
+
+            <!--            <div class="search">-->
+            <!--                <label>-->
+            <!--                    <input type="text" placeholder="Search here">-->
+            <!--                    <ion-icon name="search-outline"></ion-icon>-->
+            <!--                </label>-->
+            <!--            </div>-->
+
+            <div class="user">
+                <!--                <img src="assets/imgs/customer01.jpg" alt="">-->
+            </div>
+        </div>
+
+
+        <div class="Container">
+            <h1 style="padding-top: 40px">Customer Management</h1>
+            <button type="button" class="add-btn" style="margin-top: 38px;margin-right: 10px;border-radius: 5px"
+                    data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo"
+            >Add Customer
+            </button>
+            <label>
+                <input type="text" id="search" placeholder="Search customers..." class="form-control"
+                       onkeyup="searchCustomer()">
+
+            </label>
+            <div class="">
+                <div class="container">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr style="padding-bottom: 10px;border: 2px solid black ">
+                            <td>Id</td>
+                            <td>Customer Name</td>
+                            <td>Email</td>
+                            <td>Role</td>
+                            <td>Actions</td>
+                        </tr>
+                        </thead>
+
+                        <tbody id="customerTable">
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!--        Add New User-->
+
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Add New User</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="mb-3">
+                                <input type="text" class="form-control" id="username" placeholder="Enter username">
+                            </div>
+                            <div class="mb-3">
+                                <input type="email" class="form-control" id="email" placeholder="Enter email">
+                            </div>
+                            <div class="mb-3">
+                                <input type="password" class="form-control" id="password" placeholder="Enter password">
+                            </div>
+                            <div class="mb-3">
+                                <select class="form-select" id="role">
+                                    <option value="ADMIN">Admin</option>
+                                    <option value="Manager">Manager</option>
+                                    <option value="USER">Customer</option>
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="btnSave">Save User</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--        update user-->
+        <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="updateModalLabel">Update User Role</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+
+                            <div class="mb-3">
+                                <select class="form-select" id="update_role">
+                                    <option value="ADMIN">Admin</option>
+                                    <option value="Manager">Manager</option>
+                                    <option value="USER">User</option>
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="btnUpdate">Update User</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Modal -->
+        <div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="profileModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="profileModalLabel">User Profile</h5>
+                    </div>
+                    <div class="modal-body text-center">
+                        <img id="modalProfilePicture" src="assets/images/default-profile.png"
+                             alt="Profile Picture" class="profile-img">
+                        <p id="modalUserName">User Name</p>
+                        <p id="modalUserEmail">User Email</p>
+                        <p id="modalUserRole">User Role</p>
+                    </div>
+                    <div class="modal-footer">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<!-- =========== Scripts =========  -->
+<script src="./js/AdminDashboard.js"></script>
+
+<!-- ====== ionicons ======= -->
+<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+<script>
+    let customers = [];
+
+
+    $(document).ready(function () {
+
+        let token = localStorage.getItem("jwtToken");
+        if (!token) {
+            alert("You are not logged in!");
+            window.location.href = "login.html";
+            return;
+        }
+
+        let imageUrl = "assets/images/";
+
+        $.ajax({
+            url: "http://localhost:8080/api/v1/user/getAll",
+            method: "GET",
+            headers: {
+                "Authorization": "Bearer " + token
+            },
+            contentType: "application/json",
+            success: (res) => {
+                customers = res.data;
+
+                let table = $('#customerTable');
+                table.empty();
+                customers.forEach((customer) => {
+                    let image = imageUrl + customer.profileImage;
+                    table.append(`
+                   <tr>
+                        <td>${customer.id}</td>
+                        <td onclick="openProfileModal('${customer.username}', '${customer.email}','${image}', '${customer.role}')"
+                        data-bs-toggle="modal" data-bs-target="#profileModal">${customer.username}</td>
+                        <td onclick="openProfileModal('${customer.username}', '${customer.email}', '${image}', '${customer.role}')"
+                        data-bs-toggle="modal" data-bs-target="#profileModal">${customer.email}</td>
+                        <td onclick="openProfileModal('${customer.username}', '${customer.email}', '${image}', '${customer.role}')"
+                        data-bs-toggle="modal" data-bs-target="#profileModal">${customer.role}</td>
+                        <td class="text-center">
+                            <button type="button" class="btn btn-danger"
+                                data-bs-toggle="modal" data-bs-target="#updateModal"
+                                onclick="edit('${customer.email}', '${customer.role}')">Edit</button>
+                            <button type="button" class="btn btn-warning"
+                                onclick="deleteCustomer('${customer.email}')">Delete</button>
+                        </td>
+                    </tr>
+                `);
+                });
+            },
+            error: (error) => {
+                console.error(error);
+                alert("Something went wrong while fetching users.");
+            }
+        });
+    });
+
+    function searchCustomer() {
+        const query = document.getElementById("search").value.trim().toLowerCase();
+        const customerTable = document.getElementById("customerTable");
+
+        // Check if customers array is populated
+        if (!customers || customers.length === 0) {
+            console.error("Customers data is empty or not loaded yet.");
+            return;
+        }
+
+        // Filter customers based on the search query
+        const filtered = customers.filter(c => c.username.toLowerCase().includes(query));
+
+        // If no results, show "No results found"
+        if (filtered.length === 0) {
+            customerTable.innerHTML = `
+            <tr>
+                <td colspan="4" class="text-center">No results found</td>
+            </tr>
+        `;
+            return;
+        }
+
+        customerTable.innerHTML = filtered.map(customer => `
+        <tr>
+        <td>${customer.id}</td>
+        <td>${customer.username}</td>
+        <td>${customer.email}</td>
+        <td>${customer.role}</td>
+            <td class="text-center">
+                <button type="button" class="btn btn-danger"
+                    data-bs-toggle="modal" data-bs-target="#updateModal"
+                    onclick="edit('${customer.email}', '${customer.role}')">Edit</button>
+                <button type="button" class="btn btn-warning"
+                    onclick="deleteCustomer('${customer.email}')">Delete</button>
+            </td>
+        </tr>
+    `).join(""); // Convert array to a single HTML string
+    }
+
+    $('#btnSave').click(function () {
+        let username = $("#username").val().trim();
+        let email = $("#email").val().trim();
+        let password = $("#password").val().trim();
+        let role = $("#role").val().trim();
+
+        if (!username || !email || !password || !role) {
+            alert("All fields are required!");
+            return;
+        }
+
+        $.ajax({
+            url: "http://localhost:8080/api/v1/user/register",
+            method: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({
+                "username": username,
+                "email": email,
+                "password": password,
+                "role": role
+            }),
+            success: (res) => {
+                console.log(res);
+                if (res.message === "Success") {
+                    console.log("Registration successful");
+                    alert("Registration successful");
+                    location.reload();
+                } else {
+                    alert("Failed: " + (res.message || "Unknown error"));
+                }
+            },
+            error: (error) => {
+                console.error(error);
+                alert("Something went wrong");
+            }
+        });
+    });
+
+
+    const edit = (UserEmail, UserRole) => {
+        document.getElementById("update_role").value = UserRole;
+
+        document.getElementById("btnUpdate").onclick = () => {
+            $.ajax({
+                url: "http://localhost:8080/api/v1/user/update/" + UserEmail,
+                method: "PUT",
+                headers: {
+                    "Authorization": `Bearer ${localStorage.getItem("jwtToken")}`
+                },
+                contentType: "application/json",
+                data: JSON.stringify({
+
+                    "role": document.getElementById("update_role").value
+                }),
+                success: (res) => {
+                    if (res.message === "User role updated successfully") {
+                        alert("User role updated successfully");
+                        $("#updateModal").modal("hide"); // Close the modal
+                        location.reload(); // Reload the page to update the table
+                    } else {
+                        alert("Failed: " + (res.message || "Unknown error"));
+                    }
+                },
+                error: (error) => {
+                    console.error(error);
+                    alert("Something went wrong while updating.");
+                }
+            });
+        };
+    };
+    const deleteCustomer = (email) => {
+        if (confirm("Are you sure you want to delete this user?")) {
+            $.ajax({
+                url: "http://localhost:8080/api/v1/user/delete/" + email,
+                method: "DELETE",
+                headers: {
+                    "Authorization": `Bearer ${localStorage.getItem("jwtToken")}`
+                },
+                success: (res) => {
+                    if (res.message === "Success") {
+                        alert("User deleted successfully");
+                        location.reload();
+                    } else {
+                        alert("Failed: " + (res.message || "Unknown error"));
+                    }
+                },
+                error: (error) => {
+                    console.error(error);
+                    alert("Something went wrong while deleting.");
+                }
+            });
+        }
+    }
+
+    function openProfileModal(username, email, image, role) {
+
+        console.log(username, email, image)
+        document.getElementById("modalUserName").innerText = username;
+        document.getElementById("modalUserEmail").innerText = email;
+        document.getElementById("modalProfilePicture").src = image;
+        document.getElementById("modalUserRole").innerText = role;
+
+        let modal = new bootstrap.Modal(document.getElementById('profileModal'));
+        modal.show();
+    }
+
+
+    function logout() {
+        localStorage.removeItem("jwtToken");
+        alert("Logged out successfully");
+        window.location.href = "Login.html";
+    }
+
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+        crossOrigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+        integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
+        crossorigin="anonymous"></script>
+
+</body>
+
+</html>

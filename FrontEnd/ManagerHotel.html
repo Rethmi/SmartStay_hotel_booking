@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Hotel Dashboard</title>
+    <!-- ======= Styles ====== -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" href="./css/AdminHotel.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .fa-power-off{
+            font-size: 22px;
+            position: relative;
+            bottom: 6px;
+        }
+    </style>
+</head>
+
+<body>
+<!-- =============== Navigation ================ -->
+<div class="Container">
+    <div class="navigation">
+        <ul style="padding-left: 0">
+        <li>
+            <a href="#">
+                        <span class="icon">
+                            <img style="width: 262px;height: 66px" src="assets/images/HotelLogo.png">
+                        </span>
+            </a>
+            </li>
+
+            <li>
+                <a href="ManagerDashBoard.html">
+                        <span class="icon">
+                            <ion-icon name="home-outline"></ion-icon>
+                        </span>
+                    <span class="title">Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="ManagerHotel.html">
+                    <span class="icon">
+                        <ion-icon name="business-outline"></ion-icon> <!-- Best for hotels -->
+                    </span>
+                    <span class="title">Hotels</span>
+                </a>
+            </li>
+            <li>
+                <a href="ManagerRoom.html">
+                        <span class="icon">
+                            <ion-icon name="bed-outline"></ion-icon>
+                        </span>
+                    <span class="title">Rooms</span>
+                </a>
+            </li>
+            <li>
+                <a href="ManagerBooking.html">
+            <span class="icon">
+                     <ion-icon name="calendar-outline"></ion-icon>
+             </span>
+                    <span class="title">Bookings</span>
+                </a>
+            </li>
+            <li>
+                <a href="ManagerPayment.html">
+                        <span class="icon">
+                            <ion-icon name="card-outline"></ion-icon>
+                        </span>
+                    <span class="title">Payment</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" onclick="logout()">
+                        <span class="icon">
+                            <i class="fas fa-power-off"></i> <!-- Logout icon -->
+                        </span>
+                    <span class="title">Sign Out</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <!-- ========================= Main ==================== -->
+    <div class="main">
+        <div class="topbar">
+            <div class="toggle">
+                <ion-icon name="menu-outline"></ion-icon>
+            </div>
+
+            <div class="user">
+<!--                <img src="assets/imgs/customer01.jpg" alt="">-->
+            </div>
+        </div>
+        <div class="Container">
+            <h1 style="padding-top: 40px;padding-bottom: 30px">Hotel Management</h1>
+            <div class="">
+                <div class="container">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr style="padding-bottom: 10px;border: 2px solid black " >
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Location</th>
+                            <th>Description</th>
+                            <th>Amenities</th>
+                            <th>PhoneNumber</th>
+                            <th>ManagerName</th>
+                            <th>Image</th>
+                        </tr>
+                        </thead>
+
+                        <tbody id="HotelTable">
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!--        <img src="http://localhost:8080/assets/images/{imageFileName}" alt="Hotel Image">-->
+
+
+        <!--        Add New Hotel-->
+
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Add New Hotel</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="mb-3">
+                                <input type="text" class="form-control" id="name" placeholder="Enter HotelName">
+                            </div>
+                            <div class="mb-3">
+                                <input type="email" class="form-control" id="location" placeholder="Enter Location">
+                            </div>
+                            <div class="mb-3">
+                                <input type="text" class="form-control" id="description"
+                                       placeholder="Enter description">
+                            </div>
+                            <div class="mb-3">
+                                <input type="text" class="form-control" id="amenities" placeholder="Enter Facalities">
+                            </div>
+                            <div class="mb-3">
+                                <input type="text" class="form-control" id="PhoneNumber"
+                                       placeholder="Enter PhoneNumber">
+                            </div>
+                            <div class="mb-3">
+                                <label for="UserID" class="form-label">Select Manager</label>
+                                <select class="form-select" id="UserID" required>
+                                    <option selected disabled>Choose a Manager</option>
+                                </select>
+                            </div>
+                            <input type="file" id="imageUpload" accept="image/*">
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="btnSave">Save Hotel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="exampleModalLabel">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="updateModalLabel">Update Hotel</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <form>
+                                <div class="mb-3">
+                                    <input type="text" class="form-control" id="Update_name"
+                                           placeholder="Enter HotelName">
+                                </div>
+                                <div class="mb-3">
+                                    <input type="email" class="form-control" id="Update_location"
+                                           placeholder="Enter Location">
+                                </div>
+                                <div class="mb-3">
+                                    <input type="text" class="form-control" id="Update_description"
+                                           placeholder="Enter description">
+                                </div>
+                                <div class="mb-3">
+                                    <input type="text" class="form-control" id="Update_amenities"
+                                           placeholder="Enter Facalities">
+                                </div>
+                                <div class="mb-3">
+                                    <input type="text" class="form-control" id="Update_PhoneNumber"
+                                           placeholder="Enter PhoneNumber">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="UpdateUserID" class="form-label">Select Manager</label>
+                                    <select class="form-select" id="UpdateUserID" required>
+                                        <option selected disabled>Choose a Manager</option>
+                                    </select>
+                                </div>
+                                <input type="file" id="Update_imageUpload" accept="image/*">
+                            </form>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="btnUpdate">Update Hotel</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<!-- =========== Scripts =========  -->
+<script src="./js/AdminDashboard.js"></script>
+
+<!-- ====== ionicons ======= -->
+<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+<script>
+    $(document).ready(function () {
+        let token = localStorage.getItem("jwtToken");
+        if (!token) {
+            alert("You are not logged in!");
+            window.location.href = "login.html";
+            return;
+        }
+
+    let userEmail = localStorage.getItem("email");
+    let imageUrl = "assets/images/";
+    console.log(userEmail);
+    $.ajax({
+        url: "http://localhost:8080/api/v1/hotelManager/getAll",
+        method: "GET",
+        headers: {
+            "Authorization": `Bearer ${localStorage.getItem("jwtToken")}`
+        },
+        data: { email: userEmail },
+        contentType: "application/json",
+        success: (res) => {
+            let table = $('#HotelTable');
+            table.empty();
+
+            res.data.forEach((hotel) => {
+                let image = imageUrl + hotel.image;
+                localStorage.setItem("hotelId", hotel.id);
+                console.log(localStorage.getItem("hotelId"));
+
+                table.append(`
+                <tr>
+                    <td>${hotel.id}</td>
+                    <td>${hotel.name}</td>
+                    <td>${hotel.location}</td>
+                    <td>${hotel.description}</td>
+                    <td>${hotel.amenities}</td>
+                    <td>${hotel.phoneNumber}</td>
+                    <td>${hotel.user.username}</td>
+                    <td>
+                        <img src="${image}" width="100" height="100" alt="Hotel Image"
+                            onerror="this.onerror=null; this.src='assets/images/default.jpg';">
+                    </td>
+
+                </tr>
+            `);
+            });
+        },
+        error: (error) => {
+            console.error("AJAX Error:", error);
+            alert("Something went wrong while fetching hotels.");
+        }
+    });
+
+});
+    function logout() {
+        localStorage.removeItem("jwtToken");
+        alert("Logged out successfully");
+        window.location.href = "Login.html";
+    }
+
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+        crossOrigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+        integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
+        crossorigin="anonymous"></script>
+
+</body>
+</html>
