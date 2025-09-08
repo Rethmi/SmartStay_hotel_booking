@@ -270,30 +270,292 @@
 <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
 <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 <script>
+    // $(document).ready(function () {
+
+    //     let token = localStorage.getItem("jwtToken");
+
+    //     if (!token) {
+    //         alert("You are not logged in!");
+    //         window.location.href = "login.html";
+    //         return;
+    //     }
+
+    //     const imageUrl = "assets/images/";
+    //     $.ajax({
+    //         url: "http://localhost:8080/api/v1/hotel/getAll",
+    //         method: "GET",
+    //         contentType: "application/json",
+    //         headers: {
+    //             "Authorization": `Bearer ${localStorage.getItem("jwtToken")}`
+    //         },
+    //         success: (res) => {
+    //             let hotelDropdown = $("#HotelID, #UpdateHotelID");
+    //             hotelDropdown.empty();
+    //             hotelDropdown.append(`<option selected disabled>Choose a Hotel</option>`);
+
+    //             res.data.forEach((hotel) => {
+    //                 hotelDropdown.append(`<option value="${hotel.id}">${hotel.name}</option>`);
+    //             });
+    //         },
+    //         error: (error) => {
+    //             console.error("Error fetching hotels:", error);
+    //             alert("Failed to load hotels.");
+    //         }
+    //     });$.ajax({
+    //         url: "http://localhost:8080/api/v1/hotel/getAll",
+    //         method: "GET",
+    //         headers: {
+    //             "Authorization": `Bearer ${localStorage.getItem("jwtToken")}`
+    //         },
+    //         contentType: "application/json",
+    //         success: (res) => {
+    //             let hotelArray = [];
+
+    //             res.data.forEach((hotel) => {
+    //                 hotelArray.push({ id: hotel.id, name: hotel.name });
+    //             });
+
+    //             console.log(hotelArray);
+
+    //             // Now make the second request to fetch room data
+    //             $.ajax({
+    //                 url: "http://localhost:8080/api/v1/room/getAll",
+    //                 method: "GET",
+    //                 headers: {
+    //                     "Authorization": `Bearer ${localStorage.getItem("jwtToken")}`
+    //                 },
+    //                 contentType: "application/json",
+    //                 success: (res) => {
+    //                     let table = $('#RoomTable');
+    //                     table.empty();
+
+    //                     res.data.forEach((room) => {
+    //                         let image1 = imageUrl + room.image1;
+    //                         let image2 = imageUrl + room.image2;
+    //                         let image3 = imageUrl + room.image3;
+
+    //                         // Find the hotel name corresponding to the room's hotelID
+    //                         let hotelName = hotelArray.find(hotel => hotel.id === room.hotelID)?.name || "Unknown Hotel";
+
+    //                         table.append(`
+    //                     <tr>
+    //                         <td>${room.id}</td>
+    //                         <td>${room.roomNumber}</td>
+    //                         <td>${room.roomType}</td>
+    //                         <td>${room.price}</td>
+    //                         <td>${room.available}</td>
+    //                         <td>${hotelName}</td>
+    //                         <td><img src="${image1}" width="100" height="100" alt="Room Image"
+    //                         onerror="this.onerror=null; this.src='assets/images/default.jpg';"></td>
+    //                         <td><img src="${image2}" width="100" height="100" alt="Room Image"
+    //                         onerror="this.onerror=null; this.src='assets/images/default.jpg';"></td>
+    //                         <td><img src="${image3}" width="100" height="100" alt="Room Image"
+    //                         onerror="this.onerror=null; this.src='assets/images/default.jpg';"></td>
+    //                         <td class="text-center">
+    //                         <button type="button" class="btn btn-danger"
+    //                         data-bs-toggle="modal" data-bs-target="#updateModal"
+    //                         onclick="editRoom('${room.id}', '${room.roomNumber}', '${room.roomType}', '${room.price}', '${room.available}', '${room.hotelID}', '${room.image1}', '${room.image2}', '${room.image3}')">
+    //                         Edit
+    //                         </button>
+    //                         <button type="button" class="btn btn-warning" onclick="deleteRoom('${room.id}')">Delete</button>
+    //                         </td>
+    //                         </tr>
+    //                         `);
+    //                         });
+    //                         },
+    //                         error: (error) => {
+    //                         console.error("Error fetching rooms:", error);
+    //                         alert("Something went wrong while fetching rooms.");
+    //                         }
+    //                         });
+    //                         },
+    //                         error: (error) => {
+    //                         console.error("Error fetching hotels:", error);
+    //                         alert("Failed to load hotels.");
+    //                         }
+    //                         });
+
+    //                         $("#search").on("keyup", function () {
+    //         searchRoom();
+    //     });
+
+    //     function searchRoom() {
+    //         let input = document.getElementById("search").value.toLowerCase().trim();
+    //         let table = document.getElementById("RoomTable");
+    //         let rows = table.getElementsByTagName("tr");
+
+    //         for (let i = 0; i < rows.length; i++) {
+    //             let roomNumberCell = rows[i].getElementsByTagName("td")[1];
+    //             if (roomNumberCell) {
+    //                 let roomNumber = roomNumberCell.textContent || roomNumberCell.innerText;
+    //                 if (roomNumber.toLowerCase().includes(input)) {
+    //                     rows[i].style.display = ""; // Show matching rows
+    //                 } else {
+    //                     rows[i].style.display = "none";
+    //                 }
+    //             }
+    //         }
+    //     }
+    //     $('#btnSave').click(function () {
+    //         let fileName1 = $("#imageUpload1")[0]?.files[0]?.name || null;
+    //         let fileName2 = $("#imageUpload2")[0]?.files[0]?.name || null;
+    //         let fileName3 = $("#imageUpload3")[0]?.files[0]?.name || null;
+
+    //         console.log("Uploading Images:", fileName1, fileName2, fileName3);
+
+    //         $.ajax({
+    //             url: "http://localhost:8080/api/v1/room/save",
+    //             method: "POST",
+    //             headers: {
+    //                 "Authorization": `Bearer ${localStorage.getItem("jwtToken")}`
+    //             },
+    //             contentType: "application/json",
+    //             data: JSON.stringify({
+    //                 roomNumber: $("#RoomNumber").val(),
+    //                 roomType: $("#roomType").val(),
+    //                 price: $("#Price").val(),
+    //                 available: $("#Availability").val(),
+    //                 hotelID: $("#HotelID").val(),
+    //                 image1: fileName1,
+    //                 image2: fileName2,
+    //                 image3: fileName3
+    //             }),
+    //             success: (res) => {
+    //                 alert(res.message || "Room saved successfully.");
+    //                 $('#exampleModal').modal('hide');
+    //                 location.reload();
+    //             },
+    //             error: (error) => {
+    //                 console.error("Error saving room:", error);
+    //                 alert("Failed to save room.");
+    //             }
+    //         });
+    //     });
+    // });
+
+    // const editRoom = (id, roomNumber, roomType, price, available, hotelID, image1, image2, image3) => {
+    //     $("#UpdateRoomNumber").val(roomNumber);
+    //     $("#UpdateRoomType").val(roomType);
+    //     $("#UpdatePrice").val(price);
+    //     $("#UpdateAvailability").val(available);
+    //     $("#UpdateHotelID").val(hotelID);
+
+    //     $("#UpdateImageUpload1, #UpdateImageUpload2, #UpdateImageUpload3").val("");
+
+    //     $("#btnUpdate").off("click").on("click", function () {
+    //         let fileInput1 = document.getElementById("UpdateImageUpload1");
+    //         let fileInput2 = document.getElementById("UpdateImageUpload2");
+    //         let fileInput3 = document.getElementById("UpdateImageUpload3");
+
+    //         console.log("File Inputs:", fileInput1, fileInput2, fileInput3);
+
+    //         let updatedData = {
+    //             roomNumber: $("#UpdateRoomNumber").val(),
+    //             roomType: $("#UpdateRoomType").val(),
+    //             price: $("#UpdatePrice").val(),
+    //             available: $("#UpdateAvailability").val(),
+    //             hotelID: $("#UpdateHotelID").val(),
+    //             image1: image1,
+    //             image2: image2,
+    //             image3: image3
+    //         };
+
+    //         if (fileInput1?.files.length > 0) {
+    //             updatedData.image1 = fileInput1.files[0].name;
+    //         }
+    //         if (fileInput2?.files.length > 0) {
+    //             updatedData.image2 = fileInput2.files[0].name;
+    //         }
+    //         if (fileInput3?.files.length > 0) {
+    //             updatedData.image3 = fileInput3.files[0].name;
+    //         }
+
+    //         updateRoom(id, updatedData);
+    //     });
+    // };
+
+    // const updateRoom = (id, updatedData) => {
+    //     $.ajax({
+    //         url: `http://localhost:8080/api/v1/room/update/${id}`,
+    //         method: "PUT",
+    //         headers: {
+    //             "Authorization": `Bearer ${localStorage.getItem("jwtToken")}`
+    //         },
+    //         contentType: "application/json",
+    //         data: JSON.stringify(updatedData),
+    //         success: (res) => {
+    //             if (res.statusCode === 200) {
+    //                 alert("Room updated successfully.");
+    //                 $("#updateModal").modal("hide");
+    //                 location.reload();
+    //             }
+    //         },
+    //         error: (error) => {
+    //             console.error("Error updating room:", error);
+    //             alert("Something went wrong while updating.");
+    //         }
+    //     });
+    // };
+
+    // const deleteRoom = (id) => {
+    //     if (confirm("Are you sure you want to delete this room?")) {
+    //         $.ajax({
+    //             url: `http://localhost:8080/api/v1/room/delete/${id}`,
+    //             method: "DELETE",
+    //             headers: {
+    //                 "Authorization": `Bearer ${localStorage.getItem("jwtToken")}`
+    //             },
+    //             success: (res) => {
+    //                 if (res.statusCode === 200) {
+    //                     alert("Room deleted successfully.");
+    //                     location.reload();
+    //                 } else {
+    //                     alert("Failed: " + (res.message || "Unknown error"));
+    //                 }
+    //             },
+    //             error: (error) => {
+    //                 console.error("Error deleting room:", error);
+    //                 alert("Something went wrong while deleting.");
+    //             }
+    //         });
+    //     }
+    // };
+    // function logout() {
+    //     localStorage.removeItem("jwtToken");
+    //     alert("Logged out successfully");
+    //     window.location.href = "Login.html";
+    // }
+ 
+    
+   
     $(document).ready(function () {
-
         let token = localStorage.getItem("jwtToken");
-
         if (!token) {
             alert("You are not logged in!");
             window.location.href = "login.html";
             return;
         }
 
-        const imageUrl = "assets/images/";
+        loadHotels();
+        loadRooms();
+
+        $('#btnSave').click(saveRoom);
+        $('#btnUpdate').click(updateRoom);
+    });
+
+    function loadHotels() {
         $.ajax({
-            url: "http://localhost:8080/api/v1/hotel/getAll",
+            url: "http://localhost:8080/api/v1/hotels/all",
             method: "GET",
-            contentType: "application/json",
             headers: {
                 "Authorization": `Bearer ${localStorage.getItem("jwtToken")}`
             },
-            success: (res) => {
+            success: (hotels) => {
                 let hotelDropdown = $("#HotelID, #UpdateHotelID");
                 hotelDropdown.empty();
-                hotelDropdown.append(`<option selected disabled>Choose a Hotel</option>`);
+                hotelDropdown.append('<option selected disabled>Choose a Hotel</option>');
 
-                res.data.forEach((hotel) => {
+                hotels.forEach((hotel) => {
                     hotelDropdown.append(`<option value="${hotel.id}">${hotel.name}</option>`);
                 });
             },
@@ -301,225 +563,236 @@
                 console.error("Error fetching hotels:", error);
                 alert("Failed to load hotels.");
             }
-        });$.ajax({
-            url: "http://localhost:8080/api/v1/hotel/getAll",
+        });
+    }
+
+    function loadRooms() {
+        $.ajax({
+            url: "http://localhost:8080/api/v1/rooms/all",
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${localStorage.getItem("jwtToken")}`
             },
-            contentType: "application/json",
-            success: (res) => {
-                let hotelArray = [];
+            success: (rooms) => {
+                let table = $('#RoomTable');
+                table.empty();
 
-                res.data.forEach((hotel) => {
-                    hotelArray.push({ id: hotel.id, name: hotel.name });
-                });
+                if (rooms && Array.isArray(rooms)) {
+                    rooms.forEach((room) => {
+                        let image1 = "assets/images/" + (room.image1 || 'default.jpg');
+                        let image2 = "assets/images/" + (room.image2 || 'default.jpg');
+                        let image3 = "assets/images/" + (room.image3 || 'default.jpg');
 
-                console.log(hotelArray);
-
-                // Now make the second request to fetch room data
-                $.ajax({
-                    url: "http://localhost:8080/api/v1/room/getAll",
-                    method: "GET",
-                    headers: {
-                        "Authorization": `Bearer ${localStorage.getItem("jwtToken")}`
-                    },
-                    contentType: "application/json",
-                    success: (res) => {
-                        let table = $('#RoomTable');
-                        table.empty();
-
-                        res.data.forEach((room) => {
-                            let image1 = imageUrl + room.image1;
-                            let image2 = imageUrl + room.image2;
-                            let image3 = imageUrl + room.image3;
-
-                            // Find the hotel name corresponding to the room's hotelID
-                            let hotelName = hotelArray.find(hotel => hotel.id === room.hotelID)?.name || "Unknown Hotel";
-
-                            table.append(`
-                        <tr>
-                            <td>${room.id}</td>
-                            <td>${room.roomNumber}</td>
-                            <td>${room.roomType}</td>
-                            <td>${room.price}</td>
-                            <td>${room.available}</td>
-                            <td>${hotelName}</td>
-                            <td><img src="${image1}" width="100" height="100" alt="Room Image"
-                            onerror="this.onerror=null; this.src='assets/images/default.jpg';"></td>
-                            <td><img src="${image2}" width="100" height="100" alt="Room Image"
-                            onerror="this.onerror=null; this.src='assets/images/default.jpg';"></td>
-                            <td><img src="${image3}" width="100" height="100" alt="Room Image"
-                            onerror="this.onerror=null; this.src='assets/images/default.jpg';"></td>
-                            <td class="text-center">
-                            <button type="button" class="btn btn-danger"
-                            data-bs-toggle="modal" data-bs-target="#updateModal"
-                            onclick="editRoom('${room.id}', '${room.roomNumber}', '${room.roomType}', '${room.price}', '${room.available}', '${room.hotelID}', '${room.image1}', '${room.image2}', '${room.image3}')">
-                            Edit
-                            </button>
-                            <button type="button" class="btn btn-warning" onclick="deleteRoom('${room.id}')">Delete</button>
-                            </td>
+                        table.append(`
+                            <tr>
+                                <td>${room.id}</td>
+                                <td>${room.roomNumber}</td>
+                                <td>${room.roomType}</td>
+                                <td>${room.price}</td>
+                                <td>${room.available}</td>
+                                <td>${room.hotelID}</td>
+                                <td><img src="${image1}" width="80" height="80" alt="Room Image"
+                                    onerror="this.onerror=null; this.src='assets/images/default.jpg';"></td>
+                                <td><img src="${image2}" width="80" height="80" alt="Room Image"
+                                    onerror="this.onerror=null; this.src='assets/images/default.jpg';"></td>
+                                <td><img src="${image3}" width="80" height="80" alt="Room Image"
+                                    onerror="this.onerror=null; this.src='assets/images/default.jpg';"></td>
+                                <td class="action-buttons">
+                                    <button type="button" class="btn btn-sm btn-primary"
+                                        onclick="prepareEdit('${room.id}', '${room.roomNumber}', '${room.roomType}', 
+                                        '${room.price}', '${room.available}', '${room.hotelID}', 
+                                        '${room.image1 || ''}', '${room.image2 || ''}', '${room.image3 || ''}')">
+                                        Edit
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-danger" 
+                                        onclick="confirmDelete('${room.id}', '${room.roomNumber}')">
+                                        Delete
+                                    </button>
+                                </td>
                             </tr>
-                            `);
-                            });
-                            },
-                            error: (error) => {
-                            console.error("Error fetching rooms:", error);
-                            alert("Something went wrong while fetching rooms.");
-                            }
-                            });
-                            },
-                            error: (error) => {
-                            console.error("Error fetching hotels:", error);
-                            alert("Failed to load hotels.");
-                            }
-                            });
-
-                            $("#search").on("keyup", function () {
-            searchRoom();
-        });
-
-        function searchRoom() {
-            let input = document.getElementById("search").value.toLowerCase().trim();
-            let table = document.getElementById("RoomTable");
-            let rows = table.getElementsByTagName("tr");
-
-            for (let i = 0; i < rows.length; i++) {
-                let roomNumberCell = rows[i].getElementsByTagName("td")[1];
-                if (roomNumberCell) {
-                    let roomNumber = roomNumberCell.textContent || roomNumberCell.innerText;
-                    if (roomNumber.toLowerCase().includes(input)) {
-                        rows[i].style.display = ""; // Show matching rows
-                    } else {
-                        rows[i].style.display = "none";
-                    }
-                }
-            }
-        }
-        $('#btnSave').click(function () {
-            let fileName1 = $("#imageUpload1")[0]?.files[0]?.name || null;
-            let fileName2 = $("#imageUpload2")[0]?.files[0]?.name || null;
-            let fileName3 = $("#imageUpload3")[0]?.files[0]?.name || null;
-
-            console.log("Uploading Images:", fileName1, fileName2, fileName3);
-
-            $.ajax({
-                url: "http://localhost:8080/api/v1/room/save",
-                method: "POST",
-                headers: {
-                    "Authorization": `Bearer ${localStorage.getItem("jwtToken")}`
-                },
-                contentType: "application/json",
-                data: JSON.stringify({
-                    roomNumber: $("#RoomNumber").val(),
-                    roomType: $("#roomType").val(),
-                    price: $("#Price").val(),
-                    available: $("#Availability").val(),
-                    hotelID: $("#HotelID").val(),
-                    image1: fileName1,
-                    image2: fileName2,
-                    image3: fileName3
-                }),
-                success: (res) => {
-                    alert(res.message || "Room saved successfully.");
-                    $('#exampleModal').modal('hide');
-                    location.reload();
-                },
-                error: (error) => {
-                    console.error("Error saving room:", error);
-                    alert("Failed to save room.");
-                }
-            });
-        });
-    });
-
-    const editRoom = (id, roomNumber, roomType, price, available, hotelID, image1, image2, image3) => {
-        $("#UpdateRoomNumber").val(roomNumber);
-        $("#UpdateRoomType").val(roomType);
-        $("#UpdatePrice").val(price);
-        $("#UpdateAvailability").val(available);
-        $("#UpdateHotelID").val(hotelID);
-
-        $("#UpdateImageUpload1, #UpdateImageUpload2, #UpdateImageUpload3").val("");
-
-        $("#btnUpdate").off("click").on("click", function () {
-            let fileInput1 = document.getElementById("UpdateImageUpload1");
-            let fileInput2 = document.getElementById("UpdateImageUpload2");
-            let fileInput3 = document.getElementById("UpdateImageUpload3");
-
-            console.log("File Inputs:", fileInput1, fileInput2, fileInput3);
-
-            let updatedData = {
-                roomNumber: $("#UpdateRoomNumber").val(),
-                roomType: $("#UpdateRoomType").val(),
-                price: $("#UpdatePrice").val(),
-                available: $("#UpdateAvailability").val(),
-                hotelID: $("#UpdateHotelID").val(),
-                image1: image1,
-                image2: image2,
-                image3: image3
-            };
-
-            if (fileInput1?.files.length > 0) {
-                updatedData.image1 = fileInput1.files[0].name;
-            }
-            if (fileInput2?.files.length > 0) {
-                updatedData.image2 = fileInput2.files[0].name;
-            }
-            if (fileInput3?.files.length > 0) {
-                updatedData.image3 = fileInput3.files[0].name;
-            }
-
-            updateRoom(id, updatedData);
-        });
-    };
-
-    const updateRoom = (id, updatedData) => {
-        $.ajax({
-            url: `http://localhost:8080/api/v1/room/update/${id}`,
-            method: "PUT",
-            headers: {
-                "Authorization": `Bearer ${localStorage.getItem("jwtToken")}`
-            },
-            contentType: "application/json",
-            data: JSON.stringify(updatedData),
-            success: (res) => {
-                if (res.statusCode === 200) {
-                    alert("Room updated successfully.");
-                    $("#updateModal").modal("hide");
-                    location.reload();
+                        `);
+                    });
+                } else {
+                    table.append('<tr><td colspan="11" class="text-center">No rooms found</td></tr>');
                 }
             },
             error: (error) => {
-                console.error("Error updating room:", error);
-                alert("Something went wrong while updating.");
+                console.error("Error fetching rooms:", error);
+                alert("Something went wrong while fetching rooms.");
             }
         });
+    }
+function saveRoom() {
+    // 🔹 Helper: safely get trimmed value from input
+    function getTrimmedValue(selector) {
+        const element = $(selector);
+        if (element.length === 0) return ""; // If selector not found
+        const val = element.val();
+        return (typeof val === "string") ? val.trim() : "";
+    }
+
+    // 🔹 Get values safely
+    const roomNumber = getTrimmedValue("#RoomNumber");
+    const roomType = getTrimmedValue("#roomType");
+    const price = getTrimmedValue("#Price");
+    const available = getTrimmedValue("#Availability");
+    const hotelID = getTrimmedValue("#HotelID");
+
+    // 🔹 Get image inputs safely
+    function getFileName(selector) {
+        const input = $(selector)[0];
+        return (input && input.files && input.files.length > 0)
+            ? input.files[0].name
+            : "default.jpg";
+    }
+
+    const image1 = getFileName("#imageUpload1");
+    const image2 = getFileName("#imageUpload2");
+    const image3 = getFileName("#imageUpload3");
+
+    console.log("Form values:", { roomNumber, roomType, price, available, hotelID, image1, image2, image3 });
+
+    // 🔹 Validate required fields
+    if (!roomNumber || !roomType || !price || !available || !hotelID) {
+        alert("Please fill in all the required fields.");
+        return;
+    }
+
+    // 🔹 Prepare data
+    const roomData = {
+        roomNumber: parseInt(roomNumber),
+        roomType: roomType,
+        price: parseFloat(price),
+        available: available,
+        hotelID: parseInt(hotelID),
+        image1: image1,
+        image2: image2,
+        image3: image3
     };
 
-    const deleteRoom = (id) => {
-        if (confirm("Are you sure you want to delete this room?")) {
-            $.ajax({
-                url: `http://localhost:8080/api/v1/room/delete/${id}`,
-                method: "DELETE",
-                headers: {
-                    "Authorization": `Bearer ${localStorage.getItem("jwtToken")}`
-                },
-                success: (res) => {
-                    if (res.statusCode === 200) {
-                        alert("Room deleted successfully.");
-                        location.reload();
-                    } else {
-                        alert("Failed: " + (res.message || "Unknown error"));
-                    }
-                },
-                error: (error) => {
-                    console.error("Error deleting room:", error);
-                    alert("Something went wrong while deleting.");
-                }
-            });
+    console.log("Sending data:", roomData);
+
+    // 🔹 Send data to backend
+    $.ajax({
+        url: "http://localhost:8080/api/v1/rooms/save",
+        method: "POST",
+        headers: {
+            "Authorization": `Bearer ${localStorage.getItem("jwtToken")}`,
+            "Content-Type": "application/json"
+        },
+        data: JSON.stringify(roomData),
+        success: () => {
+            alert("Room saved successfully.");
+            $("#exampleModal").modal("hide");
+            $("#hotelForm")[0].reset();
+            loadRooms();
+        },
+        error: (error) => {
+            console.error("Error saving room:", error);
+            alert("Failed to save room. Check console for details.");
         }
-    };
+    });
+}
+
+    function updateRoom() {
+        if (!currentRoomId) {
+            alert("No room selected for update.");
+            return;
+        }
+
+        let roomNumber = $("#UpdateRoomNumber").val().trim();
+        let roomType = $("#UpdateRoomType").val();
+        let price = $("#UpdatePrice").val().trim();
+        let available = $("#UpdateAvailability").val();
+        let hotelID = $("#UpdateHotelID").val();
+        let image1Input = document.getElementById("UpdateImageUpload1");
+        let image2Input = document.getElementById("UpdateImageUpload2");
+        let image3Input = document.getElementById("UpdateImageUpload3");
+
+        let image1 = image1Input.files.length > 0 ? image1Input.files[0].name : currentImages.image1;
+        let image2 = image2Input.files.length > 0 ? image2Input.files[0].name : currentImages.image2;
+        let image3 = image3Input.files.length > 0 ? image3Input.files[0].name : currentImages.image3;
+
+        if (!roomNumber || !roomType || !price || !available || !hotelID) {
+            alert("Please fill in all the required fields.");
+            return;
+        }
+
+        let roomData = {
+            roomNumber: parseInt(roomNumber),
+            roomType: roomType,
+            price: parseFloat(price),
+            available: available,
+            hotelID: parseInt(hotelID),
+            image1: image1,
+            image2: image2,
+            image3: image3
+        };
+
+        $.ajax({
+            url: `http://localhost:8080/api/v1/rooms/update${currentRoomId}`,
+            method: "PUT",
+            headers: {
+                "Authorization": `Bearer ${localStorage.getItem("jwtToken")}`,
+                "Content-Type": "application/json"
+            },
+            data: JSON.stringify(roomData),
+            success: (updatedRoom) => {
+                alert("Room updated successfully.");
+                $("#updateModal").modal("hide");
+                loadRooms();
+            },
+            error: (error) => {
+                console.error("Error updating room:", error);
+                alert("Failed to update room.");
+            }
+        });
+    }
+
+    function confirmDelete(id, roomNumber) {
+        if (confirm(`Are you sure you want to delete room ${roomNumber}?`)) {
+            deleteRoom(id);
+        }
+    }
+
+    function deleteRoom(id) {
+        $.ajax({
+            url: `http://localhost:8080/api/v1/rooms/delete${id}`,
+            method: "DELETE",
+            headers: {
+                "Authorization": `Bearer ${localStorage.getItem("jwtToken")}`
+            },
+            success: () => {
+                alert("Room deleted successfully.");
+                loadRooms();
+            },
+            error: (error) => {
+                console.error("Error deleting room:", error);
+                alert("Failed to delete room.");
+            }
+        });
+    }
+
+    function searchRoom() {
+        let input = document.getElementById("search").value.toLowerCase();
+        let table = document.getElementById("RoomTable");
+        let rows = table.getElementsByTagName("tr");
+
+        for (let i = 0; i < rows.length; i++) {
+            let cols = rows[i].getElementsByTagName("td");
+            if (cols.length > 0) {
+                let roomNumber = cols[1].textContent.toLowerCase();
+                let roomType = cols[2].textContent.toLowerCase();
+                
+                if (roomNumber.includes(input) || roomType.includes(input)) {
+                    rows[i].style.display = "";
+                } else {
+                    rows[i].style.display = "none";
+                }
+            }
+        }
+    }
+
     function logout() {
         localStorage.removeItem("jwtToken");
         alert("Logged out successfully");

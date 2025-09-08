@@ -32,7 +32,7 @@ public class AuthServiceImpl implements AuthService {
     private final JwtUtil jwtUtil;
 
     public AuthResponseDto authentication(AuthDTO authDto){
-        User user = userRepository.findByEmail(authDto.getEmail())
+        User user = (User) userRepository.findByEmail(authDto.getEmail())
                 .orElseThrow(()->new UsernameNotFoundException("User email not Found"));
 
         if (!passwordEncoder.matches(authDto.getPassword(),user.getPassword())){
@@ -56,7 +56,7 @@ public class AuthServiceImpl implements AuthService {
                 ))
                 .email(registerDto.getEmail())
                 .role(registerDto.getRole())
-                .ProfileImage("default.jpg") // give a default image
+                .profileImage("default.jpg") // give a default image
                 .build();
         userRepository.save(user);
         return "User registration Success";
@@ -106,7 +106,7 @@ public class AuthServiceImpl implements AuthService {
             throw new RuntimeException("User not found!");
         }
 
-        User user = userOptional.get();
+        User user = (User) userOptional.get();
         user.setPassword(passwordEncoder.encode(newPassword));
         userRepository.save(user);
 

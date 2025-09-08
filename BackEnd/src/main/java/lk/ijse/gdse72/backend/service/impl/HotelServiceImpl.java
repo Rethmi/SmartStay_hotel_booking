@@ -3,46 +3,53 @@ package lk.ijse.gdse72.backend.service.impl;
 import lk.ijse.gdse72.backend.dto.HotelDto;
 import lk.ijse.gdse72.backend.entity.Hotel;
 import lk.ijse.gdse72.backend.repository.HotelRepository;
-import lk.ijse.gdse72.backend.repository.UserRepository;
 import lk.ijse.gdse72.backend.service.HotelService;
-import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeToken;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
-@Transactional
+@RequiredArgsConstructor
 public class HotelServiceImpl implements HotelService {
-    @Autowired
-    private HotelRepository hotelRepository;
 
-    @Autowired
-    private ModelMapper modelMapper;
-
-    @Autowired
-    private UserRepository userRepository;
+    private final HotelRepository hotelRepository;
 
     @Override
-
-    public void saveHotel(HotelDto hotel) {
-        hotelRepository.save(modelMapper.map(hotel,Hotel.class));
+    public HotelDto saveHotel(HotelDto hotelDto) {
+        Hotel hotel = Hotel.builder()
+                .name(hotelDto.getName())
+                .location(hotelDto.getLocation())
+                .description(hotelDto.getDescription())
+                .amenities(hotelDto.getAmenities())
+                .phoneNumber(hotelDto.getPhoneNumber())
+                .image(hotelDto.getImage())
+                .build();
+        hotel = hotelRepository.save(hotel);
+        return convertToDto(hotel);
     }
 
     @Override
-    public void deleteHotel(Long id) {
-        System.out.println("Delete Hotel Service ID: " + id);
-        hotelRepository.deleteById(id);
+    public List<HotelDto> getAllHotels() {
+        return hotelRepository.findAll()
+                .stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public void updateHotel(Long id, HotelDto hotelDto) {
-        Hotel existingHotel = hotelRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Hotel not found with ID: " + id));
+    public HotelDto getHotelById(Long id) {
+        Hotel hotel = hotelRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Hotel not found with id: " + id));
+        return convertToDto(hotel);
+    }
 
-        // Update fields
+    @Override
+    public HotelDto updateHotel(HotelDto hotelDto) {
+        Hotel existingHotel = hotelRepository.findById(hotelDto.getId())
+                .orElseThrow(() -> new RuntimeException("Hotel not found with id: " + hotelDto.getId()));
+
         existingHotel.setName(hotelDto.getName());
         existingHotel.setLocation(hotelDto.getLocation());
         existingHotel.setDescription(hotelDto.getDescription());
@@ -50,24 +57,27 @@ public class HotelServiceImpl implements HotelService {
         existingHotel.setPhoneNumber(hotelDto.getPhoneNumber());
         existingHotel.setImage(hotelDto.getImage());
 
-        // Save the updated entity
-        hotelRepository.save(existingHotel);
+        Hotel updatedHotel = hotelRepository.save(existingHotel);
+        return convertToDto(updatedHotel);
     }
 
     @Override
-    public List<HotelDto> getAllHotels() {
-        return modelMapper.map(hotelRepository.findAll(), new TypeToken<List<HotelDto>>() {}.getType());
-
-    }
-    @Override
-    public List<Hotel> getHotelsByUserId(Long userId) {
-        System.out.println("Service");
-        return hotelRepository.findByUserId(userId);
-    }
-    @Override
-    public Long getUserIdByEmail(String email) {
-        Long user = userRepository.findIdByEmailADD(email);
-        return user;
+    public void deleteHotel(Long id) {
+        if (!hotelRepository.existsById(id)) {
+            throw new RuntimeException("Hotel not found with id: " + id);
+        }
+        hotelRepository.deleteById(id);
     }
 
+    private HotelDto convertToDto(Hotel hotel) {
+        return HotelDto.builder()
+                .id(hotel.getId())
+                .name(hotel.getName())
+                .location(hotel.getLocation())
+                .description(hotel.getDescription())
+                .amenities(hotel.getAmenities())
+                .phoneNumber(hotel.getPhoneNumber())
+                .image(hotel.getImage())
+                .build();
+    }
 }

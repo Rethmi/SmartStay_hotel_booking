@@ -17,6 +17,14 @@
             position: relative;
             bottom: 6px;
         }
+        .table-container {
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        .action-buttons {
+            display: flex;
+            gap: 5px;
+        }
     </style>
 </head>
 
@@ -107,77 +115,82 @@
         </div>
         <div class="Container">
             <h1 style="padding-top: 40px">Hotel Management</h1>
-            <button type="button" class="add-btn" style="margin-top: 38px;margin-right: 10px;border-radius: 5px"
-                    data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo"
-            >Add Hotel
-            </button>
-            <label>
-                <input type="text" style="height: 40px ;border-radius: 10px" placeholder="  Search Hotel"
-                       onkeyup="searchCustomer()" id="search">
-                <ion-icon name="search-outline"></ion-icon>
-            </label>
-            <div class="">
-                <div class="container">
-                    <table class="table table-hover">
-                        <thead>
-                        <tr style="padding-bottom: 10px;border: 2px solid black " >
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Location</th>
-                            <th>Description</th>
-                            <th>Amenities</th>
-                            <th>PhoneNumber</th>
-                            <th>ManagerID</th>
-                            <th>Image</th>
-                            <th>Actions</th>
-                        </tr>
-                        </thead>
-
-                        <tbody id="HotelTable">
-
-                        </tbody>
-                    </table>
+            <div class="d-flex justify-content-between align-items-center mt-4 mb-3">
+                <button type="button" class="btn btn-primary" style="border-radius: 5px"
+                        data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo"
+                >Add Hotel
+                </button>
+                
+                <div class="search-container position-relative">
+                    <input type="text" class="form-control" style="height: 40px; width: 300px; border-radius: 10px" 
+                           placeholder="Search Hotel" onkeyup="searchHotel()" id="search">
+                    <ion-icon name="search-outline" class="position-absolute" 
+                              style="right: 10px; top: 10px;"></ion-icon>
                 </div>
             </div>
+            
+            <div class="table-container">
+                <table class="table table-hover table-striped">
+                    <thead class="table-dark sticky-top">
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Location</th>
+                        <th>Description</th>
+                        <th>Amenities</th>
+                        <th>Phone Number</th>
+                        <th>Image</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+
+                    <tbody id="HotelTable">
+                    <!-- Data will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
         </div>
-        <!--        <img src="http://localhost:8080/assets/images/{imageFileName}" alt="Hotel Image">-->
 
-
-        <!--        Add New Hotel-->
-
+        <!-- Add New Hotel Modal -->
         <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel">
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h1 class="modal-title fs-5" id="exampleModalLabel">Add New Hotel</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form>
-                            <div class="mb-3">
-                                <input type="text" class="form-control" id="name" placeholder="Enter HotelName">
+                        <form id="addHotelForm">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="name" class="form-label">Hotel Name</label>
+                                        <input type="text" class="form-control" id="name" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="location" class="form-label">Location</label>
+                                        <input type="text" class="form-control" id="location" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="description" class="form-label">Description</label>
+                                        <textarea class="form-control" id="description" rows="3"></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="amenities" class="form-label">Amenities</label>
+                                        <input type="text" class="form-control" id="amenities">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="PhoneNumber" class="form-label">Phone Number</label>
+                                        <input type="text" class="form-control" id="PhoneNumber" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="imageUpload" class="form-label">Hotel Image</label>
+                                        <input type="file" class="form-control" id="imageUpload" accept="image/*">
+                                    </div>
+                                </div>
                             </div>
-                            <div class="mb-3">
-                                <input type="email" class="form-control" id="location" placeholder="Enter Location">
-                            </div>
-                            <div class="mb-3">
-                                <input type="text" class="form-control" id="description"
-                                       placeholder="Enter description">
-                            </div>
-                            <div class="mb-3">
-                                <input type="text" class="form-control" id="amenities" placeholder="Enter Facalities">
-                            </div>
-                            <div class="mb-3">
-                                <input type="text" class="form-control" id="PhoneNumber"
-                                       placeholder="Enter PhoneNumber">
-                            </div>
-                            <div class="mb-3">
-                                <label for="UserID" class="form-label">Select Manager</label>
-                                <select class="form-select" id="UserID" required>
-                                    <option selected disabled>Choose a Manager</option>
-                                </select>
-                            </div>
-                            <input type="file" id="imageUpload" accept="image/*">
                         </form>
                     </div>
                     <div class="modal-footer">
@@ -188,44 +201,50 @@
             </div>
         </div>
 
-        <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="exampleModalLabel">
-            <div class="modal-dialog">
+        <!-- Update Hotel Modal -->
+        <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModalLabel">
+            <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h1 class="modal-title fs-5" id="updateModalLabel">Update Hotel</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form>
-                            <form>
-                                <div class="mb-3">
-                                    <input type="text" class="form-control" id="Update_name"
-                                           placeholder="Enter HotelName">
+                        <form id="updateHotelForm">
+                            <input type="hidden" id="Update_hotelId">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="Update_name" class="form-label">Hotel Name</label>
+                                        <input type="text" class="form-control" id="Update_name" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="Update_location" class="form-label">Location</label>
+                                        <input type="text" class="form-control" id="Update_location" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="Update_description" class="form-label">Description</label>
+                                        <textarea class="form-control" id="Update_description" rows="3"></textarea>
+                                    </div>
                                 </div>
-                                <div class="mb-3">
-                                    <input type="email" class="form-control" id="Update_location"
-                                           placeholder="Enter Location">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="Update_amenities" class="form-label">Amenities</label>
+                                        <input type="text" class="form-control" id="Update_amenities">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="Update_PhoneNumber" class="form-label">Phone Number</label>
+                                        <input type="text" class="form-control" id="Update_PhoneNumber" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="Update_imageUpload" class="form-label">Hotel Image</label>
+                                        <input type="file" class="form-control" id="Update_imageUpload" accept="image/*">
+                                        <div class="mt-2">
+                                            <img id="Update_currentImage" src="" class="img-thumbnail" style="max-height: 100px;">
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="mb-3">
-                                    <input type="text" class="form-control" id="Update_description"
-                                           placeholder="Enter description">
-                                </div>
-                                <div class="mb-3">
-                                    <input type="text" class="form-control" id="Update_amenities"
-                                           placeholder="Enter Facalities">
-                                </div>
-                                <div class="mb-3">
-                                    <input type="text" class="form-control" id="Update_PhoneNumber"
-                                           placeholder="Enter PhoneNumber">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="UpdateUserID" class="form-label">Select Manager</label>
-                                    <select class="form-select" id="UpdateUserID" required>
-                                        <option selected disabled>Choose a Manager</option>
-                                    </select>
-                                </div>
-                                <input type="file" id="Update_imageUpload" accept="image/*">
-                            </form>
+                            </div>
                         </form>
                     </div>
                     <div class="modal-footer">
@@ -235,11 +254,9 @@
                 </div>
             </div>
         </div>
-
-
     </div>
 </div>
-</div>
+
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <!-- =========== Scripts =========  -->
 <script src="./js/AdminDashboard.js"></script>
@@ -247,141 +264,241 @@
 <!-- ====== ionicons ======= -->
 <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
 <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
-<script>
-    $(document).ready(function () {
 
+<script>
+    // Global variables
+    let currentHotelId = null;
+    let imageUrl = "assets/images/";
+    
+    $(document).ready(function () {
+        // Check authentication
         let token = localStorage.getItem("jwtToken");
         if (!token) {
             alert("You are not logged in!");
             window.location.href = "login.html";
             return;
         }
-
+        
+        // Load hotels
+        loadHotels();
+        
+        // Set up event handlers
+        $('#btnSave').click(saveHotel);
+        $('#btnUpdate').click(updateHotel);
+    });
+    
+    function loadHotels() {
+        let token = localStorage.getItem("jwtToken");
+        
         $.ajax({
-            url: "http://localhost:8080/api/v1/user/getAll",
+            url: "http://localhost:8080/api/v1/hotels/all",
             method: "GET",
             headers: {
-                "Authorization": "Bearer " + token
+                "Authorization": `Bearer ${token}`
             },
-            contentType: "application/json",
+            success: (hotels) => {
+                let table = $('#HotelTable');
+                table.empty();
 
-            success: (res) => {
-                if (!res.data || !Array.isArray(res.data)) {
-                    console.error("Invalid response data:", res);
-                    return;
+                if (hotels && Array.isArray(hotels)) {
+                    hotels.forEach((hotel) => {
+                        let image = imageUrl + (hotel.image || 'default.jpg');
+                        
+                        table.append(`
+                            <tr>
+                                <td>${hotel.id}</td>
+                                <td>${hotel.name}</td>
+                                <td>${hotel.location}</td>
+                                <td class="text-truncate" style="max-width: 200px;">${hotel.description || ''}</td>
+                                <td class="text-truncate" style="max-width: 150px;">${hotel.amenities || ''}</td>
+                                <td>${hotel.phoneNumber}</td>
+                                <td>
+                                    <img src="${image}" width="80" height="80" alt="Hotel Image"
+                                    onerror="this.onerror=null; this.src='assets/images/default.jpg';">
+                                </td>
+                                <td class="action-buttons">
+                                    <button type="button" class="btn btn-sm btn-primary"
+                                    data-bs-toggle="modal" data-bs-target="#updateModal"
+                                    onclick="prepareEdit('${hotel.id}', '${hotel.name}', '${hotel.location}', 
+                                    '${hotel.description || ''}', '${hotel.amenities || ''}', 
+                                    '${hotel.phoneNumber}', '${hotel.image || ''}')">
+                                        Edit
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-danger" 
+                                    onclick="confirmDelete('${hotel.id}', '${hotel.name}')">
+                                        Delete
+                                    </button>
+                                </td>
+                            </tr>
+                        `);
+                    });
+                } else {
+                    table.append('<tr><td colspan="8" class="text-center">No hotels found</td></tr>');
                 }
-
-                let userDropDown = $("#UserID,#UpdateUserID");
-                userDropDown.empty();
-                userDropDown.append('<option selected disabled>Choose a Manager</option>');
-
-                res.data.forEach(user => {
-                    if (user.role !== "Manager") {
-                        return;
-                    }
-                    userDropDown.append(`<option value="${user.id}">${user.username}</option>`);
-                });
             },
-            error: (err) => {
-                console.error("Failed to load users:", err);
-                alert("Error fetching user data. Please try again.");
+            error: (error) => {
+                console.error("AJAX Error:", error);
+                if (error.status === 403) {
+                    alert("You don't have permission to access hotel data.");
+                } else {
+                    alert("Something went wrong while fetching hotels.");
+                }
             }
         });
-    });
-
-    $('#btnSave').click(function () {
+    }
+    
+    function saveHotel() {
         let name = $("#name").val().trim();
-        let locationn = $("#location").val().trim();
+        let location = $("#location").val().trim();
         let description = $("#description").val().trim();
-        let amenities =  $("#amenities").val().trim();
+        let amenities = $("#amenities").val().trim();
         let phoneNumber = $("#PhoneNumber").val().trim();
-        let userID = $("#UserID").val().trim();
-        let imageInput = $("#imageUpload")[0]; // Get the file input element
-        let fileName = imageInput.files.length > 0 ? imageInput.files[0].name : null; // Extract file name
-            console.log(userID);
-        if (!name || !locationn || !description || !amenities || !phoneNumber || !userID) {
+        let imageInput = $("#imageUpload")[0];
+        let fileName = imageInput.files.length > 0 ? imageInput.files[0].name : "default.jpg";
+
+        if (!name || !location || !phoneNumber) {
             alert("Please fill in all the required fields.");
             return;
         }
 
+        let token = localStorage.getItem("jwtToken");
+        
         $.ajax({
-            url: "http://localhost:8080/api/v1/hotel/save",
+            url: "http://localhost:8080/api/v1/hotels/save",
             method: "POST",
             headers: {
-                "Authorization": `Bearer ${localStorage.getItem("jwtToken")}`
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json"
             },
-            contentType: "application/json",
             data: JSON.stringify({
                 "name": name,
-                "location": locationn,
+                "location": location,
                 "description": description,
                 "amenities": amenities,
                 "phoneNumber": phoneNumber,
-                "userId": userID,
                 "image": fileName
             }),
-            success: (res) => {
-                if (res.message === "Hotel Saved Successfully") {
-                    alert("Hotel added successfully");
-                    location.reload();
-                } else {
-                    alert("Failed: " + (res.message || "Unknown error"));
-                }
+            success: (savedHotel) => {
+                alert("Hotel added successfully");
+                $("#exampleModal").modal("hide");
+                $("#addHotelForm")[0].reset();
+                loadHotels();
             },
             error: (error) => {
                 console.error(error);
-                alert("Something went wrong");
+                if (error.status === 403) {
+                    alert("You don't have permission to add hotels.");
+                } else {
+                    alert("Something went wrong while saving the hotel.");
+                }
             }
         });
-    });
-    let imageUrl = "assets/images/";
-
-    $.ajax({
-        url: "http://localhost:8080/api/v1/hotel/getAll",
-        method: "GET",
-        headers: {
-            "Authorization": `Bearer ${localStorage.getItem("jwtToken")}`
-        },
-        contentType: "application/json",
-        success: (res) => {
-            let table = $('#HotelTable');
-            table.empty();
-
-            res.data.forEach((hotel) => {
-                let image = imageUrl + hotel.image; // Construct the correct image path
-
-                table.append(`
-                <tr>
-                    <td>${hotel.id}</td>
-                    <td>${hotel.name}</td>
-                    <td>${hotel.location}</td>
-                    <td>${hotel.description}</td>
-                    <td>${hotel.amenities}</td>
-                    <td>${hotel.phoneNumber}</td>
-                    <td>${hotel.userId}</td>
-                    <td>
-                        <img src="${image}" width="100" height="100" alt="Hotel Image"
-                        onerror="this.onerror=null; this.src='assets/images/default.jpg';">
-                    </td>
-                    <td class="text-center">
-                        <button type="button" class="btn btn-danger"
-                        data-bs-toggle="modal" data-bs-target="#updateModal"
-                        onclick="edit('${hotel.id}', '${hotel.name}', '${hotel.location}', '${hotel.description}', '${hotel.amenities}', '${hotel.phoneNumber}', '${hotel.image}')">
-                            Edit
-                        </button>
-                        <button type="button" class="btn btn-warning" onclick="deleteHotel('${hotel.id}')">Delete</button>
-                    </td>
-                </tr>
-            `);
-            });
-        },
-        error: (error) => {
-            console.error("AJAX Error:", error);
-            alert("Something went wrong while fetching hotels.");
+    }
+    
+    function prepareEdit(id, name, location, description, amenities, phoneNumber, image) {
+        currentHotelId = id;
+        
+        $("#Update_name").val(name);
+        $("#Update_location").val(location);
+        $("#Update_description").val(description);
+        $("#Update_amenities").val(amenities);
+        $("#Update_PhoneNumber").val(phoneNumber);
+        
+        // Show current image
+        let imageSrc = imageUrl + (image || 'default.jpg');
+        $("#Update_currentImage").attr("src", imageSrc).on("error", function() {
+            $(this).attr("src", "assets/images/default.jpg");
+        });
+        
+        // Clear file input
+        $("#Update_imageUpload").val("");
+    }
+    
+    function updateHotel() {
+        if (!currentHotelId) {
+            alert("No hotel selected for update.");
+            return;
         }
-    });
+        
+        let name = $("#Update_name").val().trim();
+        let location = $("#Update_location").val().trim();
+        let description = $("#Update_description").val().trim();
+        let amenities = $("#Update_amenities").val().trim();
+        let phoneNumber = $("#Update_PhoneNumber").val().trim();
+        let imageInput = document.getElementById("Update_imageUpload");
+        let fileName = imageInput.files.length > 0 ? imageInput.files[0].name : $("#Update_currentImage").attr("src").split('/').pop();
 
-    function searchCustomer() {
+        if (!name || !location || !phoneNumber) {
+            alert("Please fill in all the required fields.");
+            return;
+        }
+
+        let token = localStorage.getItem("jwtToken");
+        let hotelData = {
+            "id": currentHotelId,
+            "name": name,
+            "location": location,
+            "description": description,
+            "amenities": amenities,
+            "phoneNumber": phoneNumber,
+            "image": fileName
+        };
+        
+        $.ajax({
+            url: "http://localhost:8080/api/v1/hotels/update/" + currentHotelId,
+            method: "PUT",
+            headers: {
+                "Authorization": `Bearer ${token}`,
+                "Content-Type": "application/json"
+            },
+            data: JSON.stringify(hotelData),
+            success: (updatedHotel) => {
+                alert("Hotel updated successfully!");
+                $("#updateModal").modal("hide");
+                loadHotels();
+            },
+            error: (error) => {
+                console.error(error);
+                if (error.status === 403) {
+                    alert("You don't have permission to update hotels.");
+                } else {
+                    alert("Something went wrong while updating the hotel.");
+                }
+            }
+        });
+    }
+    
+    function confirmDelete(id, name) {
+        if (confirm(`Are you sure you want to delete the hotel "${name}"?`)) {
+            deleteHotel(id);
+        }
+    }
+    
+    function deleteHotel(id) {
+        let token = localStorage.getItem("jwtToken");
+        
+        $.ajax({
+            url: `http://localhost:8080/api/v1/hotels/delete/${id}`,
+            method: "DELETE",
+            headers: {
+                "Authorization": `Bearer ${token}`
+            },
+            success: (response) => {
+                alert("Hotel deleted successfully");
+                loadHotels();
+            },
+            error: (error) => {
+                console.error(error);
+                if (error.status === 403) {
+                    alert("You don't have permission to delete hotels.");
+                } else {
+                    alert("Something went wrong while deleting the hotel.");
+                }
+            }
+        });
+    }
+    
+    function searchHotel() {
         let input = document.getElementById("search").value.toLowerCase();
         let table = document.getElementById("HotelTable");
         let rows = table.getElementsByTagName("tr");
@@ -390,7 +507,9 @@
             let cols = rows[i].getElementsByTagName("td");
             if (cols.length > 0) {
                 let hotelName = cols[1].textContent.toLowerCase();
-                if (hotelName.includes(input)) {
+                let hotelLocation = cols[2].textContent.toLowerCase();
+                
+                if (hotelName.includes(input) || hotelLocation.includes(input)) {
                     rows[i].style.display = "";
                 } else {
                     rows[i].style.display = "none";
@@ -398,101 +517,16 @@
             }
         }
     }
-
-
-    const edit = (HotelID, HotelName, HotelLocation, HotelDescription, HotelAmenities, HotelPhoneNumber, HotelImage) => {
-        // Set input values
-        $("#Update_name").val(HotelName);
-        $("#Update_location").val(HotelLocation);
-        $("#Update_description").val(HotelDescription);
-        $("#Update_amenities").val(HotelAmenities);
-        $("#Update_PhoneNumber").val(HotelPhoneNumber);
-        $("UpdateUserID").val(HotelID);
-
-        // Show current image
-        $("#Update_currentImage").attr("src", imageUrl + HotelImage).on("error", function () {
-            $(this).attr("src", "assets/images/default.jpg");
-        });
-
-        // Clear file input
-        $("#Update_imageUpload").val("");
-
-        // Update button click event
-        $("#btnUpdate").off("click").on("click", function () {
-            let fileInput = document.getElementById("Update_imageUpload");
-            let hotelData = {
-                name: $("#Update_name").val(),
-                location: $("#Update_location").val(),
-                description: $("#Update_description").val(),
-                amenities: $("#Update_amenities").val(),
-                phoneNumber: $("#Update_PhoneNumber").val(),
-                userID: $("#UpdateUserID").val(),
-                image: HotelImage // Default to existing image
-            };
-
-            if (fileInput.files.length > 0) {
-                // Extract only filename
-                let fileName = fileInput.files[0].name;
-                hotelData.image = fileName;
-            }
-
-            // Send update request
-            updateHotel(HotelID, hotelData);
-        });
-    };
-
-    // Function to send AJAX request
-    const updateHotel = (HotelID, hotelData) => {
-        $.ajax({
-            url: "http://localhost:8080/api/v1/hotel/update/" + HotelID,
-            method: "PUT",
-            headers: {
-                "Authorization": `Bearer ${localStorage.getItem("jwtToken")}`
-            },
-            contentType: "application/json",
-            data: JSON.stringify(hotelData),
-            success: (res) => {
-                alert("Hotel updated successfully!");
-                $("#updateModal").modal("hide");
-                location.reload(); // Refresh the page to reflect changes
-            },
-            error: (error) => {
-                console.error(error);
-                alert("Something went wrong while updating.");
-            }
-        });
-    };
-
-    const deleteHotel = (id) => {
-        if (confirm("Are you sure you want to delete this booking?")) {
-            $.ajax({
-                url: `http://localhost:8080/api/v1/hotel/delete/${id}`,
-                method: "DELETE",
-                headers: {
-                    "Authorization": `Bearer ${localStorage.getItem("jwtToken")}`
-                },
-                success: (res) => {
-                    if (res.statusCode === 200) {
-                        alert("Hotel deleted successfully");
-                        location.reload(); // Reload the page to update the table
-                    } else {
-                        alert("Failed: " + (res.message || "Unknown error"));
-                    }
-                },
-                error: (error) => {
-                    console.error(error);
-                    alert("Something went wrong while deleting.");
-                }
-            });
-        }
-    };
+    
     function logout() {
-        localStorage.removeItem("jwtToken");
-        alert("Logged out successfully");
-        window.location.href = "Login.html";
+        if (confirm("Are you sure you want to logout?")) {
+            localStorage.removeItem("jwtToken");
+            alert("Logged out successfully");
+            window.location.href = "Login.html";
+        }
     }
-
 </script>
+
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
         integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
         crossOrigin="anonymous"></script>

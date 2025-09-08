@@ -132,7 +132,7 @@
             </div>
         </div>
         <!--        Update Booking-->
-        <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="exampleModalLabel">
+        <!-- <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="exampleModalLabel">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -160,6 +160,67 @@
         </div>
     </div>
 </div>
+</div> -->
+<!-- Update Booking Modal -->
+<div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModalLabel">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Update Booking</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">User ID</label>
+                                <input type="text" class="form-control" id="UpdateUserId" readonly>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Room ID</label>
+                                <input type="text" class="form-control" id="UpdateRoomId" readonly>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Check-in Date</label>
+                                <input type="date" class="form-control" id="UpdateCheckInDate">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Check-out Date</label>
+                                <input type="date" class="form-control" id="UpdateCheckOutDate">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label class="form-label">Phone Number</label>
+                                <input type="text" class="form-control" id="UpdatePhoneNumber">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Email</label>
+                                <input type="email" class="form-control" id="UpdateEmail">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">City</label>
+                                <input type="text" class="form-control" id="UpdateCity">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Status</label>
+                                <select class="form-select" id="UpdateBookingStatus">
+                                    <option value="PENDING">PENDING</option>
+                                    <option value="CONFIRMED">CONFIRMED</option>
+                                    <option value="CANCELLED">CANCELLED</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="updateBooking()">Update Booking</button>
+            </div>
+        </div>
+    </div>
 </div>
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <!-- =========== Scripts =========  -->
@@ -169,120 +230,162 @@
 <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
 <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 <script>
+ 
     $(document).ready(function () {
-
         let token = localStorage.getItem("jwtToken");
-
         if (!token) {
             alert("You are not logged in!");
             window.location.href = "login.html";
             return;
         }
+        loadBookings();
+    });
 
+    function loadBookings() {
         $.ajax({
-            url: "http://localhost:8080/api/v1/booking/getAll",
+            url: "http://localhost:8080/api/v1/bookings/all",
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${localStorage.getItem("jwtToken")}`
             },
-            contentType: "application/json",
-            success: (res) => {
-                let bookings = res.data;
+            success: (bookings) => {
                 let table = $('#BookingTable');
                 table.empty();
 
-                bookings.forEach((booking) => {
-                    table.append(`
-                    <tr>
-                        <td>${booking.id}</td>
-                        <td>${booking.userId}</td>
-                        <td>${booking.roomId}</td>
-                        <td>${booking.checkInDate}</td>
-                        <td>${booking.checkOutDate}</td>
-                        <td>${booking.phoneNumber}</td>
-                        <td>${booking.email}</td>
-                        <td>${booking.status}</td>
-                        <td class="text-center">
-                            <button type="button" class="btn btn-danger" style="background-color: red"
-                                data-bs-toggle="modal" data-bs-target="#updateModal"
-                                onclick="editBooking('${booking.id}', '${booking.status}', '${booking.email}', '${booking.checkInDate}', '${booking.checkOutDate}', '${booking.roomId}')">
-                                Edit
-                            </button>
-                            <button type="button" class="btn btn-warning" style="background-color: orange" onclick="deleteBooking('${booking.id}')">Delete</button>
-                        </td>
-                    </tr>
-                `);
-                });
+                if (bookings && Array.isArray(bookings)) {
+                    bookings.forEach((booking) => {
+                        table.append(`
+                            <tr>
+                                <td>${booking.id}</td>
+                                <td>${booking.userId}</td>
+                                <td>${booking.roomId}</td>
+                                <td>${booking.checkInDate}</td>
+                                <td>${booking.checkOutDate}</td>
+                                <td>${booking.phoneNumber}</td>
+                                <td>${booking.email}</td>
+                                <td>${booking.status}</td>
+                                <td class="text-center">
+                                    <button type="button" class="btn btn-sm btn-primary"
+                                        data-bs-toggle="modal" data-bs-target="#updateModal"
+                                        onclick="prepareEdit('${booking.id}', '${booking.status}', '${booking.userId}', 
+                                        '${booking.roomId}', '${booking.checkInDate}', '${booking.checkOutDate}', 
+                                        '${booking.phoneNumber}', '${booking.email}', '${booking.city}')">
+                                        Edit
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-danger" 
+                                        onclick="confirmDelete('${booking.id}')">
+                                        Delete
+                                    </button>
+                                </td>
+                            </tr>
+                        `);
+                    });
+                } else {
+                    table.append('<tr><td colspan="9" class="text-center">No bookings found</td></tr>');
+                }
             },
             error: (error) => {
                 console.error("Error fetching bookings:", error);
                 alert("Something went wrong while fetching bookings.");
             }
         });
-    });
+    }
 
-    const editBooking = (id, status, email , checkInDate, checkOutDate,roomId) => {
-        document.getElementById("UpdateBookingStatus").value = status;
+    function prepareEdit(id, status, userId, roomId, checkInDate, checkOutDate, phoneNumber, email, city) {
+        currentBookingId = id;
+        
+        $("#UpdateBookingStatus").val(status);
+        $("#UpdateUserId").val(userId);
+        $("#UpdateRoomId").val(roomId);
+        $("#UpdateCheckInDate").val(checkInDate);
+        $("#UpdateCheckOutDate").val(checkOutDate);
+        $("#UpdatePhoneNumber").val(phoneNumber);
+        $("#UpdateEmail").val(email);
+        $("#UpdateCity").val(city);
+        
+        $("#updateModal").modal("show");
+    }
 
-        document.getElementById("btnUpdate").onclick = () => {
-            $.ajax({
-                url: `http://localhost:8080/api/v1/booking/update/${id}`,
-                method: "PUT",
-                headers: {
-                    "Authorization": `Bearer ${localStorage.getItem("jwtToken")}`
-                },
-                contentType: "application/json",
-                data: JSON.stringify({
-                    "status": document.getElementById("UpdateBookingStatus").value,
-                    "email": email,
-                    "checkInDate": checkInDate,
-                    "checkOutDate": checkOutDate,
-                    "roomId": roomId
-                }),
-                success: (res) => {
-                    if (res.statusCode === 200) {
-                        alert("Booking updated successfully.");
-                        $("#updateModal").modal("hide");
-                        location.reload();
-                    }
-                },
-                error: (error) => {
-                    console.error("Error updating booking:", error);
-                    alert("Something went wrong while updating booking.");
-                }
-            });
-        };
-    };
-
-    const deleteBooking = (id) => {
-        if (confirm("Are you sure you want to delete this booking?")) {
-            $.ajax({
-                url: `http://localhost:8080/api/v1/booking/delete/${id}`,
-                method: "DELETE",
-                headers: {
-                    "Authorization": `Bearer ${localStorage.getItem("jwtToken")}`
-                },
-                success: (res) => {
-                    if (res.statusCode === 200) {
-                        alert("Booking deleted successfully.");
-                        location.reload();
-                    } else {
-                        alert("Failed: " + (res.message || "Unknown error"));
-                    }
-                },
-                error: (error) => {
-                    console.error("Error deleting booking:", error);
-                    alert("Something went wrong while deleting.");
-                }
-            });
+    function updateBooking() {
+        if (!currentBookingId) {
+            alert("No booking selected for update.");
+            return;
         }
-    };
+        
+        let status = $("#UpdateBookingStatus").val();
+        let userId = $("#UpdateUserId").val();
+        let roomId = $("#UpdateRoomId").val();
+        let checkInDate = $("#UpdateCheckInDate").val();
+        let checkOutDate = $("#UpdateCheckOutDate").val();
+        let phoneNumber = $("#UpdatePhoneNumber").val();
+        let email = $("#UpdateEmail").val();
+        let city = $("#UpdateCity").val();
+
+        if (!status || !userId || !roomId || !checkInDate || !checkOutDate || !phoneNumber || !email || !city) {
+            alert("Please fill in all the required fields.");
+            return;
+        }
+
+        let bookingData = {
+            userId: parseInt(userId),
+            roomId: parseInt(roomId),
+            checkInDate: checkInDate,
+            checkOutDate: checkOutDate,
+            phoneNumber: phoneNumber,
+            email: email,
+            city: city,
+            status: status
+        };
+
+        $.ajax({
+            url: `http://localhost:8080/api/v1/bookings/${currentBookingId}`,
+            method: "PUT",
+            headers: {
+                "Authorization": `Bearer ${localStorage.getItem("jwtToken")}`,
+                "Content-Type": "application/json"
+            },
+            data: JSON.stringify(bookingData),
+            success: (updatedBooking) => {
+                alert("Booking updated successfully!");
+                $("#updateModal").modal("hide");
+                loadBookings();
+            },
+            error: (error) => {
+                console.error("Error updating booking:", error);
+                alert("Failed to update booking.");
+            }
+        });
+    }
+
+    function confirmDelete(id) {
+        if (confirm("Are you sure you want to delete this booking?")) {
+            deleteBooking(id);
+        }
+    }
+
+    function deleteBooking(id) {
+        $.ajax({
+            url: `http://localhost:8080/api/v1/bookings/${id}`,
+            method: "DELETE",
+            headers: {
+                "Authorization": `Bearer ${localStorage.getItem("jwtToken")}`
+            },
+            success: () => {
+                alert("Booking deleted successfully");
+                loadBookings();
+            },
+            error: (error) => {
+                console.error("Error deleting booking:", error);
+                alert("Failed to delete booking.");
+            }
+        });
+    }
+
     function logout() {
         localStorage.removeItem("jwtToken");
         alert("Logged out successfully");
         window.location.href = "Login.html";
     }
-
 
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"

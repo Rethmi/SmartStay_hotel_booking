@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class AuthController {
     private final AuthService authService;
+    private final AuthServiceImpl authServiceImpl;
 
     @PostMapping("/register")
     public ResponseEntity<APIResponse> registerUser(@RequestBody RegisterDto registerDto) {
@@ -81,101 +82,23 @@ public class AuthController {
 //                .body(new ResponseDTO(HttpStatus.CREATED.value(), "Success", authDTO));
 //    }
 //
-//    @PostMapping("/forgot-password")
-//    public ResponseEntity<ResponseDTO> forgotPassword(@RequestBody ForgotPasswordRequestDTO request) {
-//        String response = authServiceImpl.generateOTP(request.getEmail());
-//        return ResponseEntity.status(HttpStatus.CREATED)
-//                .body(new ResponseDTO(HttpStatus.CREATED.value(), "Success", response));
-//    }
-//
-//    @PostMapping("/verify-otp")
-//    public ResponseEntity<String> verifyOTP(@RequestBody OTPVerificationDTO request) {
-//        boolean isValid = authServiceImpl.verifyOTP(request.getEmail(), request.getOtp());
-//        return isValid ? ResponseEntity.ok("OTP Verified! Reset your password.")
-//                : ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid OTP!");
-//    }
-//
-//    @PostMapping("/reset-password")
-//    public ResponseEntity<String> resetPassword(@RequestBody ResetPasswordDTO request) {
-//        String response = authServiceImpl.resetPassword(request.getEmail(), request.getNewPassword());
-//        return ResponseEntity.ok(response);
-//    }
-}///package lk.ijse.gdse72.backend.service.impl;
-//
-//import lk.ijse.gdse72.backend.entity.User;
-//import lk.ijse.gdse72.backend.repository.UserRepository;
-//import lk.ijse.gdse72.backend.service.AuthService;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.mail.SimpleMailMessage;
-//import org.springframework.mail.javamail.JavaMailSender;
-//import org.springframework.security.crypto.password.PasswordEncoder;
-//import org.springframework.stereotype.Service;
-//
-//import java.util.HashMap;
-//import java.util.Map;
-//import java.util.Optional;
-//import java.util.Random;
-//
-//@Service
-//public class AuthServiceImpl implements AuthService {
-//
-//    @Autowired
-//    private PasswordEncoder passwordEncoder;
-//
-//    @Autowired
-//    private UserRepository userRepository;
-//
-//    @Autowired
-//    private JavaMailSender mailSender; // For sending OTP via email
-//
-//    private Map<String, String> otpStorage = new HashMap<>(); // Temporary storage (Use Redis for production)
-//
-//    public String generateOTP(String email) {
-//        Optional<User> userOptional = Optional.ofNullable(userRepository.findByEmail(email));
-//        if (userOptional.isEmpty()) {
-//            throw new RuntimeException("User not found!");
-//        }
-//
-//        String otp = String.valueOf(new Random().nextInt(999999 - 100000) + 100000); // Generate 6-digit OTP
-//        otpStorage.put(email, otp); // Store OTP temporarily
-//
-//        sendEmail(email, otp); // Send OTP via email
-//
-//        return "OTP sent successfully!";
-//    }
-//
-//    public void sendEmail(String email, String otp) {
-//        SimpleMailMessage message = new SimpleMailMessage();
-//        message.setTo(email);
-//        message.setSubject("Password Reset OTP");
-//        message.setText("Your OTP for password reset is: " + otp);
-//        mailSender.send(message);
-//    }
-//    public boolean verifyOTP(String email, String otp) {
-//        if (!otpStorage.containsKey(email)) {
-//            throw new RuntimeException("OTP expired or invalid!");
-//        }
-//
-//        if (otpStorage.get(email).equals(otp)) {
-//            otpStorage.remove(email); // OTP is used, remove it
-//            return true;
-//        } else {
-//            throw new RuntimeException("Incorrect OTP!");
-//        }
-//    }
-//    public String resetPassword(String email, String newPassword) {
-//        Optional<User> userOptional = Optional.ofNullable(userRepository.findByEmail(email));
-//        if (userOptional.isEmpty()) {
-//            throw new RuntimeException("User not found!");
-//        }
-//
-//        User user = userOptional.get();
-//        user.setPassword(passwordEncoder.encode(newPassword));
-//        userRepository.save(user);
-//
-//        return "Password reset successfully!";
-//    }
-//
-//
-//}
-//
+    @PostMapping("/forgot-password")
+    public ResponseEntity<ResponseDTO> forgotPassword(@RequestBody ForgotPasswordRequestDTO request) {
+        String response = authServiceImpl.generateOTP(request.getEmail());
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new ResponseDTO(HttpStatus.CREATED.value(), "Success", response));
+    }
+
+    @PostMapping("/verify-otp")
+    public ResponseEntity<String> verifyOTP(@RequestBody OTPVerificationDTO request) {
+        boolean isValid = authServiceImpl.verifyOTP(request.getEmail(), request.getOtp());
+        return isValid ? ResponseEntity.ok("OTP Verified! Reset your password.")
+                : ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid OTP!");
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<String> resetPassword(@RequestBody ResetPasswordDTO request) {
+        String response = authServiceImpl.resetPassword(request.getEmail(), request.getNewPassword());
+        return ResponseEntity.ok(response);
+    }
+}

@@ -2,10 +2,12 @@ package lk.ijse.gdse72.backend.repository;
 
 import lk.ijse.gdse72.backend.entity.Booking;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-public interface BookingRepository extends JpaRepository<Booking,Long> {
-    List<Booking> findByRoomIdIn(List<Long> roomIds);
-
+@Repository
+public interface BookingRepository extends JpaRepository<Booking, Long> {
+    List<Booking> findByUserId(Long userId);
+    List<Booking> findByRoomId(Long roomId);
 }

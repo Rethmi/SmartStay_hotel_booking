@@ -3,66 +3,119 @@ package lk.ijse.gdse72.backend.service.impl;
 import lk.ijse.gdse72.backend.dto.BookingDTO;
 import lk.ijse.gdse72.backend.entity.Booking;
 import lk.ijse.gdse72.backend.entity.Room;
+import lk.ijse.gdse72.backend.entity.User;
 import lk.ijse.gdse72.backend.repository.BookingRepository;
 import lk.ijse.gdse72.backend.repository.RoomRepository;
 import lk.ijse.gdse72.backend.repository.UserRepository;
 import lk.ijse.gdse72.backend.service.BookingService;
-import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeToken;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional
+@RequiredArgsConstructor
 public class BookingServiceImpl implements BookingService {
-    @Autowired
-    private BookingRepository bookingRepository;
 
-    @Autowired
-    private ModelMapper modelMapper;
+    private final BookingRepository bookingRepository;
+    private final UserRepository userRepository;
+    private final RoomRepository roomRepository;
 
-    @Autowired
-    private UserRepository userRepository;
+    private BookingDTO convertToDTO(Booking booking) {
+        return BookingDTO.builder()
+                .id(booking.getId())
+                .userId(booking.getUser().getId())
+                .roomId(booking.getRoom().getId())
+                .checkInDate(booking.getCheckInDate())
+                .checkOutDate(booking.getCheckOutDate())
+                .phoneNumber(booking.getPhoneNumber())
+                .email(booking.getEmail())
+                .city(booking.getCity())
+                .status(booking.getStatus())
+                .build();
+    }
 
-    @Autowired
-    private RoomRepository roomRepository;
-    @Override
-    public BookingDTO save(BookingDTO bookingDTO) {
-        bookingRepository.save(modelMapper.map(bookingDTO, Booking.class));
-        return bookingDTO;
+    private Booking convertToEntity(BookingDTO dto) {
+        User user = userRepository.findById(dto.getUserId())
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + dto.getUserId()));
+        Room room = roomRepository.findById(dto.getRoomId())
+                .orElseThrow(() -> new RuntimeException("Room not found with id: " + dto.getRoomId()));
 
+        return Booking.builder()
+                .id(dto.getId())
+                .user(user)
+                .room(room)
+                .checkInDate(dto.getCheckInDate())
+                .checkOutDate(dto.getCheckOutDate())
+                .phoneNumber(dto.getPhoneNumber())
+                .email(dto.getEmail())
+                .city(dto.getCity())
+                .status(dto.getStatus())
+                .build();
     }
 
     @Override
-    public void delete(Long id) {
+    public BookingDTO createBooking(BookingDTO bookingDTO) {
+        Booking booking = convertToEntity(bookingDTO);
+        return convertToDTO(bookingRepository.save(booking));
+    }
+
+    @Override
+    public BookingDTO getBookingById(Long id) {
+        return bookingRepository.findById(id)
+                .map(this::convertToDTO)
+                .orElseThrow(() -> new RuntimeException("Booking not found with id: " + id));
+    }
+
+    @Override
+    public List<BookingDTO> getAllBookings() {
+        return bookingRepository.findAll().stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public BookingDTO updateBooking(Long id, BookingDTO bookingDTO) {
+        Booking existingBooking = bookingRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Booking not found with id: " + id));
+
+        User user = userRepository.findById(bookingDTO.getUserId())
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + bookingDTO.getUserId()));
+        Room room = roomRepository.findById(bookingDTO.getRoomId())
+                .orElseThrow(() -> new RuntimeException("Room not found with id: " + bookingDTO.getRoomId()));
+
+        existingBooking.setUser(user);
+        existingBooking.setRoom(room);
+        existingBooking.setCheckInDate(bookingDTO.getCheckInDate());
+        existingBooking.setCheckOutDate(bookingDTO.getCheckOutDate());
+        existingBooking.setPhoneNumber(bookingDTO.getPhoneNumber());
+        existingBooking.setEmail(bookingDTO.getEmail());
+        existingBooking.setCity(bookingDTO.getCity());
+        existingBooking.setStatus(bookingDTO.getStatus());
+
+        return convertToDTO(bookingRepository.save(existingBooking));
+    }
+
+    @Override
+    public void deleteBooking(Long id) {
+        if (!bookingRepository.existsById(id)) {
+            throw new RuntimeException("Booking not found with id: " + id);
+        }
         bookingRepository.deleteById(id);
     }
 
     @Override
-    public void update(Long id, BookingDTO bookingDTO) {
-        Booking existingBooking = bookingRepository.findById(id).orElseThrow(() -> new RuntimeException("Booking not found."));
-        existingBooking.setStatus(Booking.BookingStatus.valueOf(bookingDTO.getStatus()));
-
-        bookingRepository.save(existingBooking);
+    public List<BookingDTO> getBookingsByUser(Long userId) {
+        return bookingRepository.findByUserId(userId).stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public List<BookingDTO> getAll() {
-
-        return modelMapper.map(bookingRepository.findAll(), new TypeToken<List<BookingDTO>>() {}.getType());
+    public List<BookingDTO> getBookingsByRoom(Long roomId) {
+        return bookingRepository.findByRoomId(roomId).stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
     }
-
-    @Override
-    public List<Booking> getBookingsByHotel(Long hotelID) {
-        List<Room> rooms = roomRepository.findByHotelId(hotelID);
-
-        List<Long> roomIds = rooms.stream().map(Room::getId).collect(Collectors.toList());
-
-        return bookingRepository.findByRoomIdIn(roomIds);
-    }
-
 }

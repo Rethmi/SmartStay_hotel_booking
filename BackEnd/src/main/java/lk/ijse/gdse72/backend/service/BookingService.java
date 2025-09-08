@@ -1,19 +1,14 @@
 package lk.ijse.gdse72.backend.service;
 
 import lk.ijse.gdse72.backend.dto.BookingDTO;
-import lk.ijse.gdse72.backend.entity.Booking;
-
 import java.util.List;
 
 public interface BookingService {
-    BookingDTO save(BookingDTO bookingDTO);
-
-    void delete(Long id);
-
-    void update(Long id, BookingDTO bookingDTO);
-
-    List<BookingDTO> getAll();
-
-    List<Booking> getBookingsByHotel(Long hotelID);
-
+    BookingDTO createBooking(BookingDTO bookingDTO);
+    BookingDTO getBookingById(Long id);
+    List<BookingDTO> getAllBookings();
+    BookingDTO updateBooking(Long id, BookingDTO bookingDTO);
+    void deleteBooking(Long id);
+    List<BookingDTO> getBookingsByUser(Long userId);
+    List<BookingDTO> getBookingsByRoom(Long roomId);
 }

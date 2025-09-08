@@ -174,19 +174,19 @@ public class JwtUtil implements Serializable {
     @Value("${jwt.secret}")
     private String secretKey;
 
-//    private Key getSigningKey() {
-//        // Ensure secretKey is at least 64 bytes for HS512
-//        return Keys.hmacShaKeyFor(secretKey.getBytes());
-//    }
+    private Key getSigningKey() {
+        // Ensure secretKey is at least 64 bytes for HS512
+        return Keys.hmacShaKeyFor(secretKey.getBytes());
+    }
 //
 //    // Retrieve username from JWT token
 //    public String getUsernameFromToken(String token) {
 //        return getClaimFromToken(token, Claims::getSubject);
 //    }
 //
-//    public Claims getUserRoleCodeFromToken(String token) {
-//        return Jwts.parserBuilder().setSigningKey(getSigningKey()).build().parseClaimsJws(token).getBody();
-//    }
+    public Claims getUserRoleCodeFromToken(String token) {
+        return Jwts.parserBuilder().setSigningKey(getSigningKey()).build().parseClaimsJws(token).getBody();
+    }
 //
 //    // Retrieve expiration date from JWT token
 //    public Date getExpirationDateFromToken(String token) {

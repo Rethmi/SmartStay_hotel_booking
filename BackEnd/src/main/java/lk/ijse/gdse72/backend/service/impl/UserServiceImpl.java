@@ -1,146 +1,172 @@
-// UserServiceImpl.java
+//package lk.ijse.gdse72.backend.service.impl;
+//
+//import lk.ijse.gdse72.backend.dto.UserDTO;
+//import lk.ijse.gdse72.backend.entity.User;
+//import lk.ijse.gdse72.backend.repository.UserRepository;
+//import lk.ijse.gdse72.backend.service.UserService;
+//import lombok.RequiredArgsConstructor;
+//import org.springframework.stereotype.Service;
+//
+//import java.util.List;
+//import java.util.stream.Collectors;
+//
+//@Service
+//@RequiredArgsConstructor
+//public class UserServiceImpl implements UserService {
+//
+//    private final UserRepository userRepository;
+//
+//    @Override
+//    public UserDTO saveUser(UserDTO userDTO) {
+//        User user = User.builder()
+//                .id(userDTO.getId())
+//                .username(userDTO.getUsername())
+//                .email(userDTO.getEmail())
+//                .role(userDTO.getRole())
+//                .password(userDTO.getPassword())
+//                .profileImage(userDTO.getProfileImage())
+//                .build();
+//        user = userRepository.save(user);
+//        userDTO.setId(user.getId());
+//        return userDTO;
+//    }
+//
+//    @Override
+//    public List<UserDTO> getAllUsers() {
+//        return userRepository.findAll().stream()
+//                .map(user -> UserDTO.builder()
+//                        .id(user.getId())
+//                        .username(user.getUsername())
+//                        .email(user.getEmail())
+//                        .role(user.getRole())
+//                        .profileImage(user.getProfileImage())
+//                        .build())
+//                .collect(Collectors.toList());
+//    }
+//
+//    @Override
+//    public UserDTO getUserById(Long id) {
+//        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+//        return UserDTO.builder()
+//                .id(user.getId())
+//                .username(user.getUsername())
+//                .email(user.getEmail())
+//                .role(user.getRole())
+//                .profileImage(user.getProfileImage())
+//                .build();
+//    }
+//}
 package lk.ijse.gdse72.backend.service.impl;
 
 import lk.ijse.gdse72.backend.dto.UserDTO;
 import lk.ijse.gdse72.backend.entity.User;
 import lk.ijse.gdse72.backend.repository.UserRepository;
 import lk.ijse.gdse72.backend.service.UserService;
-import org.modelmapper.ModelMapper;
-import org.modelmapper.TypeToken;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
-@Transactional
-public class UserServiceImpl implements UserDetailsService, UserService {
+@RequiredArgsConstructor
+public class UserServiceImpl implements UserService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private ModelMapper modelMapper;
-
-//    @Override
-//    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-//        User user = userRepository.findByEmail(email);
-//        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), getAuthority(user));
-//    }
-@Override
-public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-    User user = userRepository.findByEmail(email).orElseThrow();
-    if(user == null){
-        throw new UsernameNotFoundException("User not found: " + email);
-    }
-    return new org.springframework.security.core.userdetails.User(
-            user.getEmail(),
-            user.getPassword(),
-            getAuthority(user)
-    );
-}
-
-
-    public UserDTO loadUserDetailsByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(username).orElseThrow();
-        return modelMapper.map(user,UserDTO.class);
+    private UserDTO convertToDTO(User user) {
+        return UserDTO.builder()
+                .id(user.getId())
+                .username(user.getUsername())
+                .email(user.getEmail())
+                .role(user.getRole())
+                .profileImage(user.getProfileImage())
+                .build();
     }
 
-    private Set<SimpleGrantedAuthority> getAuthority(User user) {
-        Set<SimpleGrantedAuthority> authorities = new HashSet<>();
-        authorities.add(new SimpleGrantedAuthority(user.getRole()));
-        return authorities;
+    private User convertToEntity(UserDTO dto) {
+        return User.builder()
+                .id(dto.getId())
+                .username(dto.getUsername())
+                .email(dto.getEmail())
+                .role(dto.getRole())
+                .password(dto.getPassword())
+                .profileImage(dto.getProfileImage())
+                .build();
     }
 
     @Override
-    public UserDTO searchUser(String username) {
-        if (userRepository.existsByEmail(username)) {
-            User user=userRepository.findByEmail(username).orElseThrow();
-            return modelMapper.map(user,UserDTO.class);
-        } else {
-            return null;
-        }
+    public UserDTO createUser(UserDTO userDTO) {
+        User user = convertToEntity(userDTO);
+        return convertToDTO(userRepository.save(user));
     }
 
     @Override
-    public void deleteUser(String email) {
-        if (!userRepository.existsByEmail(email)) {
-            throw new RuntimeException("User not found");
-        }
-        userRepository.deleteByEmail(email);
-    }
-
-//    @Override
-//    public int saveUser(UserDTO userDTO) {
-//        if (userRepository.existsByEmail(userDTO.getEmail())) {
-//            System.out.println("Email Already Used");
-//            return 406; // HttpStatus.NOT_ACCEPTABLE.value()
-//        } else {
-//            System.out.println("Created");
-//            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-//            userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-//            userDTO.setRole("USER");
-//            userRepository.save(modelMapper.map(userDTO, User.class));
-//            return 201; // HttpStatus.CREATED.value()
-//        }
-//    }
-@Override
-public int saveUser(UserDTO userDTO) {
-    if (userRepository.existsByEmail(userDTO.getEmail())) {
-        System.out.println("Email Already Used: " + userDTO.getEmail());
-        return 409; // HttpStatus.CONFLICT.value()
-    } else {
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-        userDTO.setRole("USER");
-        userRepository.save(modelMapper.map(userDTO, User.class));
-        System.out.println("User Created: " + userDTO.getEmail());
-        return 201; // HttpStatus.CREATED.value()
-    }
-}
-
-    @Override
-    public void updateUserRole(String email, String newRole) {
-        User user = userRepository.findByEmail(String.valueOf(email)).orElseThrow();
-        user.setRole(newRole);
-        userRepository.save(user);
+    public List<UserDTO> getAllUsers() {
+        return userRepository.findAll().stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public List<UserDTO> getAll() {
-        return modelMapper.map(userRepository.findAll(),new TypeToken<List<UserDTO>>() {}.getType());
-    }
-
-    @Override
-    public boolean allReadyUsedEmail(String email) {
-        return userRepository.existsByEmail(email);
+    public UserDTO getUserById(Long id) {
+        return userRepository.findById(id)
+                .map(this::convertToDTO)
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
     }
 
     @Override
     public UserDTO getUserByEmail(String email) {
-        User user = userRepository.findByEmail(email).orElseThrow();
-        if (user != null) {
-            return modelMapper.map(user, UserDTO.class);
-        } else {
-            throw new UsernameNotFoundException("User not found with email: " + email);
-        }
+        return userRepository.findByEmail(email)
+                .map(this::convertToDTO)
+                .orElseThrow(() -> new RuntimeException("User not found with email: " + email));
     }
 
     @Override
-    public UserDTO getUserNameById(Long id) {
-        User user = userRepository.findById(Long.valueOf(String.valueOf(id))).orElse(null);
-        if (user != null) {
-            return modelMapper.map(user, UserDTO.class);
-        } else {
-            throw new UsernameNotFoundException("User not found with id: " + id);
+    public UserDTO updateUser(Long id, UserDTO userDTO) {
+        User existingUser = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+
+        existingUser.setUsername(userDTO.getUsername());
+        existingUser.setEmail(userDTO.getEmail());
+        existingUser.setRole(userDTO.getRole());
+        existingUser.setProfileImage(userDTO.getProfileImage());
+
+        if (userDTO.getPassword() != null && !userDTO.getPassword().isEmpty()) {
+            existingUser.setPassword(userDTO.getPassword());
         }
+
+        return convertToDTO(userRepository.save(existingUser));
+    }
+
+    @Override
+    public UserDTO updateUserByEmail(String email, UserDTO userDTO) {
+        User existingUser = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found with email: " + email));
+
+        existingUser.setUsername(userDTO.getUsername());
+        existingUser.setRole(userDTO.getRole());
+        existingUser.setProfileImage(userDTO.getProfileImage());
+
+        if (userDTO.getPassword() != null && !userDTO.getPassword().isEmpty()) {
+            existingUser.setPassword(userDTO.getPassword());
+        }
+
+        return convertToDTO(userRepository.save(existingUser));
+    }
+
+    @Override
+    public void deleteUser(Long id) {
+        if (!userRepository.existsById(id)) {
+            throw new RuntimeException("User not found with id: " + id);
+        }
+        userRepository.deleteById(id);
+    }
+
+    @Override
+    public void deleteUserByEmail(String email) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("User not found with email: " + email));
+        userRepository.delete(user);
     }
 }

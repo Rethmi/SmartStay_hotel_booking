@@ -1,77 +1,102 @@
-// RoomController.java
+//package lk.ijse.gdse72.backend.controller;
+//
+//import lk.ijse.gdse72.backend.dto.RoomDTO;
+//import lk.ijse.gdse72.backend.service.RoomService;
+//import lombok.RequiredArgsConstructor;
+//import org.springframework.http.ResponseEntity;
+//import org.springframework.web.bind.annotation.*;
+//
+//import java.util.List;
+//
+//@RestController
+//@RequestMapping("/api/v1/rooms")
+//@RequiredArgsConstructor
+//public class RoomController {
+//
+//    private final RoomService roomService;
+//
+//    @PostMapping("/save")
+//    public ResponseEntity<RoomDTO> createRoom(@RequestBody RoomDTO roomDTO) {
+//        return ResponseEntity.ok(roomService.createRoom(roomDTO));
+//    }
+//
+//    @GetMapping("/{id}")
+//    public ResponseEntity<RoomDTO> getRoomById(@PathVariable Long id) {
+//        return ResponseEntity.ok(roomService.getRoomById(id));
+//    }
+//
+//    @GetMapping
+//    public ResponseEntity<List<RoomDTO>> getAllRooms() {
+//        return ResponseEntity.ok(roomService.getAllRooms());
+//    }
+//
+//    @PutMapping("/{id}")
+//    public ResponseEntity<RoomDTO> updateRoom(@PathVariable Long id, @RequestBody RoomDTO roomDTO) {
+//        return ResponseEntity.ok(roomService.updateRoom(id, roomDTO));
+//    }
+//
+//    @DeleteMapping("/{id}")
+//    public ResponseEntity<Void> deleteRoom(@PathVariable Long id) {
+//        roomService.deleteRoom(id);
+//        return ResponseEntity.noContent().build();
+//    }
+//
+//    @GetMapping("/hotel/{hotelId}")
+//    public ResponseEntity<List<RoomDTO>> getRoomsByHotel(@PathVariable Long hotelId) {
+//        return ResponseEntity.ok(roomService.getRoomsByHotel(hotelId));
+//    }
+//}
 package lk.ijse.gdse72.backend.controller;
 
-import jakarta.validation.Valid;
-import lk.ijse.gdse72.backend.dto.ResponseDTO;
 import lk.ijse.gdse72.backend.dto.RoomDTO;
 import lk.ijse.gdse72.backend.service.RoomService;
-import lk.ijse.gdse72.backend.service.impl.RoomServiceImpl;
-import lk.ijse.gdse72.backend.util.JwtUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin
+import java.util.List;
+
 @RestController
-@RequestMapping("api/v1/room")
+@RequestMapping("/api/v1/rooms")
+@RequiredArgsConstructor
+@CrossOrigin(origins = "*")
 public class RoomController {
+
     private final RoomService roomService;
-    private final RoomServiceImpl roomServiceImpl;
-
-    @Autowired
-    JwtUtil jwtUtil;
-
-    public RoomController(RoomService roomService, RoomServiceImpl roomServiceImpl) {
-        this.roomService = roomService;
-        this.roomServiceImpl = roomServiceImpl;
-    }
 
     @PostMapping("/save")
-    @PreAuthorize("hasAnyAuthority('ADMIN','Manager')")
-    public ResponseEntity<ResponseDTO> saveRoom(@RequestBody @Valid RoomDTO roomDTO,@RequestHeader("Authorization") String token) {
-        System.out.println("hotelID"+" "+roomDTO.getHotelID());
-        System.out.println(roomDTO.getImage1());
-        System.out.println(roomDTO.getImage2());
-//        jwtUtil.getUserRoleCodeFromToken(token.substring(7));
-        roomServiceImpl.save(roomDTO);
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(new ResponseDTO(HttpStatus.OK.value(), "Room Saved Successfully", null));
+    public ResponseEntity<RoomDTO> createRoom(@RequestBody RoomDTO roomDTO) {
+        return ResponseEntity.ok(roomService.createRoom(roomDTO));
     }
 
-    @DeleteMapping(value = "/delete/{id}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','Manager')")
-    public ResponseEntity <ResponseDTO> deleteRoom(@PathVariable Long id,@RequestHeader("Authorization") String token) {
-//        jwtUtil.getUserRoleCodeFromToken(token.substring(7));
-        roomService.delete(id);
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(new ResponseDTO(HttpStatus.OK.value(), "Success", null));
+    @GetMapping("/{id}")
+    public ResponseEntity<RoomDTO> getRoomById(@PathVariable Long id) {
+        return ResponseEntity.ok(roomService.getRoomById(id));
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<RoomDTO>> getAllRooms() {
+        return ResponseEntity.ok(roomService.getAllRooms());
     }
 
     @PutMapping("/update/{id}")
-    @PreAuthorize("hasAnyAuthority('ADMIN','Manager')")
-    public ResponseEntity<ResponseDTO> updateRoom(@PathVariable Long id, @RequestBody @Valid RoomDTO roomDTO,@RequestHeader("Authorization") String token) {
-        System.out.println(roomDTO.getImage1()+"   Image 1");
-//        jwtUtil.getUserRoleCodeFromToken(token.substring(7));
-        roomServiceImpl.update(id,roomDTO);
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(new ResponseDTO(HttpStatus.OK.value(), "Room Updated Successfully", null));
+    public ResponseEntity<RoomDTO> updateRoom(@PathVariable Long id, @RequestBody RoomDTO roomDTO) {
+        return ResponseEntity.ok(roomService.updateRoom(id, roomDTO));
     }
 
-    @GetMapping("getAll")
-    @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
-    public ResponseEntity<ResponseDTO> getAllRooms(@RequestHeader("Authorization") String token) {
-//        jwtUtil.getUserRoleCodeFromToken(token.substring(7));
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(new ResponseDTO(HttpStatus.OK.value(), "Success", roomService.getAll()));
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> deleteRoom(@PathVariable Long id) {
+        roomService.deleteRoom(id);
+        return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/getByHotelId/{hotelId}")
-    @PreAuthorize("hasAnyAuthority('USER')")
-    public ResponseEntity<ResponseDTO> getAllRoomsByHotelID(@PathVariable Long hotelId ,@RequestHeader("Authorization") String token) {
-//        jwtUtil.getUserRoleCodeFromToken(token.substring(7));
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(new ResponseDTO(HttpStatus.OK.value(), "Success", roomService.getAllRoomsByHotelID(hotelId)));
+    @GetMapping("/hotel/{hotelId}")
+    public ResponseEntity<List<RoomDTO>> getRoomsByHotel(@PathVariable Long hotelId) {
+        return ResponseEntity.ok(roomService.getRoomsByHotel(hotelId));
+    }
+
+    @GetMapping("/available/{status}")
+    public ResponseEntity<List<RoomDTO>> getRoomsByAvailability(@PathVariable String status) {
+        return ResponseEntity.ok(roomService.getRoomsByAvailability(status));
     }
 }
