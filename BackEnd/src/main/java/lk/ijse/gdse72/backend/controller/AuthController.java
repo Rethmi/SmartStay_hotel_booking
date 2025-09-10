@@ -81,24 +81,24 @@ public class AuthController {
 //        return ResponseEntity.status(HttpStatus.CREATED)
 //                .body(new ResponseDTO(HttpStatus.CREATED.value(), "Success", authDTO));
 //    }
+////
+//    @PostMapping("/forgot-password")
+//    public ResponseEntity<ResponseDTO> forgotPassword(@RequestBody ForgotPasswordRequestDTO request) {
+//        String response = authServiceImpl.generateOTP(request.getEmail());
+//        return ResponseEntity.status(HttpStatus.CREATED)
+//                .body(new ResponseDTO(HttpStatus.CREATED.value(), "Success", response));
+//    }
+
+//    @PostMapping("/verify-otp")
+//    public ResponseEntity<String> verifyOTP(@RequestBody OTPVerificationDTO request) {
+//        boolean isValid = authServiceImpl.verifyOTP(request.getEmail(), request.getOtp());
+//        return isValid ? ResponseEntity.ok("OTP Verified! Reset your password.")
+//                : ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid OTP!");
+//    }
 //
-    @PostMapping("/forgot-password")
-    public ResponseEntity<ResponseDTO> forgotPassword(@RequestBody ForgotPasswordRequestDTO request) {
-        String response = authServiceImpl.generateOTP(request.getEmail());
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(new ResponseDTO(HttpStatus.CREATED.value(), "Success", response));
-    }
-
-    @PostMapping("/verify-otp")
-    public ResponseEntity<String> verifyOTP(@RequestBody OTPVerificationDTO request) {
-        boolean isValid = authServiceImpl.verifyOTP(request.getEmail(), request.getOtp());
-        return isValid ? ResponseEntity.ok("OTP Verified! Reset your password.")
-                : ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid OTP!");
-    }
-
-    @PostMapping("/reset-password")
-    public ResponseEntity<String> resetPassword(@RequestBody ResetPasswordDTO request) {
-        String response = authServiceImpl.resetPassword(request.getEmail(), request.getNewPassword());
-        return ResponseEntity.ok(response);
-    }
+//    @PostMapping("/reset-password")
+//    public ResponseEntity<String> resetPassword(@RequestBody ResetPasswordDTO request) {
+//        String response = authServiceImpl.resetPassword(request.getEmail(), request.getNewPassword());
+//        return ResponseEntity.ok(response);
+//    }
 }

@@ -2,561 +2,524 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart Hotel Booking</title>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Hotel Booking</title>
 
-    <!--
-      - favicon
-    -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="shortcut icon" href="./favicon.svg" type="image/svg+xml">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <link rel="shortcut icon" href="./favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/hotelSearch.css">
 
-    <!--
-      - custom css link
-    -->
-    <link rel="stylesheet" href="css/hotelSearch.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <style>
+    .logo-hotel {
+      width: 300px;
+      height: 53px;
+    }
 
-    <!--
-      - google font link
-    -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-            href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap"
-            rel="stylesheet">
-    <style>
-        .logo-hotel {
-            width: 300px;
-            height: 53px;
-        }
+    ol,
+    ul {
+      padding-left: 0rem;
+    }
 
-        ol, ul {
-            padding-left: 0rem;
-        }
-
-        .see {
-            padding: 8px 20px;
-        }
-    </style>
+    .see {
+      padding: 8px 20px;
+    }
+    .searchContainer {
+    min-height: 400px;
+  }
+  
+  .card {
+    transition: transform 0.3s ease;
+  }
+  
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  }
+  
+  .seeAvailability {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+    transition: all 0.3s ease;
+  }
+  
+  .seeAvailability:hover {
+    background-color: #0b5ed7;
+    border-color: #0a58ca;
+    transform: scale(1.05);
+  }
+  </style>
 </head>
 
 <body id="top">
 
-<!--
-  - #HEADER
--->
-
-<header class="header" data-header>
-
+  <!-- HEADER -->
+  <header class="header" data-header>
     <div class="overlay" data-overlay></div>
-
     <div class="header-top">
-        <div class="container">
-
-            <a href="tel:+01123456790" class="helpline-box">
-
-                <div class="icon-box">
-                    <ion-icon name="call-outline"></ion-icon>
-                </div>
-
-                <div class="wrapper">
-                    <p class="helpline-title">For Further Inquires :</p>
-
-                    <p class="helpline-number">+01 (123) 4567 90</p>
-                </div>
-
-            </a>
-
-            <a href="#" class="logo logo-hotel">
-                <img src="./assets/images/HotelLogo.png" alt="Tourly logo" class="logo-hotel">
-            </a>
-
-            <div class="header-btn-group">
-
-                <button class="search-btn" aria-label="Search">
-                    <ion-icon name="search"></ion-icon>
-                </button>
-
-                <button class="nav-open-btn" aria-label="Open Menu" data-nav-open-btn>
-                    <ion-icon name="menu-outline"></ion-icon>
-                </button>
-
-            </div>
-
+      <div class="container">
+        <a href="tel:+01123456790" class="helpline-box">
+          <div class="icon-box">
+            <ion-icon name="call-outline"></ion-icon>
+          </div>
+          <div class="wrapper">
+            <p class="helpline-title">For Further Inquires :</p>
+            <p class="helpline-number">+01 (123) 4567 90</p>
+          </div>
+        </a>
+        <a href="#" class="logo logo-hotel">
+          <img src="./assets/images/HotelLogo.png" alt="Hotel Logo" class="logo-hotel">
+        </a>
+        <div class="header-btn-group">
+          <button class="search-btn" aria-label="Search">
+            <ion-icon name="search"></ion-icon>
+          </button>
+          <button class="nav-open-btn" aria-label="Open Menu" data-nav-open-btn>
+            <ion-icon name="menu-outline"></ion-icon>
+          </button>
         </div>
+      </div>
     </div>
 
     <div class="header-bottom">
-        <div class="container">
+      <div class="container">
+        <ul class="social-list">
+          <li><a href="#" class="social-link"><ion-icon name="logo-facebook"></ion-icon></a></li>
+          <li><a href="#" class="social-link"><ion-icon name="logo-twitter"></ion-icon></a></li>
+          <li><a href="#" class="social-link"><ion-icon name="logo-youtube"></ion-icon></a></li>
+        </ul>
 
-            <ul class="social-list">
+        <nav class="navbar" data-navbar>
+          <div class="navbar-top">
+            <a href="#" class="logo">
+              <img src="./assets/images/colombo.jpeg" alt="Logo">
+            </a>
+            <button class="nav-close-btn" aria-label="Close Menu" data-nav-close-btn>
+              <ion-icon name="close-outline"></ion-icon>
+            </button>
+          </div>
+          <ul class="navbar-list">
+            <li><a href="CustomerDashboard.html" class="navbar-link">Home</a></li>
+            <li><a href="#" class="navbar-link">About Us</a></li>
+            <li><a href="#destination" class="navbar-link">Stays</a></li>
+            <li><a href="#contact" class="navbar-link">Contact Us</a></li>
+          </ul>
+        </nav>
 
-                <li>
-                    <a href="#" class="social-link">
-                        <ion-icon name="logo-facebook"></ion-icon>
-                    </a>
-                </li>
-
-                <li>
-                    <a href="#" class="social-link">
-                        <ion-icon name="logo-twitter"></ion-icon>
-                    </a>
-                </li>
-
-                <li>
-                    <a href="#" class="social-link">
-                        <ion-icon name="logo-youtube"></ion-icon>
-                    </a>
-                </li>
-
-            </ul>
-
-            <nav class="navbar" data-navbar>
-
-                <div class="navbar-top">
-
-                    <a href="#" class="logo">
-                        <img src="./assets/images/logo-blue.svg" alt="Tourly logo">
-                    </a>
-
-                    <button class="nav-close-btn" aria-label="Close Menu" data-nav-close-btn>
-                        <ion-icon name="close-outline"></ion-icon>
-                    </button>
-
-                </div>
-
-                <ul class="navbar-list">
-
-                    <li>
-                        <a href="CustomerDashboard.html" class="navbar-link" data-nav-link>home</a>
-                    </li>
-
-                    <li>
-                        <a href="#" class="navbar-link" data-nav-link>about us</a>
-                    </li>
-
-                    <li>
-                        <a href="#destination" class="navbar-link" data-nav-link>Stays</a>
-                    </li>
-
-                    <!-- <li>
-                      <a href="#package" class="navbar-link" data-nav-link></a>
-                    </li> -->
-
-
-                    <li>
-                        <a href="#contact" class="navbar-link" data-nav-link>contact us</a>
-                    </li>
-
-                </ul>
-
-            </nav>
-
-            <button class="btn btn-primary" onclick="logout()">Log Out</button>
-
-        </div>
+        <button class="btn btn-primary" onclick="logout()">Log Out</button>
+      </div>
     </div>
+  </header>
 
-</header>
-
-
-<main>
+  <main>
     <article>
-
-        <!--
-          - #HERO
-        -->
-
-        <section class="hero" id="home">
-            <div class="container">
-
-                <h2 class="h1 hero-title">Journey to explore Sri Lanka</h2>
-
-                <p class="hero-text">
-                    Discover the breathtaking beauty of Sri Lanka, where golden beaches, lush mountains, and rich
-                    heritage await. Whether you're seeking adventure, relaxation, or cultural experiences, your perfect
-                    getaway starts here
-                </p>
-
-                <div class="btn-group">
-                    <button class="btn btn-primary">Learn more</button>
-
-                    <button class="btn btn-primary" onclick="logout()">Log Out</button>
-                </div>
-
-            </div>
-        </section>
-
-
-        <!--
-          - #TOUR SEARCH
-        -->
-
-        <section class="tour-search">
-            <div class="container">
-
-                <form action="" class="tour-search-form">
-
-                    <div class="input-wrapper">
-                        <label for="destination" class="input-label">Search Destination*</label>
-
-                        <input type="text" name="destination" id="destination" required placeholder="Enter Destination"
-                               class="input-field">
-                    </div>
-                    <div class="input-wrapper">
-                        <label for="people" class="input-label">Room Type*</label>
-                        <select name="people" id="people" required class="input-field">
-                            <option value="single">Single</option>
-                            <option value="double" selected>Double</option> <!-- Default value -->
-                            <option value="suite">Suite</option>
-                        </select>
-                    </div>
-
-
-                    <div class="input-wrapper">
-                        <label for="checkin" class="input-label">Checkin Date**</label>
-
-                        <input type="date" name="checkin" id="checkin" required class="input-field">
-                    </div>
-
-                    <div class="input-wrapper">
-                        <label for="checkout" class="input-label">Checkout Date*</label>
-
-                        <input type="date" name="checkout" id="checkout" required class="input-field">
-                    </div>
-
-                    <button type="submit" class="btn btn-secondary" id="search_btn">Search now</button>
-
-                </form>
-
-            </div>
-        </section>
-
-        <div class="searchContainer m-5 d-flex justify-content-around flex-wrap " id="hotelsContainer">
-            <div class="card mb-3" id="hotel" style="max-width: 540px;">
-                <div class="row g-0">
-                    <div class="col-md-4">
-                        <img src="assets/images/colombo.jpeg" class="img-fluid rounded-start" alt="Hotels">
-                    </div>
-                    <div class="col-md-8">
-                        <div class="card-body">
-                            <h5 class="card-title fw-bold">Hotel Name</h5>
-                            <div class="d-flex">
-                                <p class="me-2"><a class="link-opacity-100-hover" style="font-size: 10px" href="#">Colombo</a>
-                                </p>
-                                <p><a class="link-opacity-100-hover" style="font-size: 10px" href="#">Show On Map</a>
-                                </p>
-                                <p class="ms-2"><a class="link-opacity-100-hover" style="font-size: 10px" href="#">Reviews</a>
-                                </p>
-                            </div>
-                            <p class="card-text"><small class="text-body-secondary">Double Room</small></p>
-                            <p class="card-text">This is a wider card with supporting text below as a natural lead-in to
-                                additional content. This content is a little bit longer.</p>
-                            <button type="button" class="btn btn-primary see ms-4">See Availability</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+      <!-- HERO -->
+      <section class="hero" id="home">
+        <div class="container">
+          <h2 class="h1 hero-title">Journey to explore Sri Lanka</h2>
+          <p class="hero-text">
+            Discover the breathtaking beauty of Sri Lanka, where golden beaches, lush mountains, and rich
+            heritage await. Whether you're seeking adventure, relaxation, or cultural experiences, your perfect
+            getaway starts here.
+          </p>
+          <div class="btn-group">
+            <button class="btn btn-primary">Learn more</button>
+            <button class="btn btn-primary" onclick="logout()">Log Out</button>
+          </div>
         </div>
-        <!--
-          - #CTA
-        -->
+      </section>
 
-        <section class="cta" id="contact">
-            <div class="container">
-
-                <div class="cta-content">
-                    <p class="section-subtitle">Call To Action</p>
-
-                    <h2 class="h2 section-title">Ready For Unforgatable Travel. Remember Us!</h2>
-
-                    <p class="section-text">
-                        Fusce hic augue velit wisi quibusdam pariatur, iusto primis, nec nemo, rutrum. Vestibulum cumque
-                        laudantium. Sit ornare
-                        mollitia tenetur, aptent.
-                    </p>
-                </div>
-
-                <button class="btn btn-secondary">Contact Us !</button>
-
+      <!-- TOUR SEARCH -->
+      <section class="tour-search">
+        <div class="container">
+          <form action="" class="tour-search-form">
+            <div class="input-wrapper">
+              <label for="destination" class="input-label">Search Destination*</label>
+              <input type="text" id="destination" placeholder="Enter Destination" required class="input-field">
             </div>
-        </section>
+            <div class="input-wrapper">
+              <label for="people" class="input-label">Room Type*</label>
+              <select id="people" required class="input-field">
+                <option value="single">Single</option>
+                <option value="double" selected>Double</option>
+                <option value="suite">Suite</option>
+              </select>
+            </div>
+            <div class="input-wrapper">
+              <label for="checkin" class="input-label">Checkin Date*</label>
+              <input type="date" id="checkin" required class="input-field">
+            </div>
+            <div class="input-wrapper">
+              <label for="checkout" class="input-label">Checkout Date*</label>
+              <input type="date" id="checkout" required class="input-field">
+            </div>
+            <button type="submit" class="btn btn-secondary" id="search_btn">Search now</button>
+          </form>
+        </div>
+      </section>
 
+      <!-- HOTEL LIST -->
+      <div class="searchContainer m-5 d-flex justify-content-around flex-wrap" id="hotelsContainer"></div>
+
+      <!-- CTA -->
+      <section class="cta" id="contact">
+        <div class="container">
+          <div class="cta-content">
+            <p class="section-subtitle">Call To Action</p>
+            <h2 class="h2 section-title">Ready For Unforgettable Travel. Remember Us!</h2>
+            <p class="section-text">Enjoy seamless hotel bookings with Smart Hotel Booking. Your comfort, our priority.</p>
+          </div>
+          <button class="btn btn-secondary">Contact Us!</button>
+        </div>
+      </section>
     </article>
-</main>
-<!--
-  - #FOOTER
--->
+  </main>
 
-<footer class="footer">
-
+  <!-- FOOTER -->
+  <footer class="footer">
     <div class="footer-top">
-        <div class="container">
-
-            <div class="footer-brand">
-
-                <a href="#" class="logo">
-                    <img src="./assets/images/HotelLogo.png" alt="Tourly logo">
-                </a>
-
-                <p class="footer-text">
-                    Urna ratione ante harum provident, eleifend, vulputate molestiae proin fringilla, praesentium magna
-                    conubia
-                    at
-                    perferendis, pretium, aenean aut ultrices.
-                </p>
-
-            </div>
-
-            <div class="footer-contact">
-
-                <h4 class="contact-title">Contact Us</h4>
-
-                <p class="contact-text">
-                    Feel free to contact and reach us !!
-                </p>
-
-                <ul>
-
-                    <li class="contact-item">
-                        <ion-icon name="call-outline"></ion-icon>
-
-                        <a href="tel:+01123456790" class="contact-link">+01 (123) 4567 90</a>
-                    </li>
-
-                    <li class="contact-item">
-                        <ion-icon name="mail-outline"></ion-icon>
-
-                        <a href="mailto:info.tourly.com" class="contact-link">SmartHotelBooking@gmail.com</a>
-                    </li>
-
-                    <li class="contact-item">
-                        <ion-icon name="location-outline"></ion-icon>
-
-                        <address>Sri Lanka</address>
-                    </li>
-
-                </ul>
-
-            </div>
-
-            <div class="footer-form">
-
-                <p class="formm-text">
-                    Subscribe our newsletter for more update & news !!
-                </p>
-
-                <form action="" class="form-wrapper">
-                    <input type="email" name="email" class="input-field" placeholder="Enter Your Email" required>
-
-                    <button type="submit" class="btn btn-secondary">Subscribe</button>
-                </form>
-
-            </div>
-
+      <div class="container">
+        <div class="footer-brand">
+          <a href="#" class="logo">
+            <img src="./assets/images/HotelLogo.png" alt="Hotel Logo">
+          </a>
+          <p class="footer-text">
+            Smart Hotel Booking brings you the best hotels in Sri Lanka with an effortless booking process.
+          </p>
         </div>
-    </div>
 
+        <div class="footer-contact">
+          <h4 class="contact-title">Contact Us</h4>
+          <p class="contact-text">Feel free to contact and reach us!</p>
+          <ul>
+            <li class="contact-item"><ion-icon name="call-outline"></ion-icon><a href="tel:+01123456790"
+                class="contact-link">+01 (123) 4567 90</a></li>
+            <li class="contact-item"><ion-icon name="mail-outline"></ion-icon><a href="mailto:SmartHotelBooking@gmail.com"
+                class="contact-link">SmartHotelBooking@gmail.com</a></li>
+            <li class="contact-item"><ion-icon name="location-outline"></ion-icon><address>Sri Lanka</address></li>
+          </ul>
+        </div>
+
+        <div class="footer-form">
+          <p class="formm-text">Subscribe to our newsletter for updates!</p>
+          <form action="" class="form-wrapper">
+            <input type="email" class="input-field" placeholder="Enter Your Email" required>
+            <button type="submit" class="btn btn-secondary">Subscribe</button>
+          </form>
+        </div>
+      </div>
+    </div>
     <div class="footer-bottom">
-        <div class="container">
-
-            <p class="copyright">
-                &copy; 2025 <a href="">Smart Hotel Booking</a>. All rights reserved
-            </p>
-
-            <ul class="footer-bottom-list">
-
-                <li>
-                    <a href="#" class="footer-bottom-link">Privacy Policy</a>
-                </li>
-
-                <li>
-                    <a href="#" class="footer-bottom-link">Term & Condition</a>
-                </li>
-
-                <li>
-                    <a href="#" class="footer-bottom-link">FAQ</a>
-                </li>
-
-            </ul>
-
-        </div>
+      <div class="container">
+        <p class="copyright">&copy; 2025 <a href="">Smart Hotel Booking</a>. All rights reserved.</p>
+        <ul class="footer-bottom-list">
+          <li><a href="#" class="footer-bottom-link">Privacy Policy</a></li>
+          <li><a href="#" class="footer-bottom-link">Terms & Conditions</a></li>
+          <li><a href="#" class="footer-bottom-link">FAQ</a></li>
+        </ul>
+      </div>
     </div>
+  </footer>
 
-</footer>
+  <a href="#top" class="go-top" data-go-top><ion-icon name="chevron-up-outline"></ion-icon></a>
 
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+  <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+    crossorigin="anonymous"></script>
 
-<a href="#top" class="go-top" data-go-top>
-    <ion-icon name="chevron-up-outline"></ion-icon>
-</a>
-
-
-<!--
-  - custom js link
--->
-<script src="js/CustomerDashboard.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-
-<!--
-  - ionicon link
--->
-<script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
-<script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
-        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
-        crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
-        integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
-        crossorigin="anonymous"></script>
-<script>
-
+  <script>
     $(document).ready(function () {
-        let token = localStorage.getItem("jwtToken");
+      let token = localStorage.getItem("jwtToken");
+      if (!token) {
+        alert("Please login first");
+        window.location.href = "login.html";
+        return;
+      }
 
-        if (!token) {
-            alert("Please login first");
-            window.location.href = "login.html";
-            return;
-        }
+      // Load saved search parameters if they exist
+      const savedDestination = localStorage.getItem("destination");
+      const savedCheckin = localStorage.getItem("checkin");
+      const savedCheckout = localStorage.getItem("checkout");
+      const savedPeople = localStorage.getItem("people");
+      
+      if (savedDestination) $("#destination").val(savedDestination);
+      if (savedCheckin) $("#checkin").val(savedCheckin);
+      if (savedCheckout) $("#checkout").val(savedCheckout);
+      if (savedPeople) $("#people").val(savedPeople);
 
-        // Load values from localStorage on page load
-        $("#destination").val(localStorage.getItem("destination"));
-        $("#checkin").val(localStorage.getItem("checkin"));
-        $("#checkout").val(localStorage.getItem("checkout"));
-        $("#people").val(localStorage.getItem("people"));
+      // If we have search parameters, perform the search
+      if (savedDestination || savedCheckin || savedCheckout || savedPeople) {
+        fetchHotels();
+      }
 
-        fetchHotels(); // Page load එකේදි call කරයි
-
-        $(".tour-search-form").submit(function (e) {
-            e.preventDefault(); // Form default submit එක prevent කරනවා
-            fetchHotels(); // Form submit කලත් hotels load කරන function එක call කරයි
-        });
+      $(".tour-search-form").submit(function (e) {
+        e.preventDefault();
+        
+        // Save search parameters to localStorage
+        localStorage.setItem("destination", $("#destination").val());
+        localStorage.setItem("checkin", $("#checkin").val());
+        localStorage.setItem("checkout", $("#checkout").val());
+        localStorage.setItem("people", $("#people").val());
+        
+        fetchHotels();
+      });
     });
 
     function fetchHotels() {
-        let people = $("#people").val();
-        let checkin = $("#checkin").val();
-        let checkout = $("#checkout").val();
-        let destination = $("#destination").val()?.trim().toLowerCase() || "";
-        localStorage.setItem("people", people);
-        if (checkin && checkout) {
-            let checkinDate = new Date(checkin);
-            let checkoutDate = new Date(checkout);
-            let days = Math.ceil((checkoutDate - checkinDate) / (1000 * 3600 * 24));
-            localStorage.setItem("days", days);
-            console.log("Number of days:", days);
-        }
+    const people = parseInt($("#people").val()) || 1;
+    const checkin = $("#checkin").val();
+    const checkout = $("#checkout").val();
+    const destination = $("#destination").val()?.trim().toLowerCase() || "";
+    const roomTypeFilter = $("#roomType").val(); // optional room type filter
 
-        $.ajax({
-            url: "http://localhost:8080/api/v1/hotel/getAll",
-            method: "GET",
-            headers: {
-                "Authorization": `Bearer ${localStorage.getItem("jwtToken")}`
-            },
-            contentType: "application/json",
-            success: (res) => {
-                $("#hotelsContainer").empty();
-
-                let filteredHotels = res.data.filter((hotel) =>
-                    hotel.location.toLowerCase().includes(destination)
-                );
-
-                if (filteredHotels.length === 0) {
-                    $("#hotelsContainer").html("<p class='text-danger'>No hotels found for the selected destination.</p>");
-                    return;
-                }
-
-                let displayedHotels = [];
-
-                filteredHotels.forEach((hotel) => {
-                    fetchRooms(hotel, people, displayedHotels);
-                });
-
-                setTimeout(() => {
-                    if (displayedHotels.length === 0) {
-                        $("#hotelsContainer").html("<p class='text-danger'>No hotels found for the selected room type.</p>");
-                    }
-                }, 500);
-            },
-            error: (xhr, status, error) => {
-                console.log("Error fetching hotels:", error);
-                alert("Failed to load hotels.");
-            }
-        });
+    if (new Date(checkin) >= new Date(checkout)) {
+        alert("Check-out date must be after check-in date");
+        return;
     }
 
-    function fetchRooms(hotel, people, displayedHotels) {
-        $.ajax({
-            url: `http://localhost:8080/api/v1/room/getByHotelId/${hotel.id}`,
-            method: "GET",
-            headers: {
-                "Authorization": `Bearer ${localStorage.getItem("jwtToken")}`
-            },
-            contentType: "application/json",
-            success: (roomRes) => {
-                let roomDetails = "";
-                let hasMatchingRoom = false;
+    $("#hotelsContainer").html("<p class='text-center'>Loading hotels...</p>");
 
-                if (roomRes.data && roomRes.data.length > 0) {
-                    roomRes.data.forEach((room) => {
-                        if (room.roomType.toLowerCase() === people.toLowerCase()) {
-                            hasMatchingRoom = true;
-                            roomDetails += `<p class="card-text"><small class="text-body-secondary">${room.roomType} - ${room.price} LKR</small></p>`;
-                        }
-                    });
-                }
-
-                if (hasMatchingRoom) {
-                    displayedHotels.push(hotel.id);
-                    $("#hotelsContainer").append(`
-                    <div class="card mb-3" style="max-width: 540px;">
-                        <div class="row g-0">
-                            <div class="col-md-4">
-                                <img style="height: 223px;width: 300px" src="assets/images/${hotel.image || 'default.jpg'}" class="img-fluid rounded-start" alt="Hotel Image">
-                            </div>
-                            <div class="col-md-8">
-                                <div class="card-body">
-                                    <h5 class="card-title fw-bold">${hotel.name}</h5>
-                                    <div class="d-flex">
-                                        <p class="me-2"><a class="link-opacity-100-hover" style="font-size: 10px">${hotel.location}</a></p>
-                                        <p><a class="link-opacity-100-hover" style="font-size: 10px" href="#">Show On Map</a></p>
-                                        <p class="ms-2"><a class="link-opacity-100-hover" style="font-size: 10px" href="#">Reviews</a></p>
-                                    </div>
-                                    ${roomDetails}
-                                    <p class="card-text">${hotel.description || "No description available."}</p>
-                                    <button type="button" class="btn btn-primary ms-4 seeAvailability" data-id="${hotel.id}">See Availability</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `);
-                }
-                 localStorage.removeItem("destination");
-                // localStorage.removeItem("checkin");
-                // localStorage.removeItem("checkout");
-            },
-            error: (err) => {
-                console.error("Error fetching rooms:", err);
+    $.ajax({
+        url: "http://localhost:8080/api/v1/hotels/all",
+        method: "GET",
+        headers: { "Authorization": `Bearer ${localStorage.getItem("jwtToken")}` },
+        success: function (res) {
+            $("#hotelsContainer").empty();
+            const hotels = res.data || res;
+            if (!hotels || hotels.length === 0) {
+                $("#hotelsContainer").html("<p class='text-danger text-center'>No hotels found.</p>");
+                console.log("no hotels")
+                return;
             }
-        });
+
+            // Filter by destination
+            let filteredHotels = hotels.filter(h => 
+                h.location?.toLowerCase().includes(destination.toLowerCase())
+            );
+            if (filteredHotels.length === 0) {
+              console.log("no destination")
+                $("#hotelsContainer").html("<p class='text-danger text-center'>No hotels found for this destination.</p>");
+                return;
+            }
+
+            let hotelsProcessed = 0;
+            let availableHotels = [];
+
+            filteredHotels.forEach(hotel => {
+
+                // Fetch rooms for this hotel
+                $.ajax({
+                    url: `http://localhost:8080/api/v1/rooms/all`,
+                    method: "GET",
+                    headers: { "Authorization": `Bearer ${localStorage.getItem("jwtToken")}` },
+                    success: function (roomsRes) {
+                        const rooms = roomsRes.data || roomsRes;
+
+                        // Filter rooms by hotelId
+                        let hotelRooms = rooms.filter(r => r.hotelID === hotel.id);
+
+                        // Optional: filter by room type
+                        if (roomTypeFilter) {
+                            hotelRooms = hotelRooms.filter(r => r.roomType === roomTypeFilter);
+                        }
+
+                        if (hotelRooms.length === 0) {
+                            hotelsProcessed++;
+                            console.log("No room type")
+                            checkDone();
+                            return;
+                        }
+
+                        // Fetch all bookings for this hotel
+                        $.ajax({
+                            url: `http://localhost:8080/api/v1/bookings/all`,
+                            method: "GET",
+                            headers: { "Authorization": `Bearer ${localStorage.getItem("jwtToken")}` },
+                            success: function (bookingsRes) {
+                                const bookings = bookingsRes.data || bookingsRes;
+
+                                // Filter bookings for rooms in this hotel
+                                const hotelBookings = bookings.filter(b => hotelRooms.some(r => r.id === b.roomId));
+
+                                // Filter available rooms by checking booked dates
+                                const availableRooms = hotelRooms.filter(r => {
+                                    const roomBookings = hotelBookings.filter(b => b.roomId === r.id);
+                                    return !roomBookings.some(b => 
+                                        (new Date(checkin) < new Date(b.checkOutDate)) && 
+                                        (new Date(checkout) > new Date(b.checkInDate))
+                                    );
+                                });
+
+                                if (availableRooms.length > 0) {
+                                    availableHotels.push({...hotel, availableRooms});
+                                }
+
+                                hotelsProcessed++;
+                                checkDone();
+                            },
+                            error: function () {
+                                console.error("Failed to fetch bookings for hotel:", hotel.name);
+                                hotelsProcessed++;
+                                checkDone();
+                            }
+                        });
+
+                        function checkDone() {
+                            if (hotelsProcessed === filteredHotels.length) {
+                                renderHotels(availableHotels, people, checkin, checkout);
+                            }
+                        }
+                    },
+                    error: function () {
+                        console.error("Failed to fetch rooms for hotel:", hotel.name);
+                        hotelsProcessed++;
+                        if (hotelsProcessed === filteredHotels.length) {
+                            renderHotels(availableHotels, people, checkin, checkout);
+                        }
+                    }
+                });
+            });
+        },
+        error: function () {
+            $("#hotelsContainer").html("<p class='text-danger text-center'>Failed to load hotels.</p>");
+        }
+    });
+}
+
+    function fetchRooms(hotel, roomType, checkin, checkout, callback) {
+      $.ajax({
+        url: `http://localhost:8080/api/v1/room/getByHotelId/${hotel.id}`,
+        method: "GET",
+        headers: { "Authorization": `Bearer ${localStorage.getItem("jwtToken")}` },
+        success: (roomRes) => {
+          if (!roomRes.data || roomRes.data.length === 0) {
+            callback(false);
+            return;
+          }
+          
+          // Filter rooms by type
+          const matchingRooms = roomRes.data.filter(room => 
+            room.roomType && room.roomType.toLowerCase() === roomType.toLowerCase()
+          );
+          
+          if (matchingRooms.length === 0) {
+            callback(false);
+            return;
+          }
+          
+          // Check availability for each room
+          const availableRooms = matchingRooms.filter(room => {
+            if (!room.bookings || room.bookings.length === 0) {
+              return true;
+            }
+            
+            const checkInDate = new Date(checkin);
+            const checkOutDate = new Date(checkout);
+            
+            // Check if the room is available for the selected dates
+            return !room.bookings.some(booking => {
+              const bookedFrom = new Date(booking.checkInDate);
+              const bookedTo = new Date(booking.checkOutDate);
+              
+              // Check for date overlap
+              return (checkInDate < bookedTo && checkOutDate > bookedFrom);
+            });
+          });
+          
+          callback(availableRooms.length > 0);
+        },
+        error: (err) => {
+          console.error("Error fetching rooms:", err);
+          callback(false);
+        }
+      });
+    }
+
+    function renderHotels(hotels, roomType, checkin, checkout) {
+      const hotelsContainer = $("#hotelsContainer");
+      hotelsContainer.empty();
+      
+      if (hotels.length === 0) {
+        hotelsContainer.html("<p class='text-danger text-center'>No available hotels found for your search criteria.</p>");
+        return;
+      }
+      
+      hotels.forEach(hotel => {
+        const hotelCard = `
+          <div class="card mb-4 shadow-sm" style="max-width: 600px;">
+            <div class="row g-0">
+              <div class="col-md-5">
+                <img style="height: 250px; width: 100%; object-fit: cover;" 
+                     src="assets/images/${hotel.image || 'default-hotel.jpg'}" 
+                     class="img-fluid rounded-start" 
+                     alt="${hotel.name}">
+              </div>
+              <div class="col-md-7">
+                <div class="card-body">
+                  <h5 class="card-title fw-bold">${hotel.name}</h5>
+                  <p class="card-text text-muted mb-2">
+                    <ion-icon name="location-outline"></ion-icon> ${hotel.location}
+                  </p>
+                  <p class="card-text">${hotel.description || "No description available."}</p>
+                  <div class="mt-3">
+                    <button type="button" class="btn btn-primary seeAvailability" 
+                            data-id="${hotel.id}" 
+                            data-room-type="${roomType}"
+                            data-checkin="${checkin}"
+                            data-checkout="${checkout}">
+                      Check Availability
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+        
+        hotelsContainer.append(hotelCard);
+      });
     }
 
     $(document).on("click", ".seeAvailability", function () {
-        let hotelId = $(this).data("id");
-        console.log("Selected Hotel ID:", hotelId);
-        localStorage.setItem("ClickedHotelId", hotelId);
-        window.location.href = "Hotel.html";
+      const hotelId = $(this).data("id");
+      const roomType = $(this).data("room-type");
+      const checkin = $(this).data("checkin");
+      const checkout = $(this).data("checkout");
+      
+      localStorage.setItem("ClickedHotelId", hotelId);
+      localStorage.setItem("selectedRoomType", roomType);
+      localStorage.setItem("selectedCheckin", checkin);
+      localStorage.setItem("selectedCheckout", checkout);
+      
+      window.location.href = "Hotel.html";
     });
+
     function logout() {
-        localStorage.removeItem("jwtToken");
-        alert("Logged out successfully");
-        window.location.href = "Login.html";
+      // Clear all stored data
+      localStorage.removeItem("jwtToken");
+      localStorage.removeItem("checkin");
+      localStorage.removeItem("checkout");
+      localStorage.removeItem("destination");
+      localStorage.removeItem("email");
+      localStorage.removeItem("people");
+      localStorage.removeItem("role");
+      localStorage.removeItem("ClickedHotelId");
+      localStorage.removeItem("selectedRoomType");
+      localStorage.removeItem("selectedCheckin");
+      localStorage.removeItem("selectedCheckout");
+      
+      alert("Logged out successfully");
+      window.location.href = "Login.html";
     }
-
-</script>
+  </script>
 </body>
-
 </html>

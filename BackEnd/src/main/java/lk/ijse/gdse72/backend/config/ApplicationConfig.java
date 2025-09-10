@@ -1,5 +1,7 @@
 package lk.ijse.gdse72.backend.config;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import lk.ijse.gdse72.backend.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -29,5 +31,13 @@ public class ApplicationConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+    @Bean
+    public Cloudinary cloudinary() {
+        return new Cloudinary(ObjectUtils.asMap(
+                "cloud_name", "dmv7yznkc",
+                "api_key", "683624797995458",
+                "api_secret", "r7b8G3n4CELASKMU_rPLoY2Bk38"
+        ));
     }
 }

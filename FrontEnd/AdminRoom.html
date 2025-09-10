@@ -5,20 +5,623 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Room Dashboard</title>
+    <title>Room Management Dashboard</title>
     <!-- ======= Styles ====== -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="./css/AdminRoom.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        .fa-power-off{
-            font-size: 22px;
+        /* =========== Google Fonts ============ */
+        @import url("https://fonts.googleapis.com/css2?family=Ubuntu:wght@300;400;500;600;700&display=swap");
+
+        /* =============== Globals ============== */
+        :root {
+            --primary: #2a2185;
+            --primary-light: #3d31b3;
+            --primary-dark: #1f1961;
+            --secondary: #d4af37;
+            --secondary-light: #e6c762;
+            --secondary-dark: #b8941f;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --gray-light: #e9ecef;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --info: #17a2b8;
+        }
+
+        * {
+            font-family: "Ubuntu", sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background-color: #f4f7fc;
+            margin: 0;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* =============== Navigation ================ */
+        .Container {
             position: relative;
-            bottom: 6px;
+            width: 100%;
+            display: flex;
+        }
+
+        .navigation {
+            position: fixed;
+            width: 280px;
+            height: 100%;
+            background: var(--primary-dark);
+            border-left: 8px solid var(--secondary);
+            transition: 0.5s;
+            overflow: hidden;
+            z-index: 1000;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .navigation.active {
+            width: 80px;
+        }
+
+        .navigation ul {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding-top: 20px;
+        }
+
+        .navigation ul li {
+            position: relative;
+            width: 100%;
+            list-style: none;
+            margin-bottom: 5px;
+        }
+
+        .navigation ul li:hover,
+        .navigation ul li.hovered {
+            background-color: var(--light);
+        }
+
+        .navigation ul li:nth-child(1) {
+            margin-bottom: 30px;
+            pointer-events: none;
+            background: transparent !important;
+        }
+
+        .navigation ul li a {
+            position: relative;
+            display: block;
+            width: 100%;
+            display: flex;
+            text-decoration: none;
+            color: var(--light);
+            transition: all 0.3s;
+            padding: 10px 0;
+        }
+        
+        .navigation ul li:hover a,
+        .navigation ul li.hovered a {
+            color: var(--primary-dark);
+        }
+
+        .navigation ul li a .icon {
+            position: relative;
+            display: block;
+            min-width: 60px;
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+        }
+        
+        .navigation ul li a .icon ion-icon {
+            font-size: 1.5rem;
+            vertical-align: middle;
+        }
+        
+        .navigation ul li a .icon i {
+            font-size: 1.3rem;
+            vertical-align: middle;
+        }
+
+        .navigation ul li a .title {
+            position: relative;
+            display: block;
+            padding: 0 10px;
+            height: 40px;
+            line-height: 40px;
+            text-align: start;
+            white-space: nowrap;
+            font-size: 0.95rem;
+        }
+
+        .navigation ul li:hover a::before,
+        .navigation ul li.hovered a::before {
+            content: "";
+            position: absolute;
+            right: 0;
+            top: -50px;
+            width: 50px;
+            height: 50px;
+            background-color: transparent;
+            border-radius: 50%;
+            box-shadow: 35px 35px 0 10px var(--light);
+            pointer-events: none;
+        }
+        
+        .navigation ul li:hover a::after,
+        .navigation ul li.hovered a::after {
+            content: "";
+            position: absolute;
+            right: 0;
+            bottom: -50px;
+            width: 50px;
+            height: 50px;
+            background-color: transparent;
+            border-radius: 50%;
+            box-shadow: 35px -35px 0 10px var(--light);
+            pointer-events: none;
+        }
+
+        /* ===================== Main ===================== */
+        .main {
+            position: relative;
+            width: calc(100% - 280px);
+            left: 280px;
+            min-height: 100vh;
+            background: var(--light);
+            transition: 0.5s;
+            padding-bottom: 30px;
+        }
+        
+        .main.active {
+            width: calc(100% - 80px);
+            left: 80px;
+        }
+
+        .topbar {
+            width: 100%;
+            height: 70px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            background: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 999;
+        }
+
+        .toggle {
+            position: relative;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2rem;
+            cursor: pointer;
+            color: var(--primary);
+        }
+
+        .page-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user {
+            position: relative;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            overflow: hidden;
+            cursor: pointer;
+            border: 2px solid var(--secondary-light);
+        }
+
+        .user img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* ================== Content Area ============== */
+        .content-area {
+            padding: 30px;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .dashboard-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .stats-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-info h3 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .stat-info p {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin: 0;
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            background: var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.8rem;
+        }
+
+        /* Search and Add Button */
+        .action-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .search-box {
+            position: relative;
+            flex: 1;
+            max-width: 400px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 10px 15px 10px 40px;
+            border-radius: 8px;
+            border: 1px solid var(--gray-light);
+            font-size: 0.95rem;
+            transition: all 0.3s;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(42, 33, 133, 0.2);
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+        }
+
+        .add-btn {
+            background: var(--success);
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background 0.3s;
+        }
+
+        .add-btn:hover {
+            background: #218838;
+        }
+
+        /* Table Styling */
+        .table-container {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid var(--gray-light);
+            position: sticky;
+            top: 0;
+            background: white;
+            z-index: 10;
+        }
+
+        .table-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin: 0;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        .table {
+            margin: 0;
+            width: 100%;
+        }
+
+        .table thead th {
+            background-color: var(--primary-light);
+            color: white;
+            font-weight: 500;
+            padding: 15px;
+            border: none;
+            text-align: left;
+            position: sticky;
+            top: 80px;
+            z-index: 5;
+        }
+
+        .table tbody td {
+            padding: 15px;
+            vertical-align: middle;
+            border-bottom: 1px solid var(--gray-light);
+        }
+
+        .table tbody tr {
+            transition: background-color 0.2s;
+        }
+
+        .table tbody tr:hover {
+            background-color: rgba(42, 33, 133, 0.05);
+        }
+
+        .availability-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            display: inline-block;
+        }
+
+        .available {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .not-available {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .room-type-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            display: inline-block;
+        }
+
+        .single {
+            background-color: #e3f2fd;
+            color: #1565c0;
+        }
+
+        .double {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .suite {
+            background-color: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-action {
+            padding: 5px 10px;
+            font-size: 0.85rem;
+            border-radius: 5px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .room-image {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+            transition: transform 0.3s;
+            margin: 2px;
+        }
+
+        .room-image:hover {
+            transform: scale(1.1);
+        }
+
+        .image-gallery {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        .text-truncate-multiline {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Modal Styling */
+        .modal-header {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .modal-content {
+            border-radius: 12px;
+            overflow: hidden;
+            border: none;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .current-image {
+            width: 100%;
+            max-height: 100px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+
+        .image-preview-container {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 991px) {
+            .navigation {
+                left: -280px;
+                width: 280px;
+            }
+            
+            .navigation.active {
+                left: 0;
+            }
+            
+            .main {
+                width: 100%;
+                left: 0;
+            }
+            
+            .main.active {
+                left: 280px;
+                width: calc(100% - 280px);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .stats-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            .action-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .search-box {
+                max-width: 100%;
+            }
+            
+            .add-btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+                gap: 5px;
+            }
+            
+            .image-gallery {
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .content-area {
+                padding: 15px;
+            }
+            
+            .dashboard-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .toggle {
+                width: 40px;
+                height: 40px;
+                font-size: 1.5rem;
+            }
+            
+            .topbar {
+                padding: 0 15px;
+            }
+            
+            .table-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+        }
+
+        .fa-power-off {
+            font-size: 1.3rem;
         }
     </style>
-
 </head>
 
 <body>
@@ -28,26 +631,26 @@
         <ul style="padding-left: 0">
             <li>
                 <a href="#">
-                        <span class="icon">
-                            <img style="width: 262px;height: 66px" src="assets/images/HotelLogo.png">
-                        </span>
+                    <span class="icon">
+                        <img style="width: 200px; height: 50px; margin-left: 10px;" src="assets/images/HotelLogo.png" alt="Hotel Logo">
+                    </span>
                 </a>
             </li>
 
             <li>
                 <a href="AdminDashBoard.html">
-                        <span class="icon">
-                            <ion-icon name="home-outline"></ion-icon>
-                        </span>
+                    <span class="icon">
+                        <ion-icon name="home-outline"></ion-icon>
+                    </span>
                     <span class="title">Dashboard</span>
                 </a>
             </li>
 
             <li>
                 <a href="AdminCustomer.html">
-                        <span class="icon">
-                            <ion-icon name="people-outline"></ion-icon>
-                        </span>
+                    <span class="icon">
+                        <ion-icon name="people-outline"></ion-icon>
+                    </span>
                     <span class="title">Customers</span>
                 </a>
             </li>
@@ -55,7 +658,7 @@
             <li>
                 <a href="AdminHotel.html">
                     <span class="icon">
-                        <ion-icon name="business-outline"></ion-icon> <!-- Best for hotels -->
+                        <ion-icon name="business-outline"></ion-icon>
                     </span>
                     <span class="title">Hotels</span>
                 </a>
@@ -63,103 +666,154 @@
 
             <li>
                 <a href="AdminRoom.html">
-                        <span class="icon">
-                            <ion-icon name="bed-outline"></ion-icon>
-                        </span>
+                    <span class="icon">
+                        <ion-icon name="bed-outline"></ion-icon>
+                    </span>
                     <span class="title">Rooms</span>
                 </a>
             </li>
             <li>
                 <a href="AdminBooking.html">
-            <span class="icon">
-                     <ion-icon name="calendar-outline"></ion-icon>
-             </span>
+                    <span class="icon">
+                        <ion-icon name="calendar-outline"></ion-icon>
+                    </span>
                     <span class="title">Bookings</span>
                 </a>
             </li>
             <li>
                 <a href="AdminPayment.html">
-                        <span class="icon">
-                            <ion-icon name="card-outline"></ion-icon>
-                        </span>
+                    <span class="icon">
+                        <ion-icon name="card-outline"></ion-icon>
+                    </span>
                     <span class="title">Payment</span>
                 </a>
             </li>
-
-
             <li>
                 <a href="#" onclick="logout()">
-                        <span class="icon">
-                            <i class="fas fa-power-off"></i> <!-- Logout icon -->
-                        </span>
+                    <span class="icon">
+                        <i class="fas fa-power-off"></i>
+                    </span>
                     <span class="title">Sign Out</span>
                 </a>
             </li>
         </ul>
     </div>
+
     <!-- ========================= Main ==================== -->
     <div class="main">
         <div class="topbar">
             <div class="toggle">
                 <ion-icon name="menu-outline"></ion-icon>
             </div>
-
-            <div class="user">
-<!--                <img src="assets/imgs/customer01.jpg" alt="">-->
+            <div class="page-title">Room Management</div>
+            <div class="user-info">
+                <div class="user">
+                    <!-- User image would go here -->
+                </div>
             </div>
         </div>
-        <div class="Container">
-            <h1 style="padding-top: 40px">Room Management</h1>
-            <button type="button" class="add-btn" style="margin-top: 38px;margin-right: 10px;border-radius: 5px"
-                    data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo"
-            >Add Room
-            </button>
-            <label>
-                <input type="text" style="height: 40px ;border-radius: 10px" placeholder="  Search Rooms Number..."
-                       onkeyup="searchRoom()" id="search">
-                <ion-icon name="search-outline"></ion-icon>
-            </label>
-            <div class="">
-                    <div class="container">
-                        <table class="table table-hover">
+
+        <div class="content-area">
+            <div class="dashboard-header">
+                <h1 class="dashboard-title">Room Management</h1>
+            </div>
+
+            <div class="stats-cards">
+                <div class="stat-card">
+                    <div class="stat-info">
+                        <h3 id="total-rooms">0</h3>
+                        <p>Total Rooms</p>
+                    </div>
+                    <div class="stat-icon">
+                        <ion-icon name="bed-outline"></ion-icon>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-info">
+                        <h3 id="available-rooms">0</h3>
+                        <p>Available Rooms</p>
+                    </div>
+                    <div class="stat-icon">
+                        <ion-icon name="checkmark-done-outline"></ion-icon>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-info">
+                        <h3 id="single-rooms">0</h3>
+                        <p>Single Rooms</p>
+                    </div>
+                    <div class="stat-icon">
+                        <ion-icon name="person-outline"></ion-icon>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-info">
+                        <h3 id="suite-rooms">0</h3>
+                        <p>Suite Rooms</p>
+                    </div>
+                    <div class="stat-icon">
+                        <ion-icon name="star-outline"></ion-icon>
+                    </div>
+                </div>
+            </div>
+
+            <div class="action-bar">
+                <div class="search-box">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="search" placeholder="Search rooms by number..." onkeyup="searchRoom()">
+                </div>
+                <button type="button" class="add-btn" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <ion-icon name="add-outline"></ion-icon> Add Room
+                </button>
+            </div>
+
+            <div class="table-container">
+                <div class="table-header">
+                    <h2 class="table-title">All Rooms</h2>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover">
                         <thead>
-                        <tr style="padding-bottom: 10px;border: 2px solid black " >
-                            <th>ID</th>
-                            <th>Number</th>
-                            <th>Type</th>
-                            <th>Price</th>
-                            <th>Available</th>
-                            <th>HotelName</th>
-                            <th>Image1</th>
-                            <th>Image2</th>
-                            <th>Image3</th>
-                            <th>Actions</th>
-                        </tr>
+                            <tr>
+                                <th>ID</th>
+                                <th>Number</th>
+                                <th>Type</th>
+                                <th>Price</th>
+                                <th>Available</th>
+                                <th>Hotel ID</th>
+                                <th>Images</th>
+                                <th>Actions</th>
+                            </tr>
                         </thead>
-
                         <tbody id="RoomTable">
-
+                            <!-- Data will be populated by JavaScript -->
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
-        <!--        Add New Room-->
-        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">Add New Room</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form id="hotelForm">
+    </div>
+</div>
+
+<!-- Add New Room Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add New Room</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="hotelForm">
+                    <div class="row">
+                        <div class="col-md-6">
                             <div class="mb-3">
-                                <input type="text" class="form-control" id="RoomNumber" placeholder="Enter RoomNumber"
-                                       required>
+                                <label for="RoomNumber" class="form-label">Room Number</label>
+                                <input type="number" class="form-control" id="RoomNumber" placeholder="Enter Room Number" required>
                             </div>
                             <div class="mb-3">
-                                <select class="form-select" id="roomType">
+                                <label for="roomType" class="form-label">Room Type</label>
+                                <select class="form-select" id="roomType" required>
                                     <option selected disabled>Select Room Type</option>
                                     <option value="single">Single</option>
                                     <option value="double">Double</option>
@@ -167,8 +821,11 @@
                                 </select>
                             </div>
                             <div class="mb-3">
-                                <input type="text" class="form-control" id="Price" placeholder="Enter Price" required>
+                                <label for="Price" class="form-label">Price ($)</label>
+                                <input type="number" step="0.01" class="form-control" id="Price" placeholder="Enter Price" required>
                             </div>
+                        </div>
+                        <div class="col-md-6">
                             <div class="mb-3">
                                 <label for="Availability" class="form-label">Availability</label>
                                 <select class="form-select" id="Availability" required>
@@ -183,351 +840,105 @@
                                     <option selected disabled>Choose a Hotel</option>
                                 </select>
                             </div>
-                            <div>
-                                <input type="file" id="imageUpload1" name="imageUpload1" required/>
+                            <div class="mb-3">
+                                <label class="form-label">Room Images</label>
+                                <input type="file" class="form-control mb-2" id="imageUpload1" accept="image/*" required>
+                                <input type="file" class="form-control mb-2" id="imageUpload2" accept="image/*" required>
+                                <input type="file" class="form-control" id="imageUpload3" accept="image/*" required>
                             </div>
-                            <div>
-                                <input type="file" id="imageUpload2" name="imageUpload2" required/>
-                            </div>
-                            <div>
-                                <input type="file" id="imageUpload3" name="imageUpload3" required/>
-                            </div>
-                        </form>
+                        </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" id="btnSave">Save Room</button>
-                    </div>
-                </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="btnSave">Save Room</button>
             </div>
         </div>
-        <div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="exampleModalLabel">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4>Update Room</h4>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form>
+    </div>
+</div>
+
+<!-- Update Room Modal -->
+<div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="updateModalLabel">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Update Room</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <input type="hidden" id="UpdateRoomId">
+                    <div class="row">
+                        <div class="col-md-6">
                             <div class="mb-3">
-                                <input type="text" class="form-control" id="UpdateRoomNumber"
-                                       placeholder="Enter RoomNumber" required>
+                                <label for="UpdateRoomNumber" class="form-label">Room Number</label>
+                                <input type="number" class="form-control" id="UpdateRoomNumber" required>
                             </div>
                             <div class="mb-3">
-                                <select class="form-select" id="UpdateRoomType">
-                                    <option selected disabled>Select Room Type</option>
+                                <label for="UpdateRoomType" class="form-label">Room Type</label>
+                                <select class="form-select" id="UpdateRoomType" required>
                                     <option value="single">Single</option>
                                     <option value="double">Double</option>
                                     <option value="suite">Suite</option>
                                 </select>
                             </div>
                             <div class="mb-3">
-                                <input type="text" class="form-control" id="UpdatePrice" placeholder="Enter Price"
-                                       required>
+                                <label for="UpdatePrice" class="form-label">Price ($)</label>
+                                <input type="number" step="0.01" class="form-control" id="UpdatePrice" required>
                             </div>
+                        </div>
+                        <div class="col-md-6">
                             <div class="mb-3">
-                                <label for="Availability" class="form-label">Availability</label>
+                                <label for="UpdateAvailability" class="form-label">Availability</label>
                                 <select class="form-select" id="UpdateAvailability" required>
-                                    <option selected disabled>Choose Availability</option>
                                     <option value="Available">Available</option>
                                     <option value="Not Available">Not Available</option>
                                 </select>
                             </div>
-
                             <div class="mb-3">
-                                <label for="HotelID" class="form-label">Select Hotel</label>
+                                <label for="UpdateHotelID" class="form-label">Select Hotel</label>
                                 <select class="form-select" id="UpdateHotelID" required>
                                     <option selected disabled>Choose a Hotel</option>
                                 </select>
                             </div>
-                            <div>
-                                <input type="file" id="UpdateImageUpload1" accept="image/*">
+                            <div class="mb-3">
+                                <label class="form-label">Update Room Images</label>
+                                <input type="file" class="form-control mb-2" id="UpdateImageUpload1" accept="image/*">
+                                <input type="file" class="form-control mb-2" id="UpdateImageUpload2" accept="image/*">
+                                <input type="file" class="form-control" id="UpdateImageUpload3" accept="image/*">
+                                <div class="image-preview-container mt-2">
+                                    <img id="UpdateCurrentImage1" class="current-image">
+                                    <img id="UpdateCurrentImage2" class="current-image">
+                                    <img id="UpdateCurrentImage3" class="current-image">
+                                </div>
                             </div>
-                            <div>
-                                <input type="file" id="UpdateImageUpload2" accept="image/*">
-                            </div>
-                            <div>
-                                <input type="file" id="UpdateImageUpload3" accept="image/*">
-                            </div>
-                        </form>
+                        </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary" id="btnUpdate">Update Room</button>
-                    </div>
-                </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="btnUpdate">Update Room</button>
             </div>
         </div>
     </div>
 </div>
-</div>
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-<!-- =========== Scripts =========  -->
-<script src="./js/AdminDashboard.js"></script>
 
-<!-- ====== ionicons ======= -->
+<!-- Scripts -->
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
 <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
+
 <script>
-    // $(document).ready(function () {
-
-    //     let token = localStorage.getItem("jwtToken");
-
-    //     if (!token) {
-    //         alert("You are not logged in!");
-    //         window.location.href = "login.html";
-    //         return;
-    //     }
-
-    //     const imageUrl = "assets/images/";
-    //     $.ajax({
-    //         url: "http://localhost:8080/api/v1/hotel/getAll",
-    //         method: "GET",
-    //         contentType: "application/json",
-    //         headers: {
-    //             "Authorization": `Bearer ${localStorage.getItem("jwtToken")}`
-    //         },
-    //         success: (res) => {
-    //             let hotelDropdown = $("#HotelID, #UpdateHotelID");
-    //             hotelDropdown.empty();
-    //             hotelDropdown.append(`<option selected disabled>Choose a Hotel</option>`);
-
-    //             res.data.forEach((hotel) => {
-    //                 hotelDropdown.append(`<option value="${hotel.id}">${hotel.name}</option>`);
-    //             });
-    //         },
-    //         error: (error) => {
-    //             console.error("Error fetching hotels:", error);
-    //             alert("Failed to load hotels.");
-    //         }
-    //     });$.ajax({
-    //         url: "http://localhost:8080/api/v1/hotel/getAll",
-    //         method: "GET",
-    //         headers: {
-    //             "Authorization": `Bearer ${localStorage.getItem("jwtToken")}`
-    //         },
-    //         contentType: "application/json",
-    //         success: (res) => {
-    //             let hotelArray = [];
-
-    //             res.data.forEach((hotel) => {
-    //                 hotelArray.push({ id: hotel.id, name: hotel.name });
-    //             });
-
-    //             console.log(hotelArray);
-
-    //             // Now make the second request to fetch room data
-    //             $.ajax({
-    //                 url: "http://localhost:8080/api/v1/room/getAll",
-    //                 method: "GET",
-    //                 headers: {
-    //                     "Authorization": `Bearer ${localStorage.getItem("jwtToken")}`
-    //                 },
-    //                 contentType: "application/json",
-    //                 success: (res) => {
-    //                     let table = $('#RoomTable');
-    //                     table.empty();
-
-    //                     res.data.forEach((room) => {
-    //                         let image1 = imageUrl + room.image1;
-    //                         let image2 = imageUrl + room.image2;
-    //                         let image3 = imageUrl + room.image3;
-
-    //                         // Find the hotel name corresponding to the room's hotelID
-    //                         let hotelName = hotelArray.find(hotel => hotel.id === room.hotelID)?.name || "Unknown Hotel";
-
-    //                         table.append(`
-    //                     <tr>
-    //                         <td>${room.id}</td>
-    //                         <td>${room.roomNumber}</td>
-    //                         <td>${room.roomType}</td>
-    //                         <td>${room.price}</td>
-    //                         <td>${room.available}</td>
-    //                         <td>${hotelName}</td>
-    //                         <td><img src="${image1}" width="100" height="100" alt="Room Image"
-    //                         onerror="this.onerror=null; this.src='assets/images/default.jpg';"></td>
-    //                         <td><img src="${image2}" width="100" height="100" alt="Room Image"
-    //                         onerror="this.onerror=null; this.src='assets/images/default.jpg';"></td>
-    //                         <td><img src="${image3}" width="100" height="100" alt="Room Image"
-    //                         onerror="this.onerror=null; this.src='assets/images/default.jpg';"></td>
-    //                         <td class="text-center">
-    //                         <button type="button" class="btn btn-danger"
-    //                         data-bs-toggle="modal" data-bs-target="#updateModal"
-    //                         onclick="editRoom('${room.id}', '${room.roomNumber}', '${room.roomType}', '${room.price}', '${room.available}', '${room.hotelID}', '${room.image1}', '${room.image2}', '${room.image3}')">
-    //                         Edit
-    //                         </button>
-    //                         <button type="button" class="btn btn-warning" onclick="deleteRoom('${room.id}')">Delete</button>
-    //                         </td>
-    //                         </tr>
-    //                         `);
-    //                         });
-    //                         },
-    //                         error: (error) => {
-    //                         console.error("Error fetching rooms:", error);
-    //                         alert("Something went wrong while fetching rooms.");
-    //                         }
-    //                         });
-    //                         },
-    //                         error: (error) => {
-    //                         console.error("Error fetching hotels:", error);
-    //                         alert("Failed to load hotels.");
-    //                         }
-    //                         });
-
-    //                         $("#search").on("keyup", function () {
-    //         searchRoom();
-    //     });
-
-    //     function searchRoom() {
-    //         let input = document.getElementById("search").value.toLowerCase().trim();
-    //         let table = document.getElementById("RoomTable");
-    //         let rows = table.getElementsByTagName("tr");
-
-    //         for (let i = 0; i < rows.length; i++) {
-    //             let roomNumberCell = rows[i].getElementsByTagName("td")[1];
-    //             if (roomNumberCell) {
-    //                 let roomNumber = roomNumberCell.textContent || roomNumberCell.innerText;
-    //                 if (roomNumber.toLowerCase().includes(input)) {
-    //                     rows[i].style.display = ""; // Show matching rows
-    //                 } else {
-    //                     rows[i].style.display = "none";
-    //                 }
-    //             }
-    //         }
-    //     }
-    //     $('#btnSave').click(function () {
-    //         let fileName1 = $("#imageUpload1")[0]?.files[0]?.name || null;
-    //         let fileName2 = $("#imageUpload2")[0]?.files[0]?.name || null;
-    //         let fileName3 = $("#imageUpload3")[0]?.files[0]?.name || null;
-
-    //         console.log("Uploading Images:", fileName1, fileName2, fileName3);
-
-    //         $.ajax({
-    //             url: "http://localhost:8080/api/v1/room/save",
-    //             method: "POST",
-    //             headers: {
-    //                 "Authorization": `Bearer ${localStorage.getItem("jwtToken")}`
-    //             },
-    //             contentType: "application/json",
-    //             data: JSON.stringify({
-    //                 roomNumber: $("#RoomNumber").val(),
-    //                 roomType: $("#roomType").val(),
-    //                 price: $("#Price").val(),
-    //                 available: $("#Availability").val(),
-    //                 hotelID: $("#HotelID").val(),
-    //                 image1: fileName1,
-    //                 image2: fileName2,
-    //                 image3: fileName3
-    //             }),
-    //             success: (res) => {
-    //                 alert(res.message || "Room saved successfully.");
-    //                 $('#exampleModal').modal('hide');
-    //                 location.reload();
-    //             },
-    //             error: (error) => {
-    //                 console.error("Error saving room:", error);
-    //                 alert("Failed to save room.");
-    //             }
-    //         });
-    //     });
-    // });
-
-    // const editRoom = (id, roomNumber, roomType, price, available, hotelID, image1, image2, image3) => {
-    //     $("#UpdateRoomNumber").val(roomNumber);
-    //     $("#UpdateRoomType").val(roomType);
-    //     $("#UpdatePrice").val(price);
-    //     $("#UpdateAvailability").val(available);
-    //     $("#UpdateHotelID").val(hotelID);
-
-    //     $("#UpdateImageUpload1, #UpdateImageUpload2, #UpdateImageUpload3").val("");
-
-    //     $("#btnUpdate").off("click").on("click", function () {
-    //         let fileInput1 = document.getElementById("UpdateImageUpload1");
-    //         let fileInput2 = document.getElementById("UpdateImageUpload2");
-    //         let fileInput3 = document.getElementById("UpdateImageUpload3");
-
-    //         console.log("File Inputs:", fileInput1, fileInput2, fileInput3);
-
-    //         let updatedData = {
-    //             roomNumber: $("#UpdateRoomNumber").val(),
-    //             roomType: $("#UpdateRoomType").val(),
-    //             price: $("#UpdatePrice").val(),
-    //             available: $("#UpdateAvailability").val(),
-    //             hotelID: $("#UpdateHotelID").val(),
-    //             image1: image1,
-    //             image2: image2,
-    //             image3: image3
-    //         };
-
-    //         if (fileInput1?.files.length > 0) {
-    //             updatedData.image1 = fileInput1.files[0].name;
-    //         }
-    //         if (fileInput2?.files.length > 0) {
-    //             updatedData.image2 = fileInput2.files[0].name;
-    //         }
-    //         if (fileInput3?.files.length > 0) {
-    //             updatedData.image3 = fileInput3.files[0].name;
-    //         }
-
-    //         updateRoom(id, updatedData);
-    //     });
-    // };
-
-    // const updateRoom = (id, updatedData) => {
-    //     $.ajax({
-    //         url: `http://localhost:8080/api/v1/room/update/${id}`,
-    //         method: "PUT",
-    //         headers: {
-    //             "Authorization": `Bearer ${localStorage.getItem("jwtToken")}`
-    //         },
-    //         contentType: "application/json",
-    //         data: JSON.stringify(updatedData),
-    //         success: (res) => {
-    //             if (res.statusCode === 200) {
-    //                 alert("Room updated successfully.");
-    //                 $("#updateModal").modal("hide");
-    //                 location.reload();
-    //             }
-    //         },
-    //         error: (error) => {
-    //             console.error("Error updating room:", error);
-    //             alert("Something went wrong while updating.");
-    //         }
-    //     });
-    // };
-
-    // const deleteRoom = (id) => {
-    //     if (confirm("Are you sure you want to delete this room?")) {
-    //         $.ajax({
-    //             url: `http://localhost:8080/api/v1/room/delete/${id}`,
-    //             method: "DELETE",
-    //             headers: {
-    //                 "Authorization": `Bearer ${localStorage.getItem("jwtToken")}`
-    //             },
-    //             success: (res) => {
-    //                 if (res.statusCode === 200) {
-    //                     alert("Room deleted successfully.");
-    //                     location.reload();
-    //                 } else {
-    //                     alert("Failed: " + (res.message || "Unknown error"));
-    //                 }
-    //             },
-    //             error: (error) => {
-    //                 console.error("Error deleting room:", error);
-    //                 alert("Something went wrong while deleting.");
-    //             }
-    //         });
-    //     }
-    // };
-    // function logout() {
-    //     localStorage.removeItem("jwtToken");
-    //     alert("Logged out successfully");
-    //     window.location.href = "Login.html";
-    // }
- 
+    // Global variables
+    let currentRoomId = null;
+    let currentImages = {};
+    let hotels = [];
+    let rooms = [];
     
-   
     $(document).ready(function () {
         let token = localStorage.getItem("jwtToken");
         if (!token) {
@@ -550,7 +961,8 @@
             headers: {
                 "Authorization": `Bearer ${localStorage.getItem("jwtToken")}`
             },
-            success: (hotels) => {
+            success: (hotelsData) => {
+                hotels = hotelsData;
                 let hotelDropdown = $("#HotelID, #UpdateHotelID");
                 hotelDropdown.empty();
                 hotelDropdown.append('<option selected disabled>Choose a Hotel</option>');
@@ -573,48 +985,10 @@
             headers: {
                 "Authorization": `Bearer ${localStorage.getItem("jwtToken")}`
             },
-            success: (rooms) => {
-                let table = $('#RoomTable');
-                table.empty();
-
-                if (rooms && Array.isArray(rooms)) {
-                    rooms.forEach((room) => {
-                        let image1 = "assets/images/" + (room.image1 || 'default.jpg');
-                        let image2 = "assets/images/" + (room.image2 || 'default.jpg');
-                        let image3 = "assets/images/" + (room.image3 || 'default.jpg');
-
-                        table.append(`
-                            <tr>
-                                <td>${room.id}</td>
-                                <td>${room.roomNumber}</td>
-                                <td>${room.roomType}</td>
-                                <td>${room.price}</td>
-                                <td>${room.available}</td>
-                                <td>${room.hotelID}</td>
-                                <td><img src="${image1}" width="80" height="80" alt="Room Image"
-                                    onerror="this.onerror=null; this.src='assets/images/default.jpg';"></td>
-                                <td><img src="${image2}" width="80" height="80" alt="Room Image"
-                                    onerror="this.onerror=null; this.src='assets/images/default.jpg';"></td>
-                                <td><img src="${image3}" width="80" height="80" alt="Room Image"
-                                    onerror="this.onerror=null; this.src='assets/images/default.jpg';"></td>
-                                <td class="action-buttons">
-                                    <button type="button" class="btn btn-sm btn-primary"
-                                        onclick="prepareEdit('${room.id}', '${room.roomNumber}', '${room.roomType}', 
-                                        '${room.price}', '${room.available}', '${room.hotelID}', 
-                                        '${room.image1 || ''}', '${room.image2 || ''}', '${room.image3 || ''}')">
-                                        Edit
-                                    </button>
-                                    <button type="button" class="btn btn-sm btn-danger" 
-                                        onclick="confirmDelete('${room.id}', '${room.roomNumber}')">
-                                        Delete
-                                    </button>
-                                </td>
-                            </tr>
-                        `);
-                    });
-                } else {
-                    table.append('<tr><td colspan="11" class="text-center">No rooms found</td></tr>');
-                }
+            success: (roomsData) => {
+                rooms = roomsData;
+                populateRoomTable(rooms);
+                updateRoomStats(rooms);
             },
             error: (error) => {
                 console.error("Error fetching rooms:", error);
@@ -622,77 +996,150 @@
             }
         });
     }
-function saveRoom() {
-    // 🔹 Helper: safely get trimmed value from input
-    function getTrimmedValue(selector) {
-        const element = $(selector);
-        if (element.length === 0) return ""; // If selector not found
-        const val = element.val();
-        return (typeof val === "string") ? val.trim() : "";
+
+    function updateRoomStats(rooms) {
+        let total = rooms.length;
+        let available = rooms.filter(room => room.available === 'Available').length;
+        let single = rooms.filter(room => room.roomType === 'single').length;
+        let suite = rooms.filter(room => room.roomType === 'suite').length;
+        
+        $('#total-rooms').text(total);
+        $('#available-rooms').text(available);
+        $('#single-rooms').text(single);
+        $('#suite-rooms').text(suite);
     }
 
-    // 🔹 Get values safely
-    const roomNumber = getTrimmedValue("#RoomNumber");
-    const roomType = getTrimmedValue("#roomType");
-    const price = getTrimmedValue("#Price");
-    const available = getTrimmedValue("#Availability");
-    const hotelID = getTrimmedValue("#HotelID");
+    function populateRoomTable(roomsArray) {
+        let table = $('#RoomTable');
+        table.empty();
 
-    // 🔹 Get image inputs safely
-    function getFileName(selector) {
-        const input = $(selector)[0];
-        return (input && input.files && input.files.length > 0)
-            ? input.files[0].name
-            : "default.jpg";
-    }
+        if (roomsArray && Array.isArray(roomsArray)) {
+            roomsArray.forEach((room) => {
+                let image1 = "assets/images/" + (room.image1 || 'default.jpg');
+                let image2 = "assets/images/" + (room.image2 || 'default.jpg');
+                let image3 = "assets/images/" + (room.image3 || 'default.jpg');
+                
+                let availabilityClass = room.available === 'Available' ? 'available' : 'not-available';
+                let roomTypeClass = room.roomType === 'single' ? 'single' : room.roomType === 'double' ? 'double' : 'suite';
 
-    const image1 = getFileName("#imageUpload1");
-    const image2 = getFileName("#imageUpload2");
-    const image3 = getFileName("#imageUpload3");
-
-    console.log("Form values:", { roomNumber, roomType, price, available, hotelID, image1, image2, image3 });
-
-    // 🔹 Validate required fields
-    if (!roomNumber || !roomType || !price || !available || !hotelID) {
-        alert("Please fill in all the required fields.");
-        return;
-    }
-
-    // 🔹 Prepare data
-    const roomData = {
-        roomNumber: parseInt(roomNumber),
-        roomType: roomType,
-        price: parseFloat(price),
-        available: available,
-        hotelID: parseInt(hotelID),
-        image1: image1,
-        image2: image2,
-        image3: image3
-    };
-
-    console.log("Sending data:", roomData);
-
-    // 🔹 Send data to backend
-    $.ajax({
-        url: "http://localhost:8080/api/v1/rooms/save",
-        method: "POST",
-        headers: {
-            "Authorization": `Bearer ${localStorage.getItem("jwtToken")}`,
-            "Content-Type": "application/json"
-        },
-        data: JSON.stringify(roomData),
-        success: () => {
-            alert("Room saved successfully.");
-            $("#exampleModal").modal("hide");
-            $("#hotelForm")[0].reset();
-            loadRooms();
-        },
-        error: (error) => {
-            console.error("Error saving room:", error);
-            alert("Failed to save room. Check console for details.");
+                table.append(`
+                    <tr>
+                        <td>${room.id}</td>
+                        <td>${room.roomNumber}</td>
+                        <td><span class="room-type-badge ${roomTypeClass}">${room.roomType}</span></td>
+                        <td>$${room.price}</td>
+                        <td><span class="availability-badge ${availabilityClass}">${room.available}</span></td>
+                        <td>${room.hotelID}</td>
+                        <td>
+                            <div class="image-gallery">
+                                <img src="${image1}" class="room-image" alt="Room Image 1"
+                                    onerror="this.onerror=null; this.src='assets/images/default.jpg';">
+                                <img src="${image2}" class="room-image" alt="Room Image 2"
+                                    onerror="this.onerror=null; this.src='assets/images/default.jpg';">
+                                <img src="${image3}" class="room-image" alt="Room Image 3"
+                                    onerror="this.onerror=null; this.src='assets/images/default.jpg';">
+                            </div>
+                        </td>
+                        <td class="action-buttons">
+                            <button type="button" class="btn btn-sm btn-primary btn-action"
+                                onclick="prepareEdit('${room.id}', '${room.roomNumber}', '${room.roomType}', 
+                                '${room.price}', '${room.available}', '${room.hotelID}', 
+                                '${room.image1 || ''}', '${room.image2 || ''}', '${room.image3 || ''}')">
+                                <ion-icon name="create-outline"></ion-icon> Edit
+                            </button>
+                            <button type="button" class="btn btn-sm btn-danger btn-action" 
+                                onclick="confirmDelete('${room.id}', '${room.roomNumber}')">
+                                <ion-icon name="trash-outline"></ion-icon> Delete
+                            </button>
+                        </td>
+                    </tr>
+                `);
+            });
+        } else {
+            table.append('<tr><td colspan="8" class="text-center py-4">No rooms found</td></tr>');
         }
-    });
-}
+    }
+
+    function saveRoom() {
+        let roomNumber = $("#RoomNumber").val().trim();
+        let roomType = $("#roomType").val();
+        let price = $("#Price").val().trim();
+        let available = $("#Availability").val();
+        let hotelID = $("#HotelID").val();
+        
+        let image1Input = document.getElementById("imageUpload1");
+        let image2Input = document.getElementById("imageUpload2");
+        let image3Input = document.getElementById("imageUpload3");
+
+        let image1 = image1Input.files.length > 0 ? image1Input.files[0].name : "default.jpg";
+        let image2 = image2Input.files.length > 0 ? image2Input.files[0].name : "default.jpg";
+        let image3 = image3Input.files.length > 0 ? image3Input.files[0].name : "default.jpg";
+
+        if (!roomNumber || !roomType || !price || !available || !hotelID) {
+            alert("Please fill in all the required fields.");
+            return;
+        }
+
+        let roomData = {
+            roomNumber: parseInt(roomNumber),
+            roomType: roomType,
+            price: parseFloat(price),
+            available: available,
+            hotelID: parseInt(hotelID),
+            image1: image1,
+            image2: image2,
+            image3: image3
+        };
+
+        $.ajax({
+            url: "http://localhost:8080/api/v1/rooms/save",
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${localStorage.getItem("jwtToken")}`,
+                "Content-Type": "application/json"
+            },
+            data: JSON.stringify(roomData),
+            success: () => {
+                alert("Room saved successfully.");
+                $("#exampleModal").modal("hide");
+                $("#hotelForm")[0].reset();
+                loadRooms();
+            },
+            error: (error) => {
+                console.error("Error saving room:", error);
+                alert("Failed to save room.");
+            }
+        });
+    }
+
+    function prepareEdit(id, roomNumber, roomType, price, available, hotelID, image1, image2, image3) {
+        currentRoomId = id;
+        currentImages = { image1, image2, image3 };
+        
+        $("#UpdateRoomId").val(id);
+        $("#UpdateRoomNumber").val(roomNumber);
+        $("#UpdateRoomType").val(roomType);
+        $("#UpdatePrice").val(price);
+        $("#UpdateAvailability").val(available);
+        $("#UpdateHotelID").val(hotelID);
+        
+        // Show current images
+        let imageBase = "assets/images/";
+        $("#UpdateCurrentImage1").attr("src", imageBase + (image1 || 'default.jpg')).on("error", function() {
+            $(this).attr("src", "assets/images/default.jpg");
+        });
+        $("#UpdateCurrentImage2").attr("src", imageBase + (image2 || 'default.jpg')).on("error", function() {
+            $(this).attr("src", "assets/images/default.jpg");
+        });
+        $("#UpdateCurrentImage3").attr("src", imageBase + (image3 || 'default.jpg')).on("error", function() {
+            $(this).attr("src", "assets/images/default.jpg");
+        });
+        
+        // Clear file inputs
+        $("#UpdateImageUpload1, #UpdateImageUpload2, #UpdateImageUpload3").val("");
+        
+        $("#updateModal").modal("show");
+    }
 
     function updateRoom() {
         if (!currentRoomId) {
@@ -705,6 +1152,7 @@ function saveRoom() {
         let price = $("#UpdatePrice").val().trim();
         let available = $("#UpdateAvailability").val();
         let hotelID = $("#UpdateHotelID").val();
+        
         let image1Input = document.getElementById("UpdateImageUpload1");
         let image2Input = document.getElementById("UpdateImageUpload2");
         let image3Input = document.getElementById("UpdateImageUpload3");
@@ -730,22 +1178,22 @@ function saveRoom() {
         };
 
         $.ajax({
-            url: `http://localhost:8080/api/v1/rooms/update${currentRoomId}`,
+            url: "http://localhost:8080/api/v1/rooms/update/" + currentRoomId,
             method: "PUT",
             headers: {
                 "Authorization": `Bearer ${localStorage.getItem("jwtToken")}`,
                 "Content-Type": "application/json"
             },
             data: JSON.stringify(roomData),
-            success: (updatedRoom) => {
+            success: () => {
                 alert("Room updated successfully.");
                 $("#updateModal").modal("hide");
                 loadRooms();
             },
-            error: (error) => {
-                console.error("Error updating room:", error);
-                alert("Failed to update room.");
-            }
+            error: function (error) { // ✅ fixed
+        console.error("Error updating room:", error);
+        alert("Failed to update room.");
+    }
         });
     }
 
@@ -757,7 +1205,7 @@ function saveRoom() {
 
     function deleteRoom(id) {
         $.ajax({
-            url: `http://localhost:8080/api/v1/rooms/delete${id}`,
+            url: `http://localhost:8080/api/v1/rooms/delete/${id}`,
             method: "DELETE",
             headers: {
                 "Authorization": `Bearer ${localStorage.getItem("jwtToken")}`
@@ -782,9 +1230,8 @@ function saveRoom() {
             let cols = rows[i].getElementsByTagName("td");
             if (cols.length > 0) {
                 let roomNumber = cols[1].textContent.toLowerCase();
-                let roomType = cols[2].textContent.toLowerCase();
                 
-                if (roomNumber.includes(input) || roomType.includes(input)) {
+                if (roomNumber.includes(input)) {
                     rows[i].style.display = "";
                 } else {
                     rows[i].style.display = "none";
@@ -798,14 +1245,7 @@ function saveRoom() {
         alert("Logged out successfully");
         window.location.href = "Login.html";
     }
-
 </script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
-        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
-        crossOrigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
-        integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
-        crossorigin="anonymous"></script>
 
 </body>
 </html>

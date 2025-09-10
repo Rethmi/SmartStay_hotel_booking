@@ -2,6 +2,7 @@ package lk.ijse.gdse72.backend.service;
 
 import lk.ijse.gdse72.backend.dto.HotelDto;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public interface HotelService {
@@ -10,4 +11,7 @@ public interface HotelService {
     HotelDto getHotelById(Long id);
     HotelDto updateHotel(HotelDto hotelDto);
     void deleteHotel(Long id);
+//
+//    List<HotelDto> searchHotels(String destination, String roomType, LocalDate checkin, LocalDate checkout);
+//
 }

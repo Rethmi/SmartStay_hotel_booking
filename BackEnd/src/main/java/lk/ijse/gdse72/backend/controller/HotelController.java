@@ -3,9 +3,11 @@ package lk.ijse.gdse72.backend.controller;
 import lk.ijse.gdse72.backend.dto.HotelDto;
 import lk.ijse.gdse72.backend.service.HotelService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -25,6 +27,15 @@ public class HotelController {
         return ResponseEntity.ok(hotelService.getAllHotels());
     }
 
+//    @GetMapping("/search")
+//    public ResponseEntity<List<HotelDto>> searchHotels(
+//            @RequestParam(required = false) String destination,
+//            @RequestParam(required = false) String roomType,
+//            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkin,
+//            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate checkout) {
+//
+//        return ResponseEntity.ok(hotelService.searchHotels(destination, roomType, checkin, checkout));
+//    }
     @GetMapping("/{id}")
     public ResponseEntity<HotelDto> getHotel(@PathVariable Long id){
         return ResponseEntity.ok(hotelService.getHotelById(id));

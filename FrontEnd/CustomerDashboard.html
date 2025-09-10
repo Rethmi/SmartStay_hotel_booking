@@ -195,7 +195,7 @@
                 <div class="navbar-top">
 
                     <a href="#" class="logo">
-                        <img src="./assets/images/logo-blue.svg" alt="Tourly logo">
+                        <img src="./assets/images/colombo.jpeg" alt="Tourly logo">
                     </a>
 
                     <button class="nav-close-btn" aria-label="Close Menu" data-nav-close-btn>
@@ -699,7 +699,7 @@
 
         // Load user details
         $.ajax({
-            url: "http://localhost:8080/api/v1/user/getAll",
+            url: "http://localhost:8080/api/v1/users/all",
             method: "GET",
             headers: {
                 "Authorization": "Bearer " + token
@@ -707,9 +707,22 @@
             success: function (response) {
                 console.log("Response:", response);
 
-                const user = response.data.find(u => u.email === email);
-                const userId = response.data.find(u => u.email === email).id;
-                console.log(userId)
+                const users = response.data || response; // fallback if backend returns array directly
+
+    if (!Array.isArray(users)) {
+        console.error("Expected users array but got:", users);
+        return; // stop execution
+    }
+
+    const user = users.find(u => u.email === email);
+
+    if (!user) {
+        console.warn("User with the given email not found.");
+        return;
+    }
+
+    const userId = user.id;
+    console.log("User ID:", userId);
 
                 if (user) {
                     $("#modalUserName").text(user.username);
@@ -725,7 +738,7 @@
                 }
 
                 $.ajax({
-                    url: "http://localhost:8080/api/v1/booking/getAll", // Update this URL if needed
+                    url: "http://localhost:8080/api/v1/bookings/all", // Update this URL if needed
                     method: "GET",
                     headers: {
                         "Authorization": "Bearer " + token
@@ -817,6 +830,7 @@
     function logout() {
         localStorage.removeItem("jwtToken");
         localStorage.removeItem("email");
+        localStorage.removeItem("role");
         // alert("Logged out successfully");
         window.location.href = "login.html";
     }

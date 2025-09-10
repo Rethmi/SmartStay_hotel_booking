@@ -7,6 +7,7 @@ import lk.ijse.gdse72.backend.service.HotelService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -68,6 +69,11 @@ public class HotelServiceImpl implements HotelService {
         }
         hotelRepository.deleteById(id);
     }
+
+//    @Override
+//    public List<HotelDto> searchHotels(String destination, String roomType, LocalDate checkin, LocalDate checkout) {
+//        return List.of();
+//    }
 
     private HotelDto convertToDto(Hotel hotel) {
         return HotelDto.builder()
