@@ -6,8 +6,9 @@ import lk.ijse.gdse72.backend.repository.HotelRepository;
 import lk.ijse.gdse72.backend.service.HotelService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDate;
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,19 +17,30 @@ import java.util.stream.Collectors;
 public class HotelServiceImpl implements HotelService {
 
     private final HotelRepository hotelRepository;
+    private final CloudService cloudService;
 
     @Override
-    public HotelDto saveHotel(HotelDto hotelDto) {
+    public HotelDto saveHotel(HotelDto hotelDto, MultipartFile image) {
+        String url = uploadMultipleFiles(image);
         Hotel hotel = Hotel.builder()
                 .name(hotelDto.getName())
                 .location(hotelDto.getLocation())
                 .description(hotelDto.getDescription())
                 .amenities(hotelDto.getAmenities())
                 .phoneNumber(hotelDto.getPhoneNumber())
-                .image(hotelDto.getImage())
+                .image(url)
                 .build();
         hotel = hotelRepository.save(hotel);
         return convertToDto(hotel);
+    }
+    public String uploadMultipleFiles(MultipartFile file) {
+        String imageUrls = "";
+            try {
+                imageUrls = cloudService.uploadFile(file);
+            } catch (IOException e) {
+                throw new RuntimeException("Failed to upload image: " + file.getOriginalFilename(), e);
+            }
+        return imageUrls;
     }
 
     @Override

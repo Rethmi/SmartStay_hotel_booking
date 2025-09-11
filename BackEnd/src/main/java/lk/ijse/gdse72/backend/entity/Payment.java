@@ -3,9 +3,17 @@ package lk.ijse.gdse72.backend.entity;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 @Table(name = "payments")
 public class Payment {
@@ -30,67 +38,7 @@ public class Payment {
         CREDIT_CARD, PAYPAL, BANK_TRANSFER
     }
 
-    public Payment(Long id, Booking booking, double amount, PaymentMethod method, LocalDateTime paymentDate) {
-        this.id = id;
-        this.booking = booking;
-        this.amount = amount;
-        this.method = method;
-        this.paymentDate = paymentDate;
-    }
 
-    public Payment() {
-    }
-
-    public double getAmount() {
-        return amount;
-    }
-
-    public void setAmount(double amount) {
-        this.amount = amount;
-    }
-
-    public PaymentMethod getMethod() {
-        return method;
-    }
-
-    public void setMethod(PaymentMethod method) {
-        this.method = method;
-    }
-
-    public LocalDateTime getPaymentDate() {
-        return paymentDate;
-    }
-
-    public void setPaymentDate(LocalDateTime paymentDate) {
-        this.paymentDate = paymentDate;
-    }
-
-    public Booking getBooking() {
-        return booking;
-    }
-
-    public void setBooking(Booking booking) {
-        this.booking = booking;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    @Override
-    public String toString() {
-        return "Payment{" +
-                "id=" + id +
-                ", booking=" + booking +
-                ", amount=" + amount +
-                ", method=" + method +
-                ", paymentDate=" + paymentDate +
-                '}';
-    }
 }
 
 

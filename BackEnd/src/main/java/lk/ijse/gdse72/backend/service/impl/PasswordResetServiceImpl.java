@@ -1,4 +1,4 @@
-package lk.ijse.gdse72.backend.service.Impl;
+package lk.ijse.gdse72.backend.service.impl;
 
 import lk.ijse.gdse72.backend.entity.PasswordResetToken;
 import lk.ijse.gdse72.backend.entity.User;
@@ -44,7 +44,7 @@ public class PasswordResetServiceImpl implements PasswordResetService {
         try {
             SimpleMailMessage message = new SimpleMailMessage();
             message.setTo(toEmail);
-            message.setSubject("Password Reset OTP - EduWings");
+            message.setSubject("Password Reset OTP - SmartStay");
             message.setText("Your OTP for password reset is: " + otp + "\nThis OTP will expire in 5 minutes.");
             mailSender.send(message);
         } catch (Exception e) {

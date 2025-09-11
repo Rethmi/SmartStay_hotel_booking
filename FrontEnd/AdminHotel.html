@@ -913,7 +913,7 @@
 
         if (hotelsArray && Array.isArray(hotelsArray)) {
             hotelsArray.forEach((hotel) => {
-                let image = imageUrl + (hotel.image || 'default.jpg');
+                // let image = imageUrl + (hotel.image || 'default.jpg');
                 
                 table.append(`
                     <tr>
@@ -924,7 +924,7 @@
                         <td class="text-truncate-multiline" style="max-width: 150px;">${hotel.amenities || ''}</td>
                         <td>${hotel.phoneNumber}</td>
                         <td>
-                            <img src="${image}" class="hotel-image" alt="Hotel Image"
+                            <img src="${hotel.image}" class="hotel-image" alt="Hotel Image"
                             onerror="this.onerror=null; this.src='assets/images/default.jpg';">
                         </td>
                         <td class="action-buttons">
@@ -949,53 +949,58 @@
     }
     
     function saveHotel() {
-        let name = $("#name").val().trim();
-        let location = $("#location").val().trim();
-        let description = $("#description").val().trim();
-        let amenities = $("#amenities").val().trim();
-        let phoneNumber = $("#PhoneNumber").val().trim();
-        let imageInput = $("#imageUpload")[0];
-        let fileName = imageInput.files.length > 0 ? imageInput.files[0].name : "default.jpg";
+    let name = $("#name").val().trim();
+    let location = $("#location").val().trim();
+    let description = $("#description").val().trim();
+    let amenities = $("#amenities").val().trim();
+    let phoneNumber = $("#PhoneNumber").val().trim();
+    let imageInput = $("#imageUpload")[0];
 
-        if (!name || !location || !phoneNumber) {
-            alert("Please fill in all the required fields.");
-            return;
-        }
-
-        let token = localStorage.getItem("jwtToken");
-        
-        $.ajax({
-            url: "http://localhost:8080/api/v1/hotels/save",
-            method: "POST",
-            headers: {
-                "Authorization": `Bearer ${token}`,
-                "Content-Type": "application/json"
-            },
-            data: JSON.stringify({
-                "name": name,
-                "location": location,
-                "description": description,
-                "amenities": amenities,
-                "phoneNumber": phoneNumber,
-                "image": fileName
-            }),
-            success: (savedHotel) => {
-                alert("Hotel added successfully");
-                $("#exampleModal").modal("hide");
-                $("#addHotelForm")[0].reset();
-                loadHotels();
-            },
-            error: (error) => {
-                console.error(error);
-                if (error.status === 403) {
-                    alert("You don't have permission to add hotels.");
-                } else {
-                    alert("Something went wrong while saving the hotel.");
-                }
-            }
-        });
+    if (!name || !location || !phoneNumber) {
+        alert("Please fill in all the required fields.");
+        return;
     }
+
+    let token = localStorage.getItem("jwtToken");
+
+    let formData = new FormData();
+    formData.append("name", name);
+    formData.append("location", location);
+    formData.append("description", description);
+    formData.append("amenities", amenities);
+    formData.append("phoneNumber", phoneNumber);
     
+    // Add the image file if selected
+    if (imageInput.files.length > 0) {
+        formData.append("image", imageInput.files[0]);
+    }
+
+    $.ajax({
+        url: "http://localhost:8080/api/v1/hotels/save",
+        method: "POST",
+        headers: {
+            "Authorization": `Bearer ${token}`
+        },
+        data: formData,
+        processData: false, // Important for FormData
+        contentType: false, // Important for FormData
+        success: (savedHotel) => {
+            alert("Hotel added successfully");
+            $("#exampleModal").modal("hide");
+            $("#addHotelForm")[0].reset();
+            loadHotels();
+        },
+        error: (error) => {
+            console.error(error);
+            if (error.status === 403) {
+                alert("You don't have permission to add hotels.");
+            } else {
+                alert("Something went wrong while saving the hotel.");
+            }
+        }
+    });
+}
+
     function prepareEdit(id, name, location, description, amenities, phoneNumber, image) {
         currentHotelId = id;
         

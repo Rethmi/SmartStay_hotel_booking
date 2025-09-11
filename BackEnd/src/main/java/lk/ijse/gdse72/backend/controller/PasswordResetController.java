@@ -16,8 +16,17 @@ public class PasswordResetController {
 
     private final PasswordResetService resetService;
 
-    @PostMapping("/forgot-password")
-    public ResponseEntity<String> forgotPassword(@RequestBody PasswordResetRequestDTO request) {
+//    @PostMapping("/forgot-password")
+//    public ResponseEntity<String> forgotPassword(@RequestBody PasswordResetRequestDTO request) {
+//        try {
+//            resetService.generateOtp(request.getEmail());
+//            return ResponseEntity.ok("OTP sent to email");
+//        } catch (Exception e) {
+//            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
+//        }
+//    }
+    @PostMapping("/send-otp")
+    public ResponseEntity<String> sendOtp(@RequestBody PasswordResetRequestDTO request) {
         try {
             resetService.generateOtp(request.getEmail());
             return ResponseEntity.ok("OTP sent to email");
@@ -25,6 +34,7 @@ public class PasswordResetController {
             return ResponseEntity.badRequest().body("Error: " + e.getMessage());
         }
     }
+
 
     @PostMapping("/verify-otp")
     public ResponseEntity<String> verifyOtp(@RequestBody OtpVerifyDTO request) {

@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -18,9 +19,38 @@ public class HotelController {
     private final HotelService hotelService;
 
     @PostMapping("/save")
-    public ResponseEntity<HotelDto> saveHotel(@RequestBody HotelDto hotelDto){
-        return ResponseEntity.ok(hotelService.saveHotel(hotelDto));
+    public ResponseEntity<HotelDto> saveHotel(
+            @RequestParam("name") String name,
+            @RequestParam("location") String location,
+            @RequestParam("description") String description,
+            @RequestParam("amenities") String amenities,
+            @RequestParam("phoneNumber") String phoneNumber,
+            @RequestParam(value = "image", required = false) MultipartFile image
+    ) {
+        HotelDto hotelDto = new HotelDto();
+        hotelDto.setName(name);
+        hotelDto.setLocation(location);
+        hotelDto.setDescription(description);
+        hotelDto.setAmenities(amenities);
+        hotelDto.setPhoneNumber(phoneNumber);
+
+//        if (image != null && !image.isEmpty()) {
+//            // Save the image file somewhere (filesystem, cloud, etc.)
+//            String imageName = image.getOriginalFilename();
+//            // Example: save to /uploads folder
+//            Path uploadPath = Paths.get("uploads/" + imageName);
+//            try {
+//                Files.createDirectories(uploadPath.getParent());
+//                image.transferTo(uploadPath);
+//                hotelDto.setImage(imageName);
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
+
+        return ResponseEntity.ok(hotelService.saveHotel(hotelDto,image));
     }
+
 
     @GetMapping("/all")
     public ResponseEntity<List<HotelDto>> getAllHotels(){
