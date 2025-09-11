@@ -236,290 +236,186 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
     crossorigin="anonymous"></script>
 
-  <script>
-    $(document).ready(function () {
-      let token = localStorage.getItem("jwtToken");
-      if (!token) {
-        alert("Please login first");
-        window.location.href = "login.html";
-        return;
-      }
+ <script>
+  $(document).ready(function () {
+    let token = localStorage.getItem("jwtToken");
+    if (!token) {
+      alert("Please login first");
+      window.location.href = "login.html";
+      return;
+    }
 
-      // Load saved search parameters if they exist
-      const savedDestination = localStorage.getItem("destination");
-      const savedCheckin = localStorage.getItem("checkin");
-      const savedCheckout = localStorage.getItem("checkout");
-      const savedPeople = localStorage.getItem("people");
-      
-      if (savedDestination) $("#destination").val(savedDestination);
-      if (savedCheckin) $("#checkin").val(savedCheckin);
-      if (savedCheckout) $("#checkout").val(savedCheckout);
-      if (savedPeople) $("#people").val(savedPeople);
+    // Load saved search parameters if they exist
+    const savedDestination = localStorage.getItem("destination");
+    const savedCheckin = localStorage.getItem("checkin");
+    const savedCheckout = localStorage.getItem("checkout");
+    const savedPeople = localStorage.getItem("people");
 
-      // If we have search parameters, perform the search
-      if (savedDestination || savedCheckin || savedCheckout || savedPeople) {
-        fetchHotels();
-      }
+    if (savedDestination) $("#destination").val(savedDestination);
+    if (savedCheckin) $("#checkin").val(savedCheckin);
+    if (savedCheckout) $("#checkout").val(savedCheckout);
+    if (savedPeople) $("#people").val(savedPeople);
 
-      $(".tour-search-form").submit(function (e) {
-        e.preventDefault();
-        
-        // Save search parameters to localStorage
-        localStorage.setItem("destination", $("#destination").val());
-        localStorage.setItem("checkin", $("#checkin").val());
-        localStorage.setItem("checkout", $("#checkout").val());
-        localStorage.setItem("people", $("#people").val());
-        
-        fetchHotels();
-      });
+    // If we have search parameters, perform the search
+    if (savedDestination || savedCheckin || savedCheckout || savedPeople) {
+      fetchHotels();
+    }
+
+    $(".tour-search-form").submit(function (e) {
+      e.preventDefault();
+
+      // Save search parameters to localStorage
+      localStorage.setItem("destination", $("#destination").val());
+      localStorage.setItem("checkin", $("#checkin").val());
+      localStorage.setItem("checkout", $("#checkout").val());
+      localStorage.setItem("people", $("#people").val());
+
+      fetchHotels();
     });
+  });
 
-    function fetchHotels() {
-    const people = parseInt($("#people").val()) || 1;
+  function fetchHotels() {
+    const people = $("#people").val();
     const checkin = $("#checkin").val();
     const checkout = $("#checkout").val();
     const destination = $("#destination").val()?.trim().toLowerCase() || "";
-    const roomTypeFilter = $("#roomType").val(); // optional room type filter
 
     if (new Date(checkin) >= new Date(checkout)) {
-        alert("Check-out date must be after check-in date");
-        return;
+      alert("Check-out date must be after check-in date");
+      return;
     }
 
     $("#hotelsContainer").html("<p class='text-center'>Loading hotels...</p>");
 
     $.ajax({
-        url: "http://localhost:8080/api/v1/hotels/all",
-        method: "GET",
-        headers: { "Authorization": `Bearer ${localStorage.getItem("jwtToken")}` },
-        success: function (res) {
-            $("#hotelsContainer").empty();
-            const hotels = res.data || res;
-            if (!hotels || hotels.length === 0) {
-                $("#hotelsContainer").html("<p class='text-danger text-center'>No hotels found.</p>");
-                console.log("no hotels")
-                return;
-            }
+      url: "http://localhost:8080/api/v1/hotels/all",
+      method: "GET",
+      headers: { "Authorization": `Bearer ${localStorage.getItem("jwtToken")}` },
+      success: function (res) {
+        // Clear loading message
+        $("#hotelsContainer").empty();
 
-            // Filter by destination
-            let filteredHotels = hotels.filter(h => 
-                h.location?.toLowerCase().includes(destination.toLowerCase())
-            );
-            if (filteredHotels.length === 0) {
-              console.log("no destination")
-                $("#hotelsContainer").html("<p class='text-danger text-center'>No hotels found for this destination.</p>");
-                return;
-            }
+        // hotels might be in res.data or directly in res
+        const hotels = res.data || res;
 
-            let hotelsProcessed = 0;
-            let availableHotels = [];
-
-            filteredHotels.forEach(hotel => {
-
-                // Fetch rooms for this hotel
-                $.ajax({
-                    url: `http://localhost:8080/api/v1/rooms/all`,
-                    method: "GET",
-                    headers: { "Authorization": `Bearer ${localStorage.getItem("jwtToken")}` },
-                    success: function (roomsRes) {
-                        const rooms = roomsRes.data || roomsRes;
-
-                        // Filter rooms by hotelId
-                        let hotelRooms = rooms.filter(r => r.hotelID === hotel.id);
-
-                        // Optional: filter by room type
-                        if (roomTypeFilter) {
-                            hotelRooms = hotelRooms.filter(r => r.roomType === roomTypeFilter);
-                        }
-
-                        if (hotelRooms.length === 0) {
-                            hotelsProcessed++;
-                            console.log("No room type")
-                            checkDone();
-                            return;
-                        }
-
-                        // Fetch all bookings for this hotel
-                        $.ajax({
-                            url: `http://localhost:8080/api/v1/bookings/all`,
-                            method: "GET",
-                            headers: { "Authorization": `Bearer ${localStorage.getItem("jwtToken")}` },
-                            success: function (bookingsRes) {
-                                const bookings = bookingsRes.data || bookingsRes;
-
-                                // Filter bookings for rooms in this hotel
-                                const hotelBookings = bookings.filter(b => hotelRooms.some(r => r.id === b.roomId));
-
-                                // Filter available rooms by checking booked dates
-                                const availableRooms = hotelRooms.filter(r => {
-                                    const roomBookings = hotelBookings.filter(b => b.roomId === r.id);
-                                    return !roomBookings.some(b => 
-                                        (new Date(checkin) < new Date(b.checkOutDate)) && 
-                                        (new Date(checkout) > new Date(b.checkInDate))
-                                    );
-                                });
-
-                                if (availableRooms.length > 0) {
-                                    availableHotels.push({...hotel, availableRooms});
-                                }
-
-                                hotelsProcessed++;
-                                checkDone();
-                            },
-                            error: function () {
-                                console.error("Failed to fetch bookings for hotel:", hotel.name);
-                                hotelsProcessed++;
-                                checkDone();
-                            }
-                        });
-
-                        function checkDone() {
-                            if (hotelsProcessed === filteredHotels.length) {
-                                renderHotels(availableHotels, people, checkin, checkout);
-                            }
-                        }
-                    },
-                    error: function () {
-                        console.error("Failed to fetch rooms for hotel:", hotel.name);
-                        hotelsProcessed++;
-                        if (hotelsProcessed === filteredHotels.length) {
-                            renderHotels(availableHotels, people, checkin, checkout);
-                        }
-                    }
-                });
-            });
-        },
-        error: function () {
-            $("#hotelsContainer").html("<p class='text-danger text-center'>Failed to load hotels.</p>");
+        if (!hotels || hotels.length === 0) {
+          $("#hotelsContainer").html("<p class='text-danger text-center'>No hotels found.</p>");
+          return;
         }
+
+        // Filter by destination
+        let filteredHotels = hotels.filter(h =>
+          h.location?.toLowerCase().includes(destination.toLowerCase())
+        );
+
+        if (filteredHotels.length === 0) {
+          $("#hotelsContainer").html("<p class='text-danger text-center'>No hotels found for this destination.</p>");
+          return;
+        }
+
+        // Render hotels
+        renderHotels(filteredHotels, people, checkin, checkout);
+      },
+      error: function () {
+        $("#hotelsContainer").html("<p class='text-danger text-center'>Failed to load hotels.</p>");
+      }
     });
-}
+  }
 
-    function fetchRooms(hotel, roomType, checkin, checkout, callback) {
-      $.ajax({
-        url: `http://localhost:8080/api/v1/room/getByHotelId/${hotel.id}`,
-        method: "GET",
-        headers: { "Authorization": `Bearer ${localStorage.getItem("jwtToken")}` },
-        success: (roomRes) => {
-          if (!roomRes.data || roomRes.data.length === 0) {
-            callback(false);
-            return;
-          }
-          
-          // Filter rooms by type
-          const matchingRooms = roomRes.data.filter(room => 
-            room.roomType && room.roomType.toLowerCase() === roomType.toLowerCase()
-          );
-          
-          if (matchingRooms.length === 0) {
-            callback(false);
-            return;
-          }
-          
-          // Check availability for each room
-          const availableRooms = matchingRooms.filter(room => {
-            if (!room.bookings || room.bookings.length === 0) {
-              return true;
-            }
-            
-            const checkInDate = new Date(checkin);
-            const checkOutDate = new Date(checkout);
-            
-            // Check if the room is available for the selected dates
-            return !room.bookings.some(booking => {
-              const bookedFrom = new Date(booking.checkInDate);
-              const bookedTo = new Date(booking.checkOutDate);
-              
-              // Check for date overlap
-              return (checkInDate < bookedTo && checkOutDate > bookedFrom);
-            });
-          });
-          
-          callback(availableRooms.length > 0);
-        },
-        error: (err) => {
-          console.error("Error fetching rooms:", err);
-          callback(false);
-        }
-      });
+  function renderHotels(hotels, roomType, checkin, checkout) {
+  const hotelsContainer = $("#hotelsContainer");
+  hotelsContainer.empty();
+
+  const fallbackImage = './assets/images/default-hotel.jpg'; // Adjust path if needed
+
+  hotels.forEach(hotel => {
+    // Build full image URL if missing or invalid
+    let imageUrl = fallbackImage;
+    if (hotel.image) {
+      if (hotel.image.startsWith('http')) {
+        imageUrl = hotel.image;
+      } else {
+        // If hotel.image is a filename or relative path
+        imageUrl = `./assets/images/colombo.jpeg`;
+      }
     }
 
-    function renderHotels(hotels, roomType, checkin, checkout) {
-      const hotelsContainer = $("#hotelsContainer");
-      hotelsContainer.empty();
-      
-      if (hotels.length === 0) {
-        hotelsContainer.html("<p class='text-danger text-center'>No available hotels found for your search criteria.</p>");
-        return;
-      }
-      
-      hotels.forEach(hotel => {
-        const hotelCard = `
-          <div class="card mb-4 shadow-sm" style="max-width: 600px;">
-            <div class="row g-0">
-              <div class="col-md-5">
-                <img style="height: 250px; width: 100%; object-fit: cover;" 
-                     src="assets/images/${hotel.image || 'default-hotel.jpg'}" 
-                     class="img-fluid rounded-start" 
-                     alt="${hotel.name}">
-              </div>
-              <div class="col-md-7">
-                <div class="card-body">
-                  <h5 class="card-title fw-bold">${hotel.name}</h5>
-                  <p class="card-text text-muted mb-2">
-                    <ion-icon name="location-outline"></ion-icon> ${hotel.location}
-                  </p>
-                  <p class="card-text">${hotel.description || "No description available."}</p>
-                  <div class="mt-3">
-                    <button type="button" class="btn btn-primary seeAvailability" 
-                            data-id="${hotel.id}" 
-                            data-room-type="${roomType}"
-                            data-checkin="${checkin}"
-                            data-checkout="${checkout}">
-                      Check Availability
-                    </button>
-                  </div>
-                </div>
+    const hotelCard = `
+      <div class="card mb-4 shadow-sm" style="max-width: 600px;">
+        <div class="row g-0">
+          <div class="col-md-5">
+            <img style="height: 250px; width: 100%; object-fit: cover;" 
+                 src="${imageUrl}" 
+                 alt="${hotel.name}" 
+                 onerror="this.onerror=null; this.src='${fallbackImage}'" 
+                 loading="lazy">
+          </div>
+          <div class="col-md-7">
+            <div class="card-body">
+              <h5 class="card-title fw-bold">${hotel.name}</h5>
+              <p class="card-text text-muted mb-2">
+                <ion-icon name="location-outline"></ion-icon> ${hotel.location}
+              </p>
+              <p class="card-text">${hotel.description || "No description available."}</p>
+              <div class="mt-3">
+                <button type="button" class="btn btn-primary seeAvailability" 
+                        data-hotel-id="${hotel.id}" 
+                        data-hotel-name="${hotel.name}"
+                        data-hotel-location="${hotel.location}"
+                        data-hotel-description="${hotel.description}"
+                        data-hotel-image="${hotel.image}"
+                        data-room-type="${roomType}"
+                        data-checkin="${checkin}"
+                        data-checkout="${checkout}">
+                  Check Availability
+                </button>
               </div>
             </div>
           </div>
-        `;
-        
-        hotelsContainer.append(hotelCard);
-      });
-    }
+        </div>
+      </div>
+    `;
 
-    $(document).on("click", ".seeAvailability", function () {
-      const hotelId = $(this).data("id");
-      const roomType = $(this).data("room-type");
-      const checkin = $(this).data("checkin");
-      const checkout = $(this).data("checkout");
-      
-      localStorage.setItem("ClickedHotelId", hotelId);
-      localStorage.setItem("selectedRoomType", roomType);
-      localStorage.setItem("selectedCheckin", checkin);
-      localStorage.setItem("selectedCheckout", checkout);
-      
-      window.location.href = "Hotel.html";
-    });
+    hotelsContainer.append(hotelCard);
+  });
+}
 
-    function logout() {
-      // Clear all stored data
-      localStorage.removeItem("jwtToken");
-      localStorage.removeItem("checkin");
-      localStorage.removeItem("checkout");
-      localStorage.removeItem("destination");
-      localStorage.removeItem("email");
-      localStorage.removeItem("people");
-      localStorage.removeItem("role");
-      localStorage.removeItem("ClickedHotelId");
-      localStorage.removeItem("selectedRoomType");
-      localStorage.removeItem("selectedCheckin");
-      localStorage.removeItem("selectedCheckout");
-      
-      alert("Logged out successfully");
-      window.location.href = "Login.html";
-    }
-  </script>
+
+  // Click handler for "Check Availability" button
+  $(document).on("click", ".seeAvailability", function () {
+    // Store all hotel data in localStorage
+    const hotelData = {
+      id: $(this).data("hotel-id"),
+      name: $(this).data("hotel-name"),
+      location: $(this).data("hotel-location"),
+      description: $(this).data("hotel-description"),
+      image: $(this).data("hotel-image"),
+      roomType: $(this).data("room-type"),
+      checkin: $(this).data("checkin"),
+      checkout: $(this).data("checkout")
+    };
+
+    localStorage.setItem("selectedHotel", JSON.stringify(hotelData));
+
+    // Navigate to hotel details page
+    window.location.href = "Hotel.html";
+  });
+
+  function logout() {
+    // Clear all stored data related to user session & search
+    localStorage.removeItem("jwtToken");
+    localStorage.removeItem("checkin");
+    localStorage.removeItem("checkout");
+    localStorage.removeItem("destination");
+    localStorage.removeItem("email");
+    localStorage.removeItem("people");
+    localStorage.removeItem("role");
+    localStorage.removeItem("selectedHotel");
+
+    alert("Logged out successfully");
+    window.location.href = "Login.html";
+  }
+</script>
+
 </body>
 </html>

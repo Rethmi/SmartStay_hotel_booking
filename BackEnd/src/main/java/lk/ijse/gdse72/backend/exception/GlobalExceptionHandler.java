@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import javax.management.relation.RelationNotFoundException;
+
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(UsernameNotFoundException.class)
@@ -38,6 +40,16 @@ public class GlobalExceptionHandler {
                 401,
                 "Unauthorized",
                 "Expired JWT Token"
+        );
+    }
+
+    @ExceptionHandler(RelationNotFoundException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public APIResponse handleRelationNotFoundException(RelationNotFoundException ex){
+        return new APIResponse(
+                401,
+                "Resourse Not Found",
+                ex.getMessage()
         );
     }
 
