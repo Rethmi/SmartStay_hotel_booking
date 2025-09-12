@@ -580,24 +580,25 @@
 
         let Userid;
 
-        // Get user info
-        $.ajax({
-            url: `http://localhost:8080/api/v1/user/get/${email}`,
-            method: "GET",
-            headers: { "Authorization": `Bearer ${token}` },
-            success: function (data) {
-                if (data && data.data) {
-                    $("#name").val(data.data.username);
-                    $("#email").val(data.data.email);
-                    Userid = data.data.id;
-                } else {
-                    alert("User not found.");
-                }
-            },
-            error: function () {
-                alert("Failed to fetch user info.");
-            }
-        });
+       $.ajax({
+    url: `http://localhost:8080/api/v1/users/email/${email}`,
+    method: "GET",
+    headers: { "Authorization": `Bearer ${token}` },
+    success: function (data) {
+        if (data) {
+            $("#name").val(data.username);
+            $("#email").val(data.email);
+            Userid = data.id;
+        } else {
+            alert("User not found.");
+        }
+    },
+    error: function (xhr) {
+        console.error("Failed to fetch user info", xhr);
+        alert("Failed to fetch user info.");
+    }
+});
+
 
         // Load rooms of the hotel
         $.ajax({
@@ -737,93 +738,120 @@
             return 'https://via.placeholder.com/200x200/cccccc/969696?text=No+Image';
         }
 
-        // Load Reviews
-        $('#offcanvasRight').on('shown.bs.offcanvas', function () {
-            $.ajax({
-                url: "http://localhost:8080/api/v1/reviews/all",
-                method: "GET",
-                headers: { "Authorization": `Bearer ${token}` },
-                success: function (res) {
-                    const reviews = Array.isArray(res) ? res : res.data || [];
-                    const hotelReviews = reviews.filter(r => Number(r.hotelId) === Number(hotelData.id));
-                    $("#review-list").empty();
 
-                    if (hotelReviews.length === 0) {
-                        $("#review-list").html(`<div class="text-center p-3"><p>No reviews yet.</p></div>`);
-                        return;
-                    }
-
-                    hotelReviews.forEach(review => {
-                        $.ajax({
-                            url: `http://localhost:8080/api/v1/user/getName/${review.userId}`,
-                            method: "GET",
-                            headers: { "Authorization": `Bearer ${token}` },
-                            success: function (userRes) {
-                                const username = userRes.data?.username || 'Anonymous';
-                                displayReview(review, username);
-                            },
-                            error: function () {
-                                displayReview(review, 'Anonymous');
-                            }
-                        });
-                    });
-                },
-                error: function () {
-                    $("#review-list").html(`<div class="text-center p-3">
-                        <p>Error loading reviews. Please try again.</p></div>`);
-                }
-            });
+      // Initialize star rating
+function initializeStarRating() {
+    $('#ratingValue').val(0);
+    $('#star-rating i').each(function (index) {
+        $(this).data('value', index + 1);
+    }).on('click', function () {
+        const rating = $(this).data('value');
+        $('#ratingValue').val(rating);
+        $('#star-rating i').each(function (index) {
+            $(this).toggleClass('checked', index < rating);
         });
+    });
+}
 
-        function displayReview(review, username) {
-            const reviewHtml = `
-                <div class="card mb-3">
-                    <div class="card-header d-flex justify-content-between">
-                        <strong>${username}</strong>
-                        <small>${new Date(review.reviewDate).toLocaleDateString()}</small>
-                    </div>
-                    <div class="card-body">
-                        <blockquote class="blockquote mb-0">
-                            <p class="fw-lighter" style="font-size: 17px;">${review.comment}</p>
-                            <footer class="blockquote-footer">
-                                Rated: ${'★'.repeat(review.rating)}${'☆'.repeat(5 - review.rating)}
-                            </footer>
-                        </blockquote>
-                    </div>
-                </div>`;
-            $("#review-list").append(reviewHtml);
-        }
+// Load Reviews
+function loadReviews() {
+    const hotelId = hotelData.id;
+    $.ajax({
+        url: `http://localhost:8080/api/v1/reviews/hotel/${hotelId}`,
+        method: "GET",
+        headers: { "Authorization": `Bearer ${token}` },
+        success: function (res) {
+            const reviews = Array.isArray(res) ? res : [];
+            $("#review-list").empty();
 
-        // Star rating
-        $('#star-rating i').on('click', function () {
-            const rating = $(this).data('value');
-            $('#ratingValue').val(rating);
-            $('#star-rating i').each(function (index) {
-                $(this).toggleClass('checked', index < rating);
-            });
-        });
-
-        // Submit review
-        $("#ReviewSend").click(function () {
-            const comment = $("#ReviewComment").val();
-            const rating = $('#ratingValue').val();
-            
-            if (!comment || rating === '0') {
-                alert("Please provide both a comment and a rating.");
+            if (reviews.length === 0) {
+                $("#review-list").html(`<div class="text-center p-3"><p>No reviews yet.</p></div>`);
                 return;
             }
-            
+
+            reviews.forEach(review => {
+                const username = review.username || 'Anonymous';
+                displayReview(review, username);
+            });
+        },
+        error: function (xhr) {
+            console.error("Error loading reviews:", xhr);
+            $("#review-list").html(`<div class="text-center p-3"><p>Error loading reviews. Please try again.</p></div>`);
+        }
+    });
+}
+
+function displayReview(review, username) {
+    const reviewDate = new Date(review.reviewDate);
+    const formattedDate = reviewDate.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+    });
+
+    const reviewHtml = `
+        <div class="card mb-3">
+            <div class="card-header d-flex justify-content-between">
+                <strong>${username}</strong>
+                <small>${formattedDate}</small>
+            </div>
+            <div class="card-body">
+                <blockquote class="blockquote mb-0">
+                    <p class="fw-lighter" style="font-size: 17px;">${review.comment}</p>
+                    <footer class="blockquote-footer">
+                        Rated: ${'★'.repeat(review.rating)}${'☆'.repeat(5 - review.rating)}
+                    </footer>
+                </blockquote>
+            </div>
+        </div>`;
+    $("#review-list").append(reviewHtml);
+}
+
+// Trigger load reviews when offcanvas is opened
+$('#offcanvasRight').on('shown.bs.offcanvas', function () {
+    loadReviews();
+});
+
+// Ensure the textarea is focused only after modal is shown
+$('#staticBackdrop').on('shown.bs.modal', function () {
+    $('#ReviewComment').trigger('focus');
+});
+
+// Submit review
+$("#ReviewSend").click(function () {
+    const comment = $("#ReviewComment").val().trim();
+    const rating = $('#ratingValue').val();
+    const hotelId = hotelData.id;
+    const userId = Userid;
+
+    if (!comment || rating === '0') {
+        alert("Please provide both a comment and a rating.");
+        return;
+    }
+
+    // Check if user already reviewed
+    $.ajax({
+        url: `http://localhost:8080/api/v1/reviews/exists?userId=${userId}&hotelId=${hotelId}`,
+        method: "GET",
+        headers: { "Authorization": `Bearer ${token}` },
+        success: function (exists) {
+            if (exists) {
+                alert("You have already reviewed this hotel.");
+                return;
+            }
+
+            // Save review
             $.ajax({
-                url: "http://localhost:8080/api/v1/review/save",
+                url: "http://localhost:8080/api/v1/reviews/save",
                 method: "POST",
                 headers: { "Authorization": `Bearer ${token}` },
                 contentType: "application/json",
                 data: JSON.stringify({
                     comment: comment,
                     rating: parseInt(rating),
-                    reviewDate: new Date().toISOString(),
-                    hotelId: hotelData.id,
-                    userId: Userid
+                    reviewDate: new Date().toISOString().split('T')[0],
+                    hotelId: hotelId,
+                    userId: userId
                 }),
                 success: function () {
                     alert("Review submitted successfully!");
@@ -831,31 +859,46 @@
                     $('#ratingValue').val("0");
                     $('#star-rating i').removeClass('checked');
                     $('#staticBackdrop').modal('hide');
+
+                    // Reload reviews safely after modal closes
+                    $('#staticBackdrop').on('hidden.bs.modal', function () {
+                        loadReviews();
+                        $(this).off('hidden.bs.modal'); // remove listener to avoid multiple triggers
+                    });
                 },
                 error: function (xhr) {
+                    console.error("Error saving review:", xhr);
                     alert("Failed to submit review. " + (xhr.responseJSON?.message || ""));
                 }
             });
-        });
+        },
+        error: function (xhr) {
+            console.error("Error checking existing review:", xhr);
+            alert("Error checking if you've already reviewed this hotel.");
+        }
     });
+});
 
-    // Book Room
-    function bookRoom(roomId) {
-        localStorage.setItem("selectedRoomId", roomId);
-        window.location.href = "Booking.html?roomId=" + roomId;
-    }
+// Initialize star rating
+initializeStarRating();
 
-    // Logout
-    function logout() {
-        Object.keys(localStorage).forEach(key => {
-            if (key.match(/jwt|Hotel|Room|destination|checkin|checkout|people|email|role/i)) {
-                localStorage.removeItem(key);
-            }
-        });
-        alert("Logged out successfully");
-        window.location.href = "Login.html";
-    }
+        // Book Room
+        window.bookRoom = function(roomId) {
+            localStorage.setItem("selectedRoomId", roomId);
+            window.location.href = "Booking.html?roomId=" + roomId;
+        };
+
+        // Logout
+        window.logout = function() {
+            Object.keys(localStorage).forEach(key => {
+                if (key.match(/jwt|Hotel|Room|destination|checkin|checkout|people|email|role/i)) {
+                    localStorage.removeItem(key);
+                }
+            });
+            alert("Logged out successfully");
+            window.location.href = "Login.html";
+        };
+    });
 </script>
 </body>
-
 </html>
