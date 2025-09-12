@@ -372,8 +372,6 @@
             overflow: hidden;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
             margin-bottom: 30px;
-            max-height: 500px;
-            overflow-y: auto;
         }
 
         .table-header {
@@ -382,10 +380,6 @@
             align-items: center;
             padding: 20px;
             border-bottom: 1px solid var(--gray-light);
-            position: sticky;
-            top: 0;
-            background: white;
-            z-index: 10;
         }
 
         .table-title {
@@ -411,9 +405,6 @@
             padding: 15px;
             border: none;
             text-align: left;
-            position: sticky;
-            top: 80px;
-            z-index: 5;
         }
 
         .table tbody td {
@@ -429,7 +420,6 @@
         .table tbody tr:hover {
             background-color: rgba(42, 33, 133, 0.05);
         }
-
         .action-buttons {
             display: flex;
             gap: 8px;
@@ -920,8 +910,8 @@
                         <td>${hotel.id}</td>
                         <td>${hotel.name}</td>
                         <td>${hotel.location}</td>
-                        <td class="text-truncate-multiline" style="max-width: 200px;">${hotel.description || ''}</td>
-                        <td class="text-truncate-multiline" style="max-width: 150px;">${hotel.amenities || ''}</td>
+                        <td>${hotel.description || ''}</td>
+                        <td>${hotel.amenities || ''}</td>
                         <td>${hotel.phoneNumber}</td>
                         <td>
                             <img src="${hotel.image}" class="hotel-image" alt="Hotel Image"

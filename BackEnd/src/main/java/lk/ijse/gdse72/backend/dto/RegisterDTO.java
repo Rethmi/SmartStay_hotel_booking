@@ -1,15 +1,18 @@
 package lk.ijse.gdse72.backend.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class RegisterDto {
+
+public class RegisterDTO {
+
     private String username;
     private String password;
     private String email;
-    private String role;
+    private String role;//USER or ADMIN
+
 }

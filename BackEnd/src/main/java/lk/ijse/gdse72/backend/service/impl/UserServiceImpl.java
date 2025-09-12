@@ -59,6 +59,7 @@
 package lk.ijse.gdse72.backend.service.impl;
 
 import lk.ijse.gdse72.backend.dto.UserDTO;
+import lk.ijse.gdse72.backend.entity.Role;
 import lk.ijse.gdse72.backend.entity.User;
 import lk.ijse.gdse72.backend.repository.UserRepository;
 import lk.ijse.gdse72.backend.service.UserService;
@@ -79,8 +80,8 @@ public class UserServiceImpl implements UserService {
                 .id(user.getId())
                 .username(user.getUsername())
                 .email(user.getEmail())
-                .role(user.getRole())
-                .profileImage(user.getProfileImage())
+                .role(Role.valueOf(user.getRole()))
+//                .profileImage(user.getProfileImage())
                 .build();
     }
 
@@ -89,9 +90,9 @@ public class UserServiceImpl implements UserService {
                 .id(dto.getId())
                 .username(dto.getUsername())
                 .email(dto.getEmail())
-                .role(dto.getRole())
+                .role(String.valueOf(dto.getRole()))
                 .password(dto.getPassword())
-                .profileImage(dto.getProfileImage())
+//                .profileImage(dto.getProfileImage())
                 .build();
     }
 
@@ -129,8 +130,8 @@ public class UserServiceImpl implements UserService {
 
         existingUser.setUsername(userDTO.getUsername());
         existingUser.setEmail(userDTO.getEmail());
-        existingUser.setRole(userDTO.getRole());
-        existingUser.setProfileImage(userDTO.getProfileImage());
+        existingUser.setRole(String.valueOf(userDTO.getRole()));
+//        existingUser.setProfileImage(userDTO.getProfileImage());
 
         if (userDTO.getPassword() != null && !userDTO.getPassword().isEmpty()) {
             existingUser.setPassword(userDTO.getPassword());
@@ -145,8 +146,8 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new RuntimeException("User not found with email: " + email));
 
         existingUser.setUsername(userDTO.getUsername());
-        existingUser.setRole(userDTO.getRole());
-        existingUser.setProfileImage(userDTO.getProfileImage());
+        existingUser.setRole(String.valueOf(userDTO.getRole()));
+//        existingUser.setProfileImage(userDTO.getProfileImage());
 
         if (userDTO.getPassword() != null && !userDTO.getPassword().isEmpty()) {
             existingUser.setPassword(userDTO.getPassword());

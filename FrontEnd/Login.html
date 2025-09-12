@@ -4,201 +4,128 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <title>Login & Sign Up</title>
 
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
     <link rel="stylesheet" href="./css/login.css">
-    <title>Login Page</title>
+
     <style>
-        #sign-up-btn2:hover{
+        #sign-up-btn2:hover,
+        #btn-login2:hover,
+        #login:hover,
+        #register:hover {
             background-color: white;
             color: black;
-            border : 1px solid black;
-        }
-        #btn-login2:hover{
-            background-color: white;
-            color: black;
-            border : 1px solid black;
-        }
-        #login:hover{
-            background-color: white;
-            color: black;
-            border : 1px solid black;
-        }
-        #register:hover{
-            background-color: white;
-            color: black;
-            border : 1px solid black;
+            border: 1px solid black;
         }
     </style>
 </head>
 
 <body>
-
-<div class="container" id="container">
-    <div class="form-container sign-up">
-        <form>
-            <h1>Create Account</h1>
-            <div class="social-icons">
-                <a href="#" class="icon"><i class="fa-brands fa-google-plus-g"></i></a>
-                <a href="#" class="icon"><i class="fa-brands fa-facebook-f"></i></a>
-                <a href="#" class="icon"><i class="fa-brands fa-github"></i></a>
-                <a href="#" class="icon"><i class="fa-brands fa-linkedin-in"></i></a>
-            </div>
-            <span>or use your email for registeration</span>
-            <input type="text" id="nameSignUp" placeholder="Name">
-            <input type="email" id="emailSignUp" placeholder="Email">
-            <input type="password" id="passwordSignUp"  placeholder="Password">
-<!--            <input type="file" id="profileImageSignUp" accept="image/*" placeholder="Profile Image">-->
-            <input type="file" id="imageUpload" accept="image/*">
-
-            <!--            <button id="sign-up-btn2">Sign Up</button>-->
-            <button type="button" class="btn btn-primary" id="sendOtp" data-bs-toggle="" data-bs-target="#staticBackdrop">
-                Sign Up
-            </button>
-        </form>
-    </div>
-    <div class="form-container sign-in">
-        <form>
-            <h1>Sign In</h1>
-            <div class="social-icons">
-                <a href="#" class="icon"><i class="fa-brands fa-google-plus-g"></i></a>
-                <a href="#" class="icon"><i class="fa-brands fa-facebook-f"></i></a>
-                <a href="#" class="icon"><i class="fa-brands fa-github"></i></a>
-                <a href="#" class="icon"><i class="fa-brands fa-linkedin-in"></i></a>
-            </div>
-            <span>or use your email password</span>
-            <input id="emailSignIn" type="email" placeholder="Email">
-            <input  id="passwordSignIn"  type="password" placeholder="Password">
-            <a href="ForgettonPassword.html">Forget Your Password?</a>
-            <button id="btn-login2">Sign In</button>
-        </form>
-    </div>
-    <div class="toggle-container">
-        <div class="toggle">
-            <div class="toggle-panel toggle-left">
-                <h1>Welcome Back!</h1>
-                <p>Enter your personal details to use all of site features</p>
-                <button class="hidden" id="login">Sign In</button>
-            </div>
-            <div class="toggle-panel toggle-right">
-                <h2>Smart Hotel Booking</h2>
-                <p>Register with your personal details to use all of site features</p>
-                <button class="hidden" id="register">Sign Up</button>
-            </div>
+    <div class="container" id="container">
+        <!-- Sign Up Form -->
+        <div class="form-container sign-up">
+            <form>
+                <h1>Create Account</h1>
+                <div class="social-icons">
+                    <a href="#" class="icon"><i class="fa-brands fa-google-plus-g"></i></a>
+                    <a href="#" class="icon"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#" class="icon"><i class="fa-brands fa-github"></i></a>
+                    <a href="#" class="icon"><i class="fa-brands fa-linkedin-in"></i></a>
+                </div>
+                <span>or use your email for registration</span>
+                <input type="text" id="nameSignUp" placeholder="Name" autocomplete="username">
+                <input type="email" id="emailSignUp" placeholder="Email" autocomplete="email">
+                <input type="password" id="passwordSignUp" placeholder="Password" autocomplete="new-password">
+                <button type="button" class="btn btn-primary" id="sign-up-btn2">Sign Up</button>
+            </form>
         </div>
-    </div>
-    <!-- Button trigger modal -->
 
+        <!-- Sign In Form -->
+        <div class="form-container sign-in">
+            <form>
+                <h1>Sign In</h1>
+                <div class="social-icons">
+                    <a href="#" class="icon"><i class="fa-brands fa-google-plus-g"></i></a>
+                    <a href="#" class="icon"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#" class="icon"><i class="fa-brands fa-github"></i></a>
+                    <a href="#" class="icon"><i class="fa-brands fa-linkedin-in"></i></a>
+                </div>
+                <span>or use your email password</span>
+                <input id="emailSignIn" type="email" placeholder="Email" autocomplete="username">
+                <input id="passwordSignIn" type="password" placeholder="Password" autocomplete="current-password">
+                <a href="ForgettonPassword.html">Forget Your Password?</a>
+                <button id="btn-login2" class="btn btn-primary">Sign In</button>
+            </form>
+        </div>
 
-    <!-- Modal -->
-    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Check Your Email</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <!-- Toggle Panels -->
+        <div class="toggle-container">
+            <div class="toggle">
+                <div class="toggle-panel toggle-left">
+                    <h1>Welcome Back!</h1>
+                    <p>Enter your personal details to use all of site features</p>
+                    <button class="hidden" id="login">Sign In</button>
                 </div>
-                <div class="modal-body">
-                    <div>
-                        <label for="otpInput">Enter OTP:</label>
-                        <input type="text" id="otpInput" name="otp" placeholder="Enter OTP" maxlength="6" required />
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" id="sign-up-btn2" class="btn btn-primary">SendOTP</button>
+                <div class="toggle-panel toggle-right">
+                    <h2>Smart Hotel Booking</h2>
+                    <p>Register with your personal details to use all of site features</p>
+                    <button class="hidden" id="register">Sign Up</button>
                 </div>
             </div>
         </div>
     </div>
 
-</div>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-<script src="./js/sign.js"></script>
-<script>
-    $(document).ready(function () {
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="./js/sign.js"></script>
 
-        $("#sendOtp").click(function () {
-
-            let email = $("#emailSignUp").val().trim();
-            // let otp = $("#otpInput").val().trim();
-            let username = $("#nameSignUp").val().trim();
-            let password = $("#passwordSignUp").val().trim();
-
-            if (!username || !email || !password) {
-                alert("All fields are required!");
-                return;
-            }
-            $.ajax({
-                url: "http://localhost:8080/api/v1/user/send-otp",
-                method: "POST",
-                contentType: "application/json",
-                data: JSON.stringify({
-                    "email": email
-                }),
-                success: (res) => {
-                    console.log(res);
-                    if (res.statusCode === 200) {
-                        $('#staticBackdrop').modal('show');
-                        console.log("OTP sent successfully");
-                    } else {
-                        alert("Failed: " + (res.message || "Unknown error"));
-                    }
-                },
-                error: (error) => {
-                    console.error(error);
-                    alert("Email already exists");
-                }
-            });
-        });
-
-        $("#sign-up-btn2").click(function () {
-
-            let username = $("#nameSignUp").val().trim();
-            let email = $("#emailSignUp").val().trim();
-            let password = $("#passwordSignUp").val().trim();
-            let otp = $("#otpInput").val().trim();
-            let imageInput = $("#imageUpload")[0];
-            let fileName = imageInput.files.length > 0 ? imageInput.files[0].name : null;
-            console.log(otp);
-
-            if (!username || !email || !password || !otp || !fileName) {
-                alert("All fields are required!");
-                return;
-            }
-
-            $.ajax({
-                url: "http://localhost:8080/api/v1/user/register/" + otp,
-                method: "POST",
-                contentType: "application/json",
-                data: JSON.stringify({
-                    "username": username,
-                    "email": email,
-                    "password": password,
-                    "role": "USER",
-                    "profileImage": fileName
-                }),
-                success: (res) => {
-                    localStorage.setItem("email", email);
-                    console.log(res);
-                    if (res.statusCode === 201) {
-                        console.log("Registration successful");
-                        window.location.href = "Login.html";
-                        alert("Registration successful");
-
-                    } else {
-                        alert("Failed: " + (res.message || "Unknown error"));
-                    }
-                },
-                error: (error) => {
-                    console.error(error);
-                    alert("Something went wrong");
-                }
-            });
-        });
+    <script>
         $(document).ready(function () {
+            // Sign Up
+            $("#sign-up-btn2").on("click", function (e) {
+                e.preventDefault();
+
+                let username = $("#nameSignUp").val().trim();
+                let email = $("#emailSignUp").val().trim();
+                let password = $("#passwordSignUp").val().trim();
+
+                if (!username || !email || !password) {
+                    alert("Please fill all fields!");
+                    return;
+                }
+
+                $.ajax({
+                    url: "http://localhost:8080/api/v1/auth/register",
+                    method: "POST",
+                    contentType: "application/json",
+                    data: JSON.stringify({
+                        username: username,
+                        email: email,
+                        password: password,
+                        role: "USER"
+                    }),
+                    success: function (res) {
+                        console.log("Response:", res);
+                        alert("✅ Registration successful!");
+                        window.location.href = "Login.html";
+                    },
+                    error: function (xhr) {
+                        console.error("Error:", xhr);
+                        alert("❌ Registration failed. Status: " + xhr.status);
+                    }
+                });
+            });
+
+            // Login
             $("#btn-login2").click(function (e) {
                 e.preventDefault();
 
@@ -210,36 +137,26 @@
                     return;
                 }
 
-                console.log(email)
-
                 $.ajax({
                     url: "http://localhost:8080/api/v1/auth/login",
                     method: "POST",
                     contentType: "application/json",
                     data: JSON.stringify({ email: email, password: password }),
                     success: function (res) {
-                        localStorage.setItem("jwtToken", res.data.accessToken);
+                        console.log("Login Response:", res);
 
                         if (res.status === "OK") {
-                            console.log("Login successful");
-                            
+                            localStorage.setItem("jwtToken", res.data.accessToken);
                             localStorage.setItem("role", res.data.role);
-                            console.log(res.data.role);
-                            console.log(res.data.token);
+                            localStorage.setItem("email", email);
+
                             let userRole = res.data.role;
-                            console.log("User Role:", userRole);
 
                             if (userRole === "ADMIN") {
-                                localStorage.setItem("email", email);
-                                //    alert("Welcome to Hotel Admin Dashboard");
                                 window.location.href = "AdminDashBoard.html";
                             } else if (userRole === "USER") {
-                                // alert("Login successful");
-                                localStorage.setItem("email", email);
                                 window.location.href = "CustomerDashboard.html";
-                            } else if (userRole === "Manager") {
-                                localStorage.setItem("email", email);
-                                //alert("Welcome to Hotel Manager Dashboard");
+                            } else if (userRole === "MANAGER") {
                                 window.location.href = "ManagerDashBoard.html";
                             } else {
                                 alert("Invalid role. Please contact support.");
@@ -255,9 +172,6 @@
                 });
             });
         });
-
-    });
-</script>
+    </script>
 </body>
-
 </html>

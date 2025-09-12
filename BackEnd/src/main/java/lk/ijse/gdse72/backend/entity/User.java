@@ -23,7 +23,7 @@ public class User {
     private String email;
     private String role;
     private String password;
-    private String profileImage;
+//    private String profileImage;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
