@@ -492,6 +492,14 @@
             border-radius: 8px;
             transition: transform 0.3s;
             margin: 2px;
+            background-color: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: #6c757d;
+            text-align: center;
+            padding: 5px;
         }
 
         .room-image:hover {
@@ -621,6 +629,20 @@
         .fa-power-off {
             font-size: 1.3rem;
         }
+        
+        .image-placeholder {
+            width: 80px;
+            height: 80px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6c757d;
+            font-size: 12px;
+            text-align: center;
+            padding: 5px;
+        }
     </style>
 </head>
 
@@ -632,7 +654,7 @@
             <li>
                 <a href="#">
                     <span class="icon">
-                        <img style="width: 200px; height: 50px; margin-left: 10px;" src="assets/images/HotelLogo.png" alt="Hotel Logo">
+                        <div class="image-placeholder">Hotel Logo</div>
                     </span>
                 </a>
             </li>
@@ -708,7 +730,7 @@
             <div class="page-title">Room Management</div>
             <div class="user-info">
                 <div class="user">
-                    <!-- User image would go here -->
+                    <div class="image-placeholder" style="width: 45px; height: 45px; border-radius: 50%;">User</div>
                 </div>
             </div>
         </div>
@@ -804,7 +826,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id="hotelForm">
+                <form id="hotelForm" enctype="multipart/form-data">
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
@@ -843,8 +865,8 @@
                             <div class="mb-3">
                                 <label class="form-label">Room Images</label>
                                 <input type="file" class="form-control mb-2" id="imageUpload1" accept="image/*" required>
-                                <input type="file" class="form-control mb-2" id="imageUpload2" accept="image/*" required>
-                                <input type="file" class="form-control" id="imageUpload3" accept="image/*" required>
+                                <input type="file" class="form-control mb-2" id="imageUpload2" accept="image/*">
+                                <input type="file" class="form-control" id="imageUpload3" accept="image/*">
                             </div>
                         </div>
                     </div>
@@ -867,7 +889,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form>
+                <form id="updateForm" enctype="multipart/form-data">
                     <input type="hidden" id="UpdateRoomId">
                     <div class="row">
                         <div class="col-md-6">
@@ -908,9 +930,9 @@
                                 <input type="file" class="form-control mb-2" id="UpdateImageUpload2" accept="image/*">
                                 <input type="file" class="form-control" id="UpdateImageUpload3" accept="image/*">
                                 <div class="image-preview-container mt-2">
-                                    <img id="UpdateCurrentImage1" class="current-image">
-                                    <img id="UpdateCurrentImage2" class="current-image">
-                                    <img id="UpdateCurrentImage3" class="current-image">
+                                    <div id="UpdateCurrentImage1" class="image-placeholder">Image 1</div>
+                                    <div id="UpdateCurrentImage2" class="image-placeholder">Image 2</div>
+                                    <div id="UpdateCurrentImage3" class="image-placeholder">Image 3</div>
                                 </div>
                             </div>
                         </div>
@@ -1015,9 +1037,9 @@
 
         if (roomsArray && Array.isArray(roomsArray)) {
             roomsArray.forEach((room) => {
-                let image1 = "assets/images/" + (room.image1 || 'default.jpg');
-                let image2 = "assets/images/" + (room.image2 || 'default.jpg');
-                let image3 = "assets/images/" + (room.image3 || 'default.jpg');
+                let image1 = room.image1 ? `http://localhost:8080/uploads/rooms/${room.image1}` : '';
+                let image2 = room.image2 ? `http://localhost:8080/uploads/rooms/${room.image2}` : '';
+                let image3 = room.image3 ? `http://localhost:8080/uploads/rooms/${room.image3}` : '';
                 
                 let availabilityClass = room.available === 'Available' ? 'available' : 'not-available';
                 let roomTypeClass = room.roomType === 'single' ? 'single' : room.roomType === 'double' ? 'double' : 'suite';
@@ -1032,12 +1054,14 @@
                         <td>${room.hotelID}</td>
                         <td>
                             <div class="image-gallery">
-                                <img src="${image1}" class="room-image" alt="Room Image 1"
-                                    onerror="this.onerror=null; this.src='assets/images/default.jpg';">
-                                <img src="${image2}" class="room-image" alt="Room Image 2"
-                                    onerror="this.onerror=null; this.src='assets/images/default.jpg';">
-                                <img src="${image3}" class="room-image" alt="Room Image 3"
-                                    onerror="this.onerror=null; this.src='assets/images/default.jpg';">
+                                ${image1 ? `<img src="${image1}" class="room-image" alt="Room Image 1" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">` : ''}
+                                ${image1 ? `<div class="image-placeholder" style="display: none;">Image 1</div>` : '<div class="image-placeholder">No Image</div>'}
+                                
+                                ${image2 ? `<img src="${image2}" class="room-image" alt="Room Image 2" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">` : ''}
+                                ${image2 ? `<div class="image-placeholder" style="display: none;">Image 2</div>` : '<div class="image-placeholder">No Image</div>'}
+                                
+                                ${image3 ? `<img src="${image3}" class="room-image" alt="Room Image 3" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">` : ''}
+                                ${image3 ? `<div class="image-placeholder" style="display: none;">Image 3</div>` : '<div class="image-placeholder">No Image</div>'}
                             </div>
                         </td>
                         <td class="action-buttons">
@@ -1071,34 +1095,38 @@
         let image2Input = document.getElementById("imageUpload2");
         let image3Input = document.getElementById("imageUpload3");
 
-        let image1 = image1Input.files.length > 0 ? image1Input.files[0].name : "default.jpg";
-        let image2 = image2Input.files.length > 0 ? image2Input.files[0].name : "default.jpg";
-        let image3 = image3Input.files.length > 0 ? image3Input.files[0].name : "default.jpg";
-
         if (!roomNumber || !roomType || !price || !available || !hotelID) {
             alert("Please fill in all the required fields.");
             return;
         }
 
-        let roomData = {
-            roomNumber: parseInt(roomNumber),
-            roomType: roomType,
-            price: parseFloat(price),
-            available: available,
-            hotelID: parseInt(hotelID),
-            image1: image1,
-            image2: image2,
-            image3: image3
-        };
+        // Create FormData object for file upload
+        let formData = new FormData();
+        formData.append("roomNumber", roomNumber);
+        formData.append("roomType", roomType);
+        formData.append("price", price);
+        formData.append("available", available);
+        formData.append("hotelID", hotelID);
+        
+        if (image1Input.files.length > 0) {
+            formData.append("image1", image1Input.files[0]);
+        }
+        if (image2Input.files.length > 0) {
+            formData.append("image2", image2Input.files[0]);
+        }
+        if (image3Input.files.length > 0) {
+            formData.append("image3", image3Input.files[0]);
+        }
 
         $.ajax({
             url: "http://localhost:8080/api/v1/rooms/save",
             method: "POST",
             headers: {
-                "Authorization": `Bearer ${localStorage.getItem("jwtToken")}`,
-                "Content-Type": "application/json"
+                "Authorization": `Bearer ${localStorage.getItem("jwtToken")}`
             },
-            data: JSON.stringify(roomData),
+            data: formData,
+            processData: false,
+            contentType: false,
             success: () => {
                 alert("Room saved successfully.");
                 $("#exampleModal").modal("hide");
@@ -1124,16 +1152,25 @@
         $("#UpdateHotelID").val(hotelID);
         
         // Show current images
-        let imageBase = "assets/images/";
-        $("#UpdateCurrentImage1").attr("src", imageBase + (image1 || 'default.jpg')).on("error", function() {
-            $(this).attr("src", "assets/images/default.jpg");
-        });
-        $("#UpdateCurrentImage2").attr("src", imageBase + (image2 || 'default.jpg')).on("error", function() {
-            $(this).attr("src", "assets/images/default.jpg");
-        });
-        $("#UpdateCurrentImage3").attr("src", imageBase + (image3 || 'default.jpg')).on("error", function() {
-            $(this).attr("src", "assets/images/default.jpg");
-        });
+        let imageBase = "http://localhost:8080/uploads/rooms/";
+        
+        if (image1) {
+            $("#UpdateCurrentImage1").html(`<img src="${imageBase}${image1}" class="current-image" onerror="this.parentElement.innerHTML='<div class=\'image-placeholder\'>Image 1</div>'">`);
+        } else {
+            $("#UpdateCurrentImage1").html('<div class="image-placeholder">No Image</div>');
+        }
+        
+        if (image2) {
+            $("#UpdateCurrentImage2").html(`<img src="${imageBase}${image2}" class="current-image" onerror="this.parentElement.innerHTML='<div class=\'image-placeholder\'>Image 2</div>'">`);
+        } else {
+            $("#UpdateCurrentImage2").html('<div class="image-placeholder">No Image</div>');
+        }
+        
+        if (image3) {
+            $("#UpdateCurrentImage3").html(`<img src="${imageBase}${image3}" class="current-image" onerror="this.parentElement.innerHTML='<div class=\'image-placeholder\'>Image 3</div>'">`);
+        } else {
+            $("#UpdateCurrentImage3").html('<div class="image-placeholder">No Image</div>');
+        }
         
         // Clear file inputs
         $("#UpdateImageUpload1, #UpdateImageUpload2, #UpdateImageUpload3").val("");
@@ -1157,43 +1194,47 @@
         let image2Input = document.getElementById("UpdateImageUpload2");
         let image3Input = document.getElementById("UpdateImageUpload3");
 
-        let image1 = image1Input.files.length > 0 ? image1Input.files[0].name : currentImages.image1;
-        let image2 = image2Input.files.length > 0 ? image2Input.files[0].name : currentImages.image2;
-        let image3 = image3Input.files.length > 0 ? image3Input.files[0].name : currentImages.image3;
-
         if (!roomNumber || !roomType || !price || !available || !hotelID) {
             alert("Please fill in all the required fields.");
             return;
         }
 
-        let roomData = {
-            roomNumber: parseInt(roomNumber),
-            roomType: roomType,
-            price: parseFloat(price),
-            available: available,
-            hotelID: parseInt(hotelID),
-            image1: image1,
-            image2: image2,
-            image3: image3
-        };
+        // Create FormData object for file upload
+        let formData = new FormData();
+        formData.append("roomNumber", roomNumber);
+        formData.append("roomType", roomType);
+        formData.append("price", price);
+        formData.append("available", available);
+        formData.append("hotelID", hotelID);
+        
+        if (image1Input.files.length > 0) {
+            formData.append("image1", image1Input.files[0]);
+        }
+        if (image2Input.files.length > 0) {
+            formData.append("image2", image2Input.files[0]);
+        }
+        if (image3Input.files.length > 0) {
+            formData.append("image3", image3Input.files[0]);
+        }
 
         $.ajax({
             url: "http://localhost:8080/api/v1/rooms/update/" + currentRoomId,
             method: "PUT",
             headers: {
-                "Authorization": `Bearer ${localStorage.getItem("jwtToken")}`,
-                "Content-Type": "application/json"
+                "Authorization": `Bearer ${localStorage.getItem("jwtToken")}`
             },
-            data: JSON.stringify(roomData),
+            data: formData,
+            processData: false,
+            contentType: false,
             success: () => {
                 alert("Room updated successfully.");
                 $("#updateModal").modal("hide");
                 loadRooms();
             },
-            error: function (error) { // ✅ fixed
-        console.error("Error updating room:", error);
-        alert("Failed to update room.");
-    }
+            error: (error) => {
+                console.error("Error updating room:", error);
+                alert("Failed to update room.");
+            }
         });
     }
 

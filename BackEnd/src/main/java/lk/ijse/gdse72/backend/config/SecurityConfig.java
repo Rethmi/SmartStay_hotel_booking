@@ -125,6 +125,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/users/**").permitAll()
                         .requestMatchers("/api/bookings/**").permitAll()
                         .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/uploads/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session ->
@@ -135,7 +136,7 @@ public class SecurityConfig {
 
         return http.build();
     }
-//@Bean
+    //@Bean
 //public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 //    http
 //            .csrf(csrf -> csrf.disable()) // Disable CSRF for API testing

@@ -162,7 +162,7 @@
                 <div class="navbar-top">
 
                     <a href="#" class="logo">
-                        <img src="./assets/images/logo-blue.svg" alt="Tourly logo">
+                        <img src="./assets/images/hotel1.jpg" alt="Tourly logo">
                     </a>
 
                     <button class="nav-close-btn" aria-label="Close Menu" data-nav-close-btn>
@@ -546,329 +546,315 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
         integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
         crossorigin="anonymous"></script>
+
 <script>
     $(document).ready(function () {
-    const token = localStorage.getItem("jwtToken");
-    const email = localStorage.getItem("email");
+        const token = localStorage.getItem("jwtToken");
+        const email = localStorage.getItem("email");
 
-    if (!token) {
-        alert("Please log in!");
-        window.location.href = "login.html";
-        return;
-    }
-
-    const hotelData = JSON.parse(localStorage.getItem("selectedHotel"));
-    if (!hotelData) {
-        alert("No hotel data found. Please search for hotels first.");
-        window.location.href = "CustomerDashboard.html";
-        return;
-    }
-
-    $("#HotelName").text(hotelData.name);
-    $("#hotelDescription").text(hotelData.description || "No description available.");
-    $("#destination").val(hotelData.location);
-    $("#people").val(hotelData.roomType);
-    $("#checkin").val(hotelData.checkin);
-    $("#checkout").val(hotelData.checkout);
-
-    const checkinDate = new Date(hotelData.checkin);
-    const checkoutDate = new Date(hotelData.checkout);
-    let days = Math.ceil((checkoutDate - checkinDate) / (1000 * 60 * 60 * 24));
-    if (days <= 0) days = 1;
-    localStorage.setItem("days", days);
-
-    let Userid;
-
-    // Get user info
-    $.ajax({
-        url: `http://localhost:8080/api/v1/user/get/${email}`,
-        method: "GET",
-        headers: { "Authorization": `Bearer ${token}` },
-        success: function (data) {
-            if (data && data.data) {
-                $("#name").val(data.data.username);
-                $("#email").val(data.data.email);
-                Userid = data.data.id;
-            } else {
-                alert("User not found.");
-            }
-        },
-        error: function () {
-            alert("Failed to fetch user info.");
+        if (!token) {
+            alert("Please log in!");
+            window.location.href = "login.html";
+            return;
         }
-    });
 
-    // Load rooms of the hotel
-    $.ajax({
-        url: `http://localhost:8080/api/v1/rooms/hotel/${hotelData.id}`,
-        method: "GET",
-        headers: { "Authorization": `Bearer ${token}` },
-        success: function (rooms) {
-            $("#roomImages").empty();
-            $("#roomTable").empty();
-
-            let filteredRooms = rooms;
-            if (hotelData.roomType) {
-                filteredRooms = rooms.filter(room =>
-                    room.roomType?.toLowerCase() === hotelData.roomType.toLowerCase()
-                );
-            }
-// Add this debug code right after you get the rooms response
-console.log("Rooms API response:", rooms);
-if (rooms.length > 0) {
-    console.log("First room object:", rooms[0]);
-    
-    // Check what image properties exist
-    const imageProps = Object.keys(rooms[0]).filter(key => 
-        key.toLowerCase().includes('image') || 
-        key.toLowerCase().includes('photo') ||
-        key.toLowerCase().includes('img')
-    );
-    console.log("Image properties found:", imageProps);
-    
-    // Check the type of the first image property if it exists
-    if (imageProps.length > 0 && rooms[0][imageProps[0]]) {
-        const firstImage = rooms[0][imageProps[0]];
-        console.log("First image data type:", typeof firstImage);
-        console.log("First image data sample:", 
-            typeof firstImage === 'string' ? 
-            firstImage.substring(0, 100) + '...' : 
-            firstImage
-        );
-    }
-}
-            // Load all bookings
-            $.ajax({
-                url: "http://localhost:8080/api/v1/bookings/all",
-                method: "GET",
-                headers: { "Authorization": `Bearer ${token}` },
-                success: function (bookingsRes) {
-                    const bookings = Array.isArray(bookingsRes) ? bookingsRes : bookingsRes.data || [];
-                    const availableRooms = filteredRooms.filter(room => {
-                        if (room.available?.toLowerCase() !== 'available') return false;
-
-                        const roomBookings = bookings.filter(b =>
-                            b.roomId === room.id || b.roomID === room.id
-                        );
-
-                        return !roomBookings.some(booking => {
-                            const bookingCheckin = new Date(booking.checkInDate || booking.checkinDate);
-                            const bookingCheckout = new Date(booking.checkOutDate || booking.checkoutDate);
-                            return (checkinDate < bookingCheckout && checkoutDate > bookingCheckin);
-                        });
-                    });
-
-                    if (availableRooms.length === 0) {
-                        $("#roomTable").append(`
-                            <tr><td colspan="4" class="text-center text-danger">
-                                No available rooms for selected dates.
-                            </td></tr>`);
-                        return;
-                    }
-
-                    // Show rooms
-                   // Update the room images section with this code
-availableRooms.forEach(room => {
-    const roomPrice = days * room.price;
-    
-    // Try different possible image property names from database
-    const roomImages = [];
-    
-    // Check for various possible image property names from database
-    // These might be base64 strings or binary data
-    if (room.image1) roomImages.push(room.image1);
-    if (room.image2) roomImages.push(room.image2);
-    if (room.image3) roomImages.push(room.image3);
-    if (room.images && Array.isArray(room.images)) roomImages.push(...room.images);
-    if (room.imageUrls && Array.isArray(room.imageUrls)) roomImages.push(...room.imageUrls);
-    if (room.photo) roomImages.push(room.photo);
-    if (room.imageData) roomImages.push(room.imageData); // Common name for BLOB data
-    
-    // If no images found, use a placeholder
-    if (roomImages.length === 0) {
-        roomImages.push('https://via.placeholder.com/200x200/cccccc/969696?text=No+Image');
-    }
-
-    // Display images
-    roomImages.forEach((imgData, index) => {
-        let imageSrc;
-        
-        // Check if the image data is a base64 string
-        if (typeof imgData === 'string' && (imgData.startsWith('data:image/') || imgData.startsWith('/9j/') || imgData.startsWith('iVBORw'))) {
-            // It's already a base64 data URL or looks like image data
-            imageSrc = imgData.startsWith('data:image/') ? imgData : `data:image/jpeg;base64,${imgData}`;
-        } 
-        // Check if it's a byte array (common with BLOB data)
-        else if (Array.isArray(imgData) || (typeof imgData === 'object' && imgData !== null)) {
-            // Convert byte array to base64
-            try {
-                const byteArray = new Uint8Array(imgData);
-                let binary = '';
-                for (let i = 0; i < byteArray.byteLength; i++) {
-                    binary += String.fromCharCode(byteArray[i]);
-                }
-                imageSrc = 'data:image/jpeg;base64,' + btoa(binary);
-            } catch (e) {
-                console.error('Error converting byte array to image:', e);
-                imageSrc = 'https://via.placeholder.com/200x200/cccccc/969696?text=Error+Loading';
-            }
+        const hotelData = JSON.parse(localStorage.getItem("selectedHotel"));
+        if (!hotelData) {
+            alert("No hotel data found. Please search for hotels first.");
+            window.location.href = "CustomerDashboard.html";
+            return;
         }
-        // Check if it's a URL
-        else if (typeof imgData === 'string' && (imgData.startsWith('http') || imgData.startsWith('/'))) {
-            imageSrc = imgData;
-        }
-        // Unknown format, use placeholder
-        else {
-            console.warn('Unknown image format:', typeof imgData, imgData);
-            imageSrc = 'https://via.placeholder.com/200x200/cccccc/969696?text=Invalid+Format';
-        }
-            
-        $("#roomImages").append(`
-            <div class="g-col-4 m-3">
-                <img src="${imageSrc}" 
-                     class="img-thumbnail" 
-                     alt="Room Image ${index + 1}" 
-                     style="height: 200px; width: 200px; object-fit: cover;"
-                     onerror="this.src='https://via.placeholder.com/200x200/cccccc/969696?text=Error+Loading'">
-            </div>
-        `);
-    });
 
-    // Rest of your code for the table row...
-    $("#roomTable").append(`
-        <tr>
-            <td>${room.roomType || 'N/A'}</td>
-            <td>$${roomPrice.toFixed(2)} (${days} nights)</td>
-            <td>${room.roomNumber || 'N/A'}</td>
-            <td>
-                <button class="btn btn-primary" style="padding: 4px 12px"
-                        onclick="bookRoom(${room.id})">
-                    Book Now
-                </button>
-            </td>
-        </tr>
-    `);
-});
-                },
-                error: function () {
-                    $("#roomTable").append(`<tr><td colspan="4" class="text-center text-warning">
-                        Error checking availability.</td></tr>`);
-                }
-            });
-        },
-        error: function () {
-            alert("Failed to load room details.");
-        }
-    });
+        $("#HotelName").text(hotelData.name);
+        $("#hotelDescription").text(hotelData.description || "No description available.");
+        $("#destination").val(hotelData.location);
+        $("#people").val(hotelData.roomType);
+        $("#checkin").val(hotelData.checkin);
+        $("#checkout").val(hotelData.checkout);
 
-    // Load Reviews
-    $('#offcanvasRight').on('shown.bs.offcanvas', function () {
+        const checkinDate = new Date(hotelData.checkin);
+        const checkoutDate = new Date(hotelData.checkout);
+        let days = Math.ceil((checkoutDate - checkinDate) / (1000 * 60 * 60 * 24));
+        if (days <= 0) days = 1;
+        localStorage.setItem("days", days);
+
+        let Userid;
+
+        // Get user info
         $.ajax({
-            url: "http://localhost:8080/api/v1/reviews/all",
+            url: `http://localhost:8080/api/v1/user/get/${email}`,
             method: "GET",
             headers: { "Authorization": `Bearer ${token}` },
-            success: function (res) {
-                const reviews = Array.isArray(res) ? res : res.data || [];
-                const hotelReviews = reviews.filter(r => Number(r.hotelId) === Number(hotelData.id));
-                $("#review-list").empty();
+            success: function (data) {
+                if (data && data.data) {
+                    $("#name").val(data.data.username);
+                    $("#email").val(data.data.email);
+                    Userid = data.data.id;
+                } else {
+                    alert("User not found.");
+                }
+            },
+            error: function () {
+                alert("Failed to fetch user info.");
+            }
+        });
 
-                if (hotelReviews.length === 0) {
-                    $("#review-list").html(`<div class="text-center p-3"><p>No reviews yet.</p></div>`);
-                    return;
+        // Load rooms of the hotel
+        $.ajax({
+            url: `http://localhost:8080/api/v1/rooms/hotel/${hotelData.id}`,
+            method: "GET",
+            headers: { "Authorization": `Bearer ${token}` },
+            success: function (rooms) {
+                $("#roomImages").empty();
+                $("#roomTable").empty();
+
+                let filteredRooms = rooms;
+                if (hotelData.roomType) {
+                    filteredRooms = rooms.filter(room =>
+                        room.roomType?.toLowerCase() === hotelData.roomType.toLowerCase()
+                    );
                 }
 
-                hotelReviews.forEach(review => {
-                    $.ajax({
-                        url: `http://localhost:8080/api/v1/user/getName/${review.userId}`,
-                        method: "GET",
-                        headers: { "Authorization": `Bearer ${token}` },
-                        success: function (userRes) {
-                            const username = userRes.data?.username || 'Anonymous';
-                            displayReview(review, username);
-                        },
-                        error: function () {
-                            displayReview(review, 'Anonymous');
+                // Load all bookings
+                $.ajax({
+                    url: "http://localhost:8080/api/v1/bookings/all",
+                    method: "GET",
+                    headers: { "Authorization": `Bearer ${token}` },
+                    success: function (bookingsRes) {
+                        const bookings = Array.isArray(bookingsRes) ? bookingsRes : bookingsRes.data || [];
+                        const availableRooms = filteredRooms.filter(room => {
+                            if (room.available?.toLowerCase() !== 'available') return false;
+
+                            const roomBookings = bookings.filter(b =>
+                                b.roomId === room.id || b.roomID === room.id
+                            );
+
+                            return !roomBookings.some(booking => {
+                                const bookingCheckin = new Date(booking.checkInDate || booking.checkinDate);
+                                const bookingCheckout = new Date(booking.checkOutDate || booking.checkoutDate);
+                                return (checkinDate < bookingCheckout && checkoutDate > bookingCheckin);
+                            });
+                        });
+
+                        if (availableRooms.length === 0) {
+                            $("#roomTable").append(`
+                                <tr><td colspan="4" class="text-center text-danger">
+                                    No available rooms for selected dates.
+                                </td></tr>`);
+                            return;
                         }
-                    });
+
+                        // Show rooms
+                        availableRooms.forEach(room => {
+                            const roomPrice = days * room.price;
+                            
+                            // Get room images - try different approaches
+                            const imageUrls = [];
+                            
+                            // Try direct image URLs first
+                            if (room.image1) imageUrls.push(getImageUrl(room.image1));
+                            if (room.image2) imageUrls.push(getImageUrl(room.image2));
+                            if (room.image3) imageUrls.push(getImageUrl(room.image3));
+                            
+                            // If no images found, use a placeholder
+                            if (imageUrls.length === 0) {
+                                imageUrls.push('https://via.placeholder.com/200x200/cccccc/969696?text=No+Image');
+                            }
+
+                            // Display images
+                            imageUrls.forEach((imgUrl, index) => {
+                                $("#roomImages").append(`
+                                    <div class="g-col-4 m-3">
+                                        <img src="${imgUrl}" 
+                                             class="img-thumbnail" 
+                                             alt="Room Image ${index + 1}" 
+                                             style="height: 200px; width: 200px; object-fit: cover;"
+                                             onerror="this.src='https://via.placeholder.com/200x200/cccccc/969696?text=Error+Loading'">
+                                    </div>
+                                `);
+                            });
+
+                            // Add room to table
+                            $("#roomTable").append(`
+                                <tr>
+                                    <td>${room.roomType || 'N/A'}</td>
+                                    <td>$${roomPrice.toFixed(2)} (${days} nights)</td>
+                                    <td>${room.roomNumber || 'N/A'}</td>
+                                    <td>
+                                        <button class="btn btn-primary" style="padding: 4px 12px"
+                                                onclick="bookRoom(${room.id})">
+                                            Book Now
+                                        </button>
+                                    </td>
+                                </tr>
+                            `);
+                        });
+                    },
+                    error: function () {
+                        $("#roomTable").append(`<tr><td colspan="4" class="text-center text-warning">
+                            Error checking availability.</td></tr>`);
+                    }
                 });
             },
             error: function () {
-                $("#review-list").html(`<div class="text-center p-3">
-                    <p>Error loading reviews. Please try again.</p></div>`);
+                alert("Failed to load room details.");
             }
+        });
+
+        // Helper function to get proper image URL
+        function getImageUrl(imageData) {
+            // If it's already a URL
+            if (typeof imageData === 'string' && imageData.startsWith('http')) {
+                return imageData;
+            }
+            
+            // If it's a base64 encoded image
+            if (typeof imageData === 'string' && (imageData.startsWith('data:image/') || imageData.startsWith('/9j/') || imageData.startsWith('iVBORw'))) {
+                return imageData.startsWith('data:image/') ? imageData : `data:image/jpeg;base64,${imageData}`;
+            }
+            
+            // If it's a filename, construct the URL
+            if (typeof imageData === 'string') {
+                return `http://localhost:8080/uploads/rooms/${imageData}`;
+            }
+            
+            // If it's binary data (array or object)
+            if (Array.isArray(imageData) || (typeof imageData === 'object' && imageData !== null)) {
+                try {
+                    const byteArray = new Uint8Array(imageData);
+                    let binary = '';
+                    for (let i = 0; i < byteArray.byteLength; i++) {
+                        binary += String.fromCharCode(byteArray[i]);
+                    }
+                    return 'data:image/jpeg;base64,' + btoa(binary);
+                } catch (e) {
+                    console.error('Error converting binary data to image:', e);
+                    return 'https://via.placeholder.com/200x200/cccccc/969696?text=Invalid+Image';
+                }
+            }
+            
+            // Default fallback
+            return 'https://via.placeholder.com/200x200/cccccc/969696?text=No+Image';
+        }
+
+        // Load Reviews
+        $('#offcanvasRight').on('shown.bs.offcanvas', function () {
+            $.ajax({
+                url: "http://localhost:8080/api/v1/reviews/all",
+                method: "GET",
+                headers: { "Authorization": `Bearer ${token}` },
+                success: function (res) {
+                    const reviews = Array.isArray(res) ? res : res.data || [];
+                    const hotelReviews = reviews.filter(r => Number(r.hotelId) === Number(hotelData.id));
+                    $("#review-list").empty();
+
+                    if (hotelReviews.length === 0) {
+                        $("#review-list").html(`<div class="text-center p-3"><p>No reviews yet.</p></div>`);
+                        return;
+                    }
+
+                    hotelReviews.forEach(review => {
+                        $.ajax({
+                            url: `http://localhost:8080/api/v1/user/getName/${review.userId}`,
+                            method: "GET",
+                            headers: { "Authorization": `Bearer ${token}` },
+                            success: function (userRes) {
+                                const username = userRes.data?.username || 'Anonymous';
+                                displayReview(review, username);
+                            },
+                            error: function () {
+                                displayReview(review, 'Anonymous');
+                            }
+                        });
+                    });
+                },
+                error: function () {
+                    $("#review-list").html(`<div class="text-center p-3">
+                        <p>Error loading reviews. Please try again.</p></div>`);
+                }
+            });
+        });
+
+        function displayReview(review, username) {
+            const reviewHtml = `
+                <div class="card mb-3">
+                    <div class="card-header d-flex justify-content-between">
+                        <strong>${username}</strong>
+                        <small>${new Date(review.reviewDate).toLocaleDateString()}</small>
+                    </div>
+                    <div class="card-body">
+                        <blockquote class="blockquote mb-0">
+                            <p class="fw-lighter" style="font-size: 17px;">${review.comment}</p>
+                            <footer class="blockquote-footer">
+                                Rated: ${'★'.repeat(review.rating)}${'☆'.repeat(5 - review.rating)}
+                            </footer>
+                        </blockquote>
+                    </div>
+                </div>`;
+            $("#review-list").append(reviewHtml);
+        }
+
+        // Star rating
+        $('#star-rating i').on('click', function () {
+            const rating = $(this).data('value');
+            $('#ratingValue').val(rating);
+            $('#star-rating i').each(function (index) {
+                $(this).toggleClass('checked', index < rating);
+            });
+        });
+
+        // Submit review
+        $("#ReviewSend").click(function () {
+            const comment = $("#ReviewComment").val();
+            const rating = $('#ratingValue').val();
+            
+            if (!comment || rating === '0') {
+                alert("Please provide both a comment and a rating.");
+                return;
+            }
+            
+            $.ajax({
+                url: "http://localhost:8080/api/v1/review/save",
+                method: "POST",
+                headers: { "Authorization": `Bearer ${token}` },
+                contentType: "application/json",
+                data: JSON.stringify({
+                    comment: comment,
+                    rating: parseInt(rating),
+                    reviewDate: new Date().toISOString(),
+                    hotelId: hotelData.id,
+                    userId: Userid
+                }),
+                success: function () {
+                    alert("Review submitted successfully!");
+                    $("#ReviewComment").val("");
+                    $('#ratingValue').val("0");
+                    $('#star-rating i').removeClass('checked');
+                    $('#staticBackdrop').modal('hide');
+                },
+                error: function (xhr) {
+                    alert("Failed to submit review. " + (xhr.responseJSON?.message || ""));
+                }
+            });
         });
     });
 
-    function displayReview(review, username) {
-        const reviewHtml = `
-            <div class="card mb-3">
-                <div class="card-header d-flex justify-content-between">
-                    <strong>${username}</strong>
-                    <small>${new Date(review.reviewDate).toLocaleDateString()}</small>
-                </div>
-                <div class="card-body">
-                    <blockquote class="blockquote mb-0">
-                        <p class="fw-lighter" style="font-size: 17px;">${review.comment}</p>
-                        <footer class="blockquote-footer">
-                            Rated: ${'★'.repeat(review.rating)}${'☆'.repeat(5 - review.rating)}
-                        </footer>
-                    </blockquote>
-                </div>
-            </div>`;
-        $("#review-list").append(reviewHtml);
+    // Book Room
+    function bookRoom(roomId) {
+        localStorage.setItem("selectedRoomId", roomId);
+        window.location.href = "Booking.html?roomId=" + roomId;
     }
 
-    // Star rating
-    $('#star-rating i').on('click', function () {
-        const rating = $(this).data('value');
-        $('#ratingValue').val(rating);
-        $('#star-rating i').each(function (index) {
-            $(this).toggleClass('checked', index < rating);
-        });
-    });
-
-    // Submit review
-    $("#ReviewSend").click(function () {
-        $.ajax({
-            url: "http://localhost:8080/api/v1/review/save",
-            method: "POST",
-            headers: { "Authorization": `Bearer ${token}` },
-            contentType: "application/json",
-            data: JSON.stringify({
-                comment: $("#ReviewComment").val(),
-                rating: $('#ratingValue').val(),
-                reviewDate: new Date().toISOString(),
-                hotelId: hotelData.id,
-                userId: Userid
-            }),
-            success: function () {
-                alert("Review submitted successfully!");
-                location.reload();
-            },
-            error: function () {
-                alert("Failed to submit review.");
+    // Logout
+    function logout() {
+        Object.keys(localStorage).forEach(key => {
+            if (key.match(/jwt|Hotel|Room|destination|checkin|checkout|people|email|role/i)) {
+                localStorage.removeItem(key);
             }
         });
-    });
-});
-
-// Book Room
-function bookRoom(roomId) {
-    localStorage.setItem("selectedRoomId", roomId);
-    window.location.href = "Booking.html?roomId=" + roomId;
-}
-
-// Logout
-function logout() {
-    Object.keys(localStorage).forEach(key => {
-        if (key.match(/jwt|Hotel|Room|destination|checkin|checkout|people|email|role/i)) {
-            localStorage.removeItem(key);
-        }
-    });
-    alert("Logged out successfully");
-    window.location.href = "Login.html";
-}
-
+        alert("Logged out successfully");
+        window.location.href = "Login.html";
+    }
 </script>
 </body>
 
