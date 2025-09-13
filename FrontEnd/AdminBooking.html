@@ -866,7 +866,7 @@
         };
 
         $.ajax({
-            url: `http://localhost:8080/api/v1/bookings/${currentBookingId}`,
+            url: `http://localhost:8080/api/v1/bookings/update/${currentBookingId}`, // <-- Add /update
             method: "PUT",
             headers: {
                 "Authorization": `Bearer ${localStorage.getItem("jwtToken")}`,
@@ -893,7 +893,7 @@
 
     function deleteBooking(id) {
         $.ajax({
-            url: `http://localhost:8080/api/v1/bookings/${id}`,
+            url: `http://localhost:8080/api/v1/bookings/delete/${id}`, // correct
             method: "DELETE",
             headers: {
                 "Authorization": `Bearer ${localStorage.getItem("jwtToken")}`

@@ -179,7 +179,7 @@
             </a>
 
             <a href="CustomerDashboard.html" class="logo logo-hotel">
-                <img src="./assets/images/HotelLogo.png" alt="Tourly logo" class="logo-hotel">
+                <!-- <img src="./assets/images/colombo.jpeg" alt="Tourly logo" class="logo-hotel"> -->
             </a>
 
             <div class="header-btn-group">
@@ -436,73 +436,78 @@
         console.log("Room ID:", roomId);
         console.log("Checkin:", checkin);
 
-        let email = localStorage.getItem("emailUser");
+       let email = localStorage.getItem("emailUser");
 
-        $.ajax({
-            url: `http://localhost:8080/api/v1/user/get/${email}`,
-            method: "GET",
-            headers: {
-                "Authorization": `Bearer ${token}`
-            },
-            contentType: "application/json",
-            success: function (data) {
-                console.log("Customer Data:", data);
-                if (data && data.data) {
-                    $("#name").val(data.data.username);
-                    $("#email").val(data.data.email);
-                    Userid = data.data.id;
-                } else {
-                    console.log("No customer data found.");
-                    alert("Customer not found.");
-                }
-            },
-            error: function (xhr, status, error) {
-                console.log("Error fetching customer:", error);
-                alert("Failed to fetch customer details.");
-            }
-        });
+if (!email) {
+    alert("No user email found. Please log in again.");
+    window.location.href = "login.html";
+    return;
+}
 
-        $("#ConfirmBooking").click(function () {
+$.ajax({
+    url: `http://localhost:8080/api/v1/users/email/${email}`,
+    method: "GET",
+    headers: {
+        "Authorization": `Bearer ${token}`
+    },
+    contentType: "application/json",
+    success: function (data) {
+        console.log("Customer Data:", data);
+        // Adjust if your backend returns plain UserDTO, not wrapped
+        if (data) {
+            $("#name").val(data.username);
+            $("#email").val(data.email);
+            Userid = data.id;
+        } else {
+            alert("Customer not found.");
+        }
+    },
+    error: function (xhr, status, error) {
+        console.log("Error fetching customer:", error);
+        alert("Failed to fetch customer details.");
+    }
+});
 
-            if (!$("#phone").val() || !$("#name").val() || !$("#email").val()) {
-                alert("Please fill in all fields.");
-                return;
-            }
+$(document).ready(function () {
+    $("#ConfirmBooking").click(function () {
 
-            $.ajax({
-                url: "http://localhost:8080/api/v1/booking/save",
-                method: "POST",
-                headers: {
-                    "Authorization": `Bearer ${token}`
-                },
-                contentType: "application/json",
-                data: JSON.stringify({
-                    roomId: roomId,
-                    userId: Userid,
-                    checkInDate: checkin,
-                    checkOutDate: checkout,
-                    phoneNumber: $("#phone").val(),
-                    status: "PENDING",
-                    email: $("#email").val(),
-                    city: "null"
-                }),
-                success: (res) => {
-                    console.log("Booking Response:", res);
-                    if (res.statusCode === 200) {
-                        alert("Booking successful.");
-                        location.href = "CustomerDashboard.html";
-                    } else {
-                        alert("Booking failed: " + res.message);
-                    }
-                },
-                error: (error) => {
-                    console.log("Error creating booking:", error);
-                    alert("Failed to create booking.");
-                }
-            });
-        });
+        console.log("Token:", token, "RoomId:", roomId, "UserId:", Userid, "CheckIn:", checkin, "CheckOut:", checkout);
+
+        if (!$("#phone").val() || !$("#name").val() || !$("#email").val()) {
+            alert("Please fill in all fields.");
+            return;
+        }
+
+       $.ajax({
+    url: "http://localhost:8080/api/v1/bookings/save", // your Spring Boot API
+    method: "POST",
+    headers: {
+        "Authorization": `Bearer ${token}`
+    },
+    contentType: "application/json",
+    data: JSON.stringify({
+        roomId: roomId,
+        userId: Userid,
+        checkInDate: checkin,
+        checkOutDate: checkout,
+        phoneNumber: $("#phone").val(),
+        status: "PENDING",
+        email: $("#email").val(),
+        city: "null"
+    }),
+    success: function(res) {
+        alert("Booking successful.");
+        window.location.href = "CustomerDashboard.html";
+    },
+    error: function(err) {
+        console.error(err);
+        alert("Failed to create booking.");
+    }
+});
+
     });
-
+});
+    });
 
 </script>
 </body>
