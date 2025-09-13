@@ -7,31 +7,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Smart Hotel Booking</title>
 
-    <!--
-      - favicon
-    -->
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
-    <link rel="shortcut icon" href="./favicon.svg" type="image/svg+xml">
+    <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-    <!--
-      - custom css link
-    -->
+    
+    <!-- SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+    <!-- Custom CSS -->
     <link rel="stylesheet" href="css/CustomerDashboard.css">
 
-    <!--
-      - google font link
-    -->
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
             href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap"
             rel="stylesheet">
+            
     <style>
         .logo-hotel {
-            width: 300px;
-            height: 53px;
+            width: 100px;
+            height: 100px;
         }
 
         ol, ul {
@@ -46,6 +45,10 @@
         /* Add space below Swiper to prevent overlap */
         .swiper {
             padding-bottom: 40px;
+        }
+
+        #profileBtn {
+            cursor: pointer;
         }
 
         /* Sidebar Styles */
@@ -116,201 +119,175 @@
             cursor: pointer;
         }
 
+        /* Custom button styles */
+        .btn-primary {
+            background-color: #3a86ff;
+            border-color: #3a86ff;
+        }
+        
+        .btn-primary:hover {
+            background-color: #2a75ff;
+            border-color: #2a75ff;
+        }
+        
+        .btn-secondary {
+            background-color: #0f0754;
+            border-color: #0f0754;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #0f0754;
+            border-color: #0f0754;
+        }
+
     </style>
 </head>
 
 <body id="top">
 
-<!--
-  - #HEADER
--->
-
+<!-- Header -->
 <header class="header" data-header>
-
     <div class="overlay" data-overlay></div>
-
     <div class="header-top">
         <div class="container">
-
             <a href="tel:+01123456790" class="helpline-box">
-
                 <div class="icon-box">
                     <ion-icon name="call-outline"></ion-icon>
                 </div>
-
                 <div class="wrapper">
                     <p class="helpline-title">For Further Inquires :</p>
-
                     <p class="helpline-number">+01 (123) 4567 90</p>
                 </div>
-
             </a>
 
             <a href="CustomerDashboard.html" class="logo logo-hotel">
                 <img src="./assets/images/HotelLogo.png" alt="Tourly logo" class="logo-hotel">
+                
             </a>
 
             <div class="header-btn-group">
-
                 <button class="search-btn" aria-label="Search">
                     <ion-icon name="search"></ion-icon>
                 </button>
-
                 <button class="nav-open-btn" aria-label="Open Menu" data-nav-open-btn>
                     <ion-icon name="menu-outline"></ion-icon>
                 </button>
-
             </div>
-
         </div>
     </div>
 
     <div class="header-bottom">
         <div class="container">
-
             <ul class="social-list">
-
                 <li>
                     <a href="#" class="social-link">
                         <ion-icon name="logo-facebook"></ion-icon>
                     </a>
                 </li>
-
                 <li>
                     <a href="#" class="social-link">
                         <ion-icon name="logo-twitter"></ion-icon>
                     </a>
                 </li>
-
                 <li>
                     <a href="#" class="social-link">
                         <ion-icon name="logo-youtube"></ion-icon>
                     </a>
                 </li>
-
             </ul>
 
             <nav class="navbar" data-navbar>
-
                 <div class="navbar-top">
-
                     <a href="#" class="logo">
                         <img src="./assets/images/colombo.jpeg" alt="Tourly logo">
                     </a>
-
                     <button class="nav-close-btn" aria-label="Close Menu" data-nav-close-btn>
                         <ion-icon name="close-outline"></ion-icon>
                     </button>
-
                 </div>
 
                 <ul class="navbar-list">
-
                     <li>
                         <a href="#home" class="navbar-link" data-nav-link>home</a>
                     </li>
-
                     <li>
                         <a href="#" class="navbar-link" data-nav-link>about us</a>
                     </li>
-
                     <li>
                         <a href="#destination" class="navbar-link" data-nav-link>Stays</a>
                     </li>
-
-                    <!-- <li>
-                      <a href="#package" class="navbar-link" data-nav-link></a>
-                    </li> -->
-
-
                     <li>
                         <a href="#contact" class="navbar-link" data-nav-link>contact us</a>
                     </li>
 
-                </ul>
+                <!-- <li class="nav-item"><a class="nav-link" href="profile.html">Profile</a></li> -->
 
+                </ul>
             </nav>
 
             <button class="btn btn-primary" id="logoutBtn" onclick="logout()">Log In</button>
-
-            <a style="color: white" class="nav-link me-3" href="#" id="profileBtn" onclick="toggleSidebar()"><i
-                    class="fa-solid fa-user-circle"></i> Profile</a>
-
+            <a style="color: rgb(1, 1, 1)" class="nav-link me-3" href="#" id="profileBtn" onclick="toggleSidebar()">
+                <i class="fa-solid fa-user-circle"></i> Profile
+            </a>
         </div>
     </div>
-    <div>
-        <!-- Sidebar (Profile) -->
-        <div id="profileSidebar" class="sidebar">
-            <span class="close-btn" onclick="toggleSidebar()">×</span>
-            <div class="profile-header">
-                <img id="modalProfilePicture" src="assets/images/image.png"
-                     alt="Profile Picture" class="profile-img">
-                <p id="modalUserName">User Name</p>
-                <p id="modalUserEmail">User Email</p>
-                <!--                <p id="modalUserRole">User Role</p>-->
-            </div>
-
-            <div class="p-3">
-                <h5 class="mb-3">Bookings</h5>
-                <div class="table-responsive" style="max-height: 300px; overflow-y: auto;">
-                    <table class="table table-bordered table-striped">
-                        <thead class="table-light">
-                        <tr>
-                            <th>roomID</th>
-                            <th>checkInDate</th>
-                            <th>checkOutDate</th>
-                        </tr>
-                        </thead>
-                        <tbody id="bookingTableBody">
-                        </tbody>
-                    </table>
-                </div>
-                <a style="border: solid 2px black; color: black;" onclick="logout();"
-                   class="btn btn-outline-danger mt-3 w-100">
-                    <i class="fas fa-sign-out-alt"></i> Logout
-                </a>
-            </div>
+    
+    <!-- Sidebar (Profile) -->
+    <div id="profileSidebar" class="sidebar">
+        <span class="close-btn" onclick="toggleSidebar()">×</span>
+        <div class="profile-header">
+            <img id="modalProfilePicture" src="assets/images/image.png"
+                 alt="Profile Picture" class="profile-img">
+            <p id="modalUserName">User Name</p>
+            <p id="modalUserEmail">User Email</p>
         </div>
 
+        <div class="p-3">
+            <h5 class="mb-3">Bookings</h5>
+            <div class="table-responsive" style="max-height: 300px; overflow-y: auto;">
+                <table class="table table-bordered table-striped">
+                    <thead class="table-light">
+                    <tr>
+                        <th>Room ID</th>
+                        <th>Check-in Date</th>
+                        <th>Check-out Date</th>
+                    </tr>
+                    </thead>
+                    <tbody id="bookingTableBody">
+                    </tbody>
+                </table>
+            </div>
+            <a style="border: solid 2px #dc3545; color: #dc3545;" onclick="logout();"
+               class="btn btn-outline-danger mt-3 w-100">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+        </div>
     </div>
 </header>
 
-
 <main>
     <article>
+        <!-- Hero Section -->
+        <section class="hero" id="home">
+            <div class="container">
+                <h2 class="h1 hero-title">Luxury Stays, Memorable Experiences</h2>
+                <p class="hero-text">
+                    Experience the finest hotels in Sri Lanka, where comfort meets elegance. 
+                    Book your stay and create unforgettable memories.
+                </p>
+                <div class="btn-group">
+                    <button class="btn btn-primary">Learn more</button>
+                    <button class="btn btn-secondary">Book now</button>
+                </div>
+            </div>
+        </section>
 
-        <!--
-          - #HERO
-        -->
-
-       <section class="hero" id="home">
-    <div class="container">
-        <h2 class="h1 hero-title">Luxury Stays, Memorable Experiences</h2>
-        <p class="hero-text">
-            Experience the finest hotels in Sri Lanka, where comfort meets elegance. 
-            Book your stay and create unforgettable memories.
-        </p>
-        <div class="btn-group">
-            <button class="btn btn-primary">Learn more</button>
-            <button class="btn btn-secondary">Book now</button>
-        </div>
-    </div>
-</section>
-
-
-
-        <!--
-          - #TOUR SEARCH
-        -->
-
+        <!-- Tour Search -->
         <section class="tour-search">
             <div class="container">
-
                 <form action="" class="tour-search-form">
-
                     <div class="input-wrapper">
                         <label for="destination" class="input-label">Search Destination*</label>
-
                         <input type="text" name="destination" id="destination" required placeholder="Enter Destination"
                                class="input-field">
                     </div>
@@ -319,7 +296,7 @@
                         <label for="people" class="input-label">Room Type*</label>
                         <select name="people" id="people" required class="input-field">
                             <option value="single">Single</option>
-                            <option value="double" selected>Double</option> <!-- Default value -->
+                            <option value="double" selected>Double</option>
                             <option value="suite">Suite</option>
                         </select>
                     </div>
@@ -334,40 +311,28 @@
                         <input type="date" name="checkout" id="checkout" required class="input-field">
                     </div>
                     <button type="submit" class="btn btn-secondary" id="Search">Search now</button>
-
                 </form>
-
             </div>
         </section>
 
-
-        <!--
-          - #POPULAR
-        -->
-
+        <!-- Popular Destinations -->
         <section class="popular" id="destination1">
             <div class="container">
-
                 <p class="section-subtitle">Uncover place</p>
-
                 <h2 class="h2 section-title">Popular destination</h2>
-
                 <p class="section-text">
                     "Explore breathtaking destinations that captivate travelers with their charm, history, and natural
                     beauty. From serene tropical beaches to bustling cityscapes, these must-visit locations offer
-                    unforgettable experiences for every kind of traveler." </p>
+                    unforgettable experiences for every kind of traveler." 
+                </p>
 
                 <ul class="popular-list">
-
                     <li>
                         <div class="popular-card">
-
                             <figure class="card-img">
-                                <img src="./assets/images/pexels-shainee-2933943.jpg    " alt="San miguel, italy" loading="lazy">
+                                <img src="./assets/images/pexels-shainee-2933943.jpg" alt="Galle, Sri Lanka" loading="lazy">
                             </figure>
-
                             <div class="card-content">
-
                                 <div class="card-rating">
                                     <ion-icon name="star"></ion-icon>
                                     <ion-icon name="star"></ion-icon>
@@ -375,31 +340,23 @@
                                     <ion-icon name="star"></ion-icon>
                                     <ion-icon name="star"></ion-icon>
                                 </div>
-
-
                                 <h3 class="h3 card-title">
-                                    <a href="#" onclick="setDestination('colombo')">Galle</a>
+                                    <a href="#" onclick="setDestination('Galle')">Galle</a>
                                 </h3>
-
                                 <p class="card-text">
-                                    Colombo, the vibrant capital of Sri Lanka, is a dynamic blend of modern skyscrapers,
-                                    colonial architecture, bustling markets, and scenic coastal views.
+                                    Galle, a historic coastal city, is famous for its well-preserved Dutch fort, 
+                                    charming streets, and beautiful beaches, offering a perfect blend of history and natural beauty.
                                 </p>
-
                             </div>
-
                         </div>
                     </li>
 
                     <li>
                         <div class="popular-card">
-
                             <figure class="card-img">
-                                <img src="./assets/images/pexels-eugene-dorosh-230277-739409.jpg" alt="Burj khalifa, dubai" loading="lazy">
+                                <img src="./assets/images/pexels-eugene-dorosh-230277-739409.jpg" alt="Kandy, Sri Lanka" loading="lazy">
                             </figure>
-
                             <div class="card-content">
-
                                 <div class="card-rating">
                                     <ion-icon name="star"></ion-icon>
                                     <ion-icon name="star"></ion-icon>
@@ -407,34 +364,23 @@
                                     <ion-icon name="star"></ion-icon>
                                     <ion-icon name="star"></ion-icon>
                                 </div>
-
-                                <p class="card-subtitle">
-                                    <a href="#"></a>
-                                </p>
-
                                 <h3 class="h3 card-title">
-                                    <a href="#" onclick="setDestination('kandy')">Kandy</a>
+                                    <a href="#" onclick="setDestination('Kandy')">Kandy</a>
                                 </h3>
-
                                 <p class="card-text">
                                     Kandy, a cultural gem of Sri Lanka, is home to the sacred Temple of the Tooth and
                                     surrounded by lush green hills, blending history and nature beautifully.
                                 </p>
-
                             </div>
-
                         </div>
                     </li>
 
                     <li>
                         <div class="popular-card">
-
                             <figure class="card-img">
-                                <img src="./assets/images/pexels-tarana-tabassum-685221579-28773425.jpg" alt="Kyoto temple, japan" loading="lazy">
+                                <img src="./assets/images/pexels-tarana-tabassum-685221579-28773425.jpg" alt="Ella, Sri Lanka" loading="lazy">
                             </figure>
-
                             <div class="card-content">
-
                                 <div class="card-rating">
                                     <ion-icon name="star"></ion-icon>
                                     <ion-icon name="star"></ion-icon>
@@ -442,238 +388,170 @@
                                     <ion-icon name="star"></ion-icon>
                                     <ion-icon name="star"></ion-icon>
                                 </div>
-
-
                                 <h3 class="h3 card-title">
-                                    <a href="#" onclick="setDestination('NuwaraEliya')">Ella</a>
+                                    <a href="#" onclick="setDestination('Ella')">Ella</a>
                                 </h3>
-
                                 <p class="card-text">
-                                    Nuwara Eliya, known as 'Little England,' is a charming hill town in Sri Lanka,
-                                    famous for its cool climate, tea plantations, and stunning landscapes.
+                                    Ella, a small mountain town, is known for its stunning views, hiking trails, 
+                                    and tea plantations, offering a peaceful retreat in the hill country of Sri Lanka.
                                 </p>
-
                             </div>
-
                         </div>
                     </li>
-
                 </ul>
-
-                <!--                <button class="btn btn-primary">More destintion</button>-->
-
             </div>
         </section>
 
-
-        <!--
-          - #PACKAGE
-        -->
-
-
-        <!--
-          - #GALLERY
-        -->
-
+        <!-- Gallery -->
         <section class="gallery" id="gallery">
             <div class="container">
-
                 <p class="section-subtitle">Photo Gallery</p>
-
                 <h2 class="h2 section-title">Photo's From Travellers</h2>
-
                 <p class="section-text">
                     Explore stunning snapshots from travelers across Sri Lanka, showcasing its breathtaking landscapes,
                     rich heritage, and vibrant culture. From golden beaches to misty mountains, every photo captures the
-                    island’s unique charm.
+                    island's unique charm.
                 </p>
 
                 <ul class="gallery-list">
-
                     <li class="gallery-item">
                         <figure class="gallery-image">
-                            <img src="./assets/images/travller.jpeg" alt="Gallery image">
+                            <img src="./assets/images/1.jpg" alt="Gallery image">
                         </figure>
                     </li>
-
                     <li class="gallery-item">
                         <figure class="gallery-image">
-                            <img src="./assets/images/travller1.jpeg" alt="Gallery image">
+                            <img src="./assets/images/2.jpg" alt="Gallery image">
                         </figure>
                     </li>
-
                     <li class="gallery-item">
                         <figure class="gallery-image">
                             <img src="./assets/images/travller2.jpeg" alt="Gallery image">
                         </figure>
                     </li>
-
                     <li class="gallery-item">
                         <figure class="gallery-image">
-                            <img src="./assets/images/The Elephant Orphanage at Pinnawala, Sri Lanka.jpeg"
+                            <img src="./assets/images/3.jpg"
                                  alt="Gallery image">
                         </figure>
                     </li>
-
                     <li class="gallery-item">
                         <figure class="gallery-image">
                             <img src="./assets/images/travller4.jpeg" alt="Gallery image">
                         </figure>
                     </li>
-
                 </ul>
-
             </div>
         </section>
 
-
-        <!--
-          - #CTA
-        -->
-
+        <!-- CTA -->
         <section class="cta" id="contact">
             <div class="container">
-
                 <div class="cta-content">
                     <p class="section-subtitle">Call To Action</p>
-
                     <h2 class="h2 section-title">Ready For Unforgatable Travel. Remember Us!</h2>
-
                     <p class="section-text">
-                        Fusce hic augue velit wisi quibusdam pariatur, iusto primis, nec nemo, rutrum. Vestibulum cumque
-                        laudantium. Sit ornare
-                        mollitia tenetur, aptent.
+                        Experience the best of Sri Lankan hospitality with our curated selection of luxury accommodations. 
+                        Let us help you create memories that will last a lifetime.
                     </p>
                 </div>
-
                 <button class="btn btn-secondary">Contact Us !</button>
-
             </div>
         </section>
-
     </article>
 </main>
 
-
-<!--
-  - #FOOTER
--->
-
+<!-- Footer -->
 <footer class="footer">
-
     <div class="footer-top">
         <div class="container">
-
             <div class="footer-brand">
-
                 <a href="#" class="logo">
                     <img src="./assets/images/HotelLogo.png" alt="Tourly logo">
                 </a>
-
                 <p class="footer-text">
-                    Urna ratione ante harum provident, eleifend, vulputate molestiae proin fringilla, praesentium magna
-                    conubia
-                    at
-                    perferendis, pretium, aenean aut ultrices.
+                    Providing exceptional hospitality experiences across Sri Lanka. 
+                    Discover comfort, luxury, and authentic Sri Lankan culture with our handpicked accommodations.
                 </p>
-
             </div>
 
             <div class="footer-contact">
-
                 <h4 class="contact-title">Contact Us</h4>
-
                 <p class="contact-text">
                     Feel free to contact and reach us !!
                 </p>
-
                 <ul>
-
                     <li class="contact-item">
                         <ion-icon name="call-outline"></ion-icon>
-
                         <a href="tel:+01123456790" class="contact-link">+01 (123) 4567 90</a>
                     </li>
-
                     <li class="contact-item">
                         <ion-icon name="mail-outline"></ion-icon>
-
                         <a href="mailto:info.tourly.com" class="contact-link">SmartHotelBooking@gmail.com</a>
                     </li>
-
                     <li class="contact-item">
                         <ion-icon name="location-outline"></ion-icon>
-
                         <address>Sri Lanka</address>
                     </li>
-
                 </ul>
-
             </div>
 
             <div class="footer-form">
-
                 <p class="formm-text">
                     Subscribe our newsletter for more update & news !!
                 </p>
-
                 <form action="" class="form-wrapper">
                     <input type="email" name="email" class="input-field" placeholder="Enter Your Email" required>
-
                     <button type="submit" class="btn btn-secondary">Subscribe</button>
                 </form>
-
             </div>
-
         </div>
     </div>
 
     <div class="footer-bottom">
         <div class="container">
-
             <p class="copyright">
                 &copy; 2025 <a href="">Smart Hotel Booking</a>. All rights reserved
             </p>
-
             <ul class="footer-bottom-list">
-
                 <li>
                     <a href="#" class="footer-bottom-link">Privacy Policy</a>
                 </li>
-
                 <li>
                     <a href="#" class="footer-bottom-link">Term & Condition</a>
                 </li>
-
                 <li>
                     <a href="#" class="footer-bottom-link">FAQ</a>
                 </li>
-
             </ul>
-
         </div>
     </div>
-
 </footer>
-
 
 <a href="#top" class="go-top" data-go-top>
     <ion-icon name="chevron-up-outline"></ion-icon>
 </a>
 
-
-<!--
-  - custom js link
--->
+<!-- Scripts -->
 <script src="js/CustomerDashboard.js"></script>
-
-<!--
-  - ionicon link
--->
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
 <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+<!-- SweetAlert2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+
 <script>
+    // SweetAlert notifications
+    function showAlert(icon, title, text) {
+        Swal.fire({
+            icon: icon,
+            title: title,
+            text: text,
+            timer: 3000,
+            showConfirmButton: false
+        });
+    }
+
     $(document).ready(function () {
         let token = localStorage.getItem("jwtToken");
         let email = localStorage.getItem("email");
@@ -686,13 +564,13 @@
 
         if (!token || !email) {
             // User not logged in
-            // alert("You are not logged in!");
-            if (profileBtn) profileBtn.style.display = "none";  // hide profile
-            if (logoutBtn) logoutBtn.style.display = "inline-block"; // show logout
+            if (profileBtn) profileBtn.style.display = "none";
+            if (logoutBtn) logoutBtn.style.display = "inline-block";
         } else {
             // User logged in
-            if (profileBtn) profileBtn.style.display = "inline-block"; // show profile
-            if (logoutBtn) logoutBtn.style.display = "none"; // show logout
+            if (profileBtn) profileBtn.style.display = "inline-block";
+            if (logoutBtn) logoutBtn.style.display = "none";
+            showAlert('success', 'Welcome!', 'You have successfully logged in.');
         }
 
         const imageUrl = "assets/images/";
@@ -707,22 +585,22 @@
             success: function (response) {
                 console.log("Response:", response);
 
-                const users = response.data || response; // fallback if backend returns array directly
+                const users = response.data || response;
 
-    if (!Array.isArray(users)) {
-        console.error("Expected users array but got:", users);
-        return; // stop execution
-    }
+                if (!Array.isArray(users)) {
+                    console.error("Expected users array but got:", users);
+                    return;
+                }
 
-    const user = users.find(u => u.email === email);
+                const user = users.find(u => u.email === email);
 
-    if (!user) {
-        console.warn("User with the given email not found.");
-        return;
-    }
+                if (!user) {
+                    console.warn("User with the given email not found.");
+                    return;
+                }
 
-    const userId = user.id;
-    console.log("User ID:", userId);
+                const userId = user.id;
+                console.log("User ID:", userId);
 
                 if (user) {
                     $("#modalUserName").text(user.username);
@@ -738,47 +616,44 @@
                 }
 
                 $.ajax({
-                    url: "http://localhost:8080/api/v1/bookings/all", // Update this URL if needed
+                    url: "http://localhost:8080/api/v1/bookings/all",
                     method: "GET",
                     headers: {
                         "Authorization": "Bearer " + token
                     },
                     success: function (response) {
-
                         const bookings = response.data || [];
-
                         const userBookings = bookings.filter(booking => booking.userId === userId);
                         console.log("userbookings:", userBookings);
 
                         if (userBookings.length === 0) {
-                            $("#bookingTableBody").html("<tr><td colspan='5'>No bookings found.</td></tr>");
+                            $("#bookingTableBody").html("<tr><td colspan='3' class='text-center'>No bookings found.</td></tr>");
                             return;
                         }
 
-                        // Populate booking table
                         let tableBody = $("#bookingTableBody");
                         tableBody.empty();
 
                         userBookings.forEach(booking => {
                             let row = `
-                <tr>
-                    <td>${booking.roomId}</td>
-                    <td>${booking.checkInDate}</td>
-                    <td>${booking.checkOutDate}</td>
-                </tr>
-            `;
+                                <tr>
+                                    <td>${booking.roomId}</td>
+                                    <td>${booking.checkInDate}</td>
+                                    <td>${booking.checkOutDate}</td>
+                                </tr>
+                            `;
                             tableBody.append(row);
                         });
                     },
                     error: function (err) {
                         console.error("Error fetching bookings:", err);
-                        alert("Failed to fetch bookings.");
+                        showAlert('error', 'Error', 'Failed to fetch bookings.');
                     }
                 });
             },
             error: function (err) {
                 console.error("Failed to fetch user data:", err);
-                //alert("Error fetching user data.");
+                showAlert('error', 'Error', 'Failed to load user data.');
             }
         });
 
@@ -794,12 +669,22 @@
             const checkout = $("#checkout").val();
             const people = $("#people option:selected").val();
 
+            if (!destination) {
+                showAlert('warning', 'Destination Required', 'Please enter a destination to search.');
+                return;
+            }
+
             localStorage.setItem("destination", destination);
             localStorage.setItem("checkin", checkin);
             localStorage.setItem("checkout", checkout);
             localStorage.setItem("people", people);
 
-            window.location.href = "HotelSearch.html";
+            showAlert('success', 'Searching', 'Finding the best hotels for you...');
+            
+            // Small delay to allow the alert to be seen
+            setTimeout(() => {
+                window.location.href = "HotelSearch.html";
+            }, 1500);
         }
     });
 
@@ -823,49 +708,58 @@
     function setDestination(value) {
         console.log("Selected destination:", value);
         document.getElementById("destination").value = value;
-        document.querySelector(".tour-search-form").submit();
+        showAlert('info', 'Destination Selected', `Searching for hotels in ${value}`);
+        
+        // Small delay to allow the alert to be seen
+        setTimeout(() => {
+            document.querySelector(".tour-search-form").submit();
+        }, 1500);
     }
 
     // Logout function
     function logout() {
-        localStorage.removeItem("jwtToken");
-        localStorage.removeItem("email");
-        localStorage.removeItem("role");
-        // alert("Logged out successfully");
-        window.location.href = "login.html";
+        Swal.fire({
+            title: 'Logout',
+            text: 'Are you sure you want to logout?',
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, logout!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                localStorage.removeItem("jwtToken");
+                localStorage.removeItem("email");
+                localStorage.removeItem("role");
+                
+                showAlert('success', 'Logged Out', 'You have been successfully logged out.');
+                
+                setTimeout(() => {
+                    window.location.href = "login.html";
+                }, 1500);
+            }
+        });
     }
 
     // Toggle profile sidebar
     function toggleSidebar() {
         const sidebar = document.getElementById("profileSidebar");
-        if (sidebar) {
-            sidebar.classList.toggle("active");
-            console.log("Sidebar state:", sidebar.classList.contains("active") ? "Visible" : "Hidden");
-            if (sidebar.classList.contains("active")) {
-                sidebar.style.right = "0"; // Show sidebar
-            } else {
-                sidebar.style.right = "-250px"; // Hide sidebar
-            }
-        } else {
-            console.error("Sidebar element not found!");
-        }
+        if (!sidebar) return console.error("Sidebar element not found!");
+
+        sidebar.classList.toggle("show");
     }
 
     // Close sidebar when clicking outside
-    document.addEventListener("click", function (event) {
+    document.addEventListener("click", function(event) {
         const sidebar = document.getElementById("profileSidebar");
         const profileBtn = document.getElementById("profileBtn");
 
-        if (
-            sidebar && sidebar.classList.contains("active") &&
-            !sidebar.contains(event.target) &&
-            event.target !== profileBtn
-        ) {
-            sidebar.classList.remove("active");
+        if (sidebar && sidebar.classList.contains("show") && 
+            !sidebar.contains(event.target) && 
+            !profileBtn.contains(event.target)) {
+            sidebar.classList.remove("show");
         }
     });
-
 </script>
 </body>
-
 </html>

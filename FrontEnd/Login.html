@@ -83,75 +83,102 @@
     </div>
 
     <!-- Scripts -->
+     <!-- SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="./js/sign.js"></script>
+<script>
+    $(document).ready(function () {
+        // Sign Up
+        $("#sign-up-btn2").on("click", function (e) {
+            e.preventDefault();
 
-    <script>
-        $(document).ready(function () {
-            // Sign Up
-            $("#sign-up-btn2").on("click", function (e) {
-                e.preventDefault();
+            let username = $("#nameSignUp").val().trim();
+            let email = $("#emailSignUp").val().trim();
+            let password = $("#passwordSignUp").val().trim();
 
-                let username = $("#nameSignUp").val().trim();
-                let email = $("#emailSignUp").val().trim();
-                let password = $("#passwordSignUp").val().trim();
-
-                if (!username || !email || !password) {
-                    alert("Please fill all fields!");
-                    return;
-                }
-
-                $.ajax({
-                    url: "http://localhost:8080/api/v1/auth/register",
-                    method: "POST",
-                    contentType: "application/json",
-                    data: JSON.stringify({
-                        username: username,
-                        email: email,
-                        password: password,
-                        role: "USER"
-                    }),
-                    success: function (res) {
-                        console.log("Response:", res);
-                        alert("✅ Registration successful!");
-                        window.location.href = "Login.html";
-                    },
-                    error: function (xhr) {
-                        console.error("Error:", xhr);
-                        alert("❌ Registration failed. Status: " + xhr.status);
-                    }
+            if (!username || !email || !password) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Missing Fields',
+                    text: 'Please fill all fields!',
                 });
-            });
+                return;
+            }
 
-            // Login
-            $("#btn-login2").click(function (e) {
-                e.preventDefault();
-
-                let email = $("#emailSignIn").val().trim();
-                let password = $("#passwordSignIn").val().trim();
-
-                if (!email || !password) {
-                    alert("Email and Password are required!");
-                    return;
+            $.ajax({
+                url: "http://localhost:8080/api/v1/auth/register",
+                method: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({
+                    username: username,
+                    email: email,
+                    password: password,
+                    role: "USER"
+                }),
+                success: function (res) {
+                    console.log("Response:", res);
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Registration Successful!',
+                        text: 'You can now log in.',
+                        confirmButtonText: 'OK'
+                    }).then(() => {
+                        window.location.href = "Login.html";
+                    });
+                },
+                error: function (xhr) {
+                    console.error("Error:", xhr);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Registration Failed',
+                        text: 'Status: ' + xhr.status,
+                    });
                 }
+            });
+        });
 
-                $.ajax({
-                    url: "http://localhost:8080/api/v1/auth/login",
-                    method: "POST",
-                    contentType: "application/json",
-                    data: JSON.stringify({ email: email, password: password }),
-                    success: function (res) {
-                        console.log("Login Response:", res);
+        // Login
+        $("#btn-login2").click(function (e) {
+            e.preventDefault();
 
-                        if (res.status === "OK") {
-                            localStorage.setItem("jwtToken", res.data.accessToken);
-                            localStorage.setItem("role", res.data.role);
-                            localStorage.setItem("emailUser", email);
+            let email = $("#emailSignIn").val().trim();
+            let password = $("#passwordSignIn").val().trim();
 
-                            let userRole = res.data.role;
+            if (!email || !password) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Missing Fields',
+                    text: 'Email and Password are required!',
+                });
+                return;
+            }
 
+            $.ajax({
+                url: "http://localhost:8080/api/v1/auth/login",
+                method: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({ email: email, password: password }),
+                success: function (res) {
+                    console.log("Login Response:", res);
+
+                    if (res.status === "OK") {
+                        localStorage.setItem("jwtToken", res.data.accessToken);
+                        localStorage.setItem("role", res.data.role);
+                        localStorage.setItem("email", email);
+
+                        let userRole = res.data.role;
+
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Login Successful!',
+                            text: 'Redirecting to dashboard...',
+                            timer: 1500,
+                            showConfirmButton: false
+                        }).then(() => {
                             if (userRole === "ADMIN") {
                                 window.location.href = "AdminDashBoard.html";
                             } else if (userRole === "USER") {
@@ -159,19 +186,33 @@
                             } else if (userRole === "MANAGER") {
                                 window.location.href = "ManagerDashBoard.html";
                             } else {
-                                alert("Invalid role. Please contact support.");
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Invalid Role',
+                                    text: 'Please contact support.',
+                                });
                             }
-                        } else {
-                            alert("Login failed: " + (res.message || "Unknown error"));
-                        }
-                    },
-                    error: function (xhr, status, error) {
-                        console.error("Error:", xhr.responseText || error);
-                        alert("Invalid credentials or server error. Please try again.");
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Login Failed',
+                            text: res.message || "Unknown error",
+                        });
                     }
-                });
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error:", xhr.responseText || error);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Login Error',
+                        text: 'Invalid credentials or server error. Please try again.',
+                    });
+                }
             });
         });
-    </script>
+    });
+</script>
+
 </body>
 </html>

@@ -1,12 +1,7 @@
 /*-----------------------------------*\
  * #style.css
 \*-----------------------------------*/
-
-/**
- * copyright 2022 codewithsadee
- */
-
-
+ 
 
 
 
@@ -379,7 +374,7 @@ body { background: var(--white); }
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
-    background-color: hsla(0, 0%, 0%, 0.7);
+    background-color: hsla(0, 2%, 28%, 0.7);
     background-blend-mode: overlay;
     display: grid;
     place-items: center;
@@ -1296,3 +1291,6 @@ address {
     .container { max-width: 1180px; }
 
 }
+
+
+

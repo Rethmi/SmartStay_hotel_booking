@@ -553,6 +553,10 @@
         .fa-power-off {
             font-size: 1.3rem;
         }
+        .logo-hotel {
+            width: 100px;
+            height: 100px;
+        }
     </style>
 </head>
 
@@ -564,7 +568,7 @@
             <li>
                 <a href="#">
                     <span class="icon">
-                        <img style="width: 200px; height: 50px; margin-left: 10px;" src="assets/images/HotelLogo.png" alt="Hotel Logo">
+                          <img src="./assets/images/HotelLogo.png" alt="Tourly logo" class="logo-hotel">
                     </span>
                 </a>
             </li>
@@ -726,6 +730,17 @@
         </div>
     </div>
 </div>
+
+<!-- Add this below your table-responsive div -->
+<div class="d-flex justify-content-between align-items-center mt-2">
+    <div>
+        <span id="pagination-info"></span>
+    </div>
+    <nav>
+        <ul class="pagination mb-0" id="pagination"></ul>
+    </nav>
+</div>
+
 
 <!-- Add New Hotel Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel">
@@ -897,47 +912,89 @@
         $('#active-hotels').text(total);
     }
     
+   let currentPage = 1;
+    const rowsPerPage = 5; // adjust number of rows per page
+
     function populateHotelTable(hotelsArray) {
         let table = $('#HotelTable');
         table.empty();
 
-        if (hotelsArray && Array.isArray(hotelsArray)) {
-            hotelsArray.forEach((hotel) => {
-                // let image = imageUrl + (hotel.image || 'default.jpg');
-                
-                table.append(`
-                    <tr>
-                        <td>${hotel.id}</td>
-                        <td>${hotel.name}</td>
-                        <td>${hotel.location}</td>
-                        <td>${hotel.description || ''}</td>
-                        <td>${hotel.amenities || ''}</td>
-                        <td>${hotel.phoneNumber}</td>
-                        <td>
-                            <img src="${hotel.image}" class="hotel-image" alt="Hotel Image"
-                            onerror="this.onerror=null; this.src='assets/images/default.jpg';">
-                        </td>
-                        <td class="action-buttons">
-                            <button type="button" class="btn btn-sm btn-primary btn-action"
-                            data-bs-toggle="modal" data-bs-target="#updateModal"
-                            onclick="prepareEdit('${hotel.id}', '${hotel.name}', '${hotel.location}', 
-                            '${hotel.description || ''}', '${hotel.amenities || ''}', 
-                            '${hotel.phoneNumber}', '${hotel.image || ''}')">
-                                <ion-icon name="create-outline"></ion-icon> Edit
-                            </button>
-                            <button type="button" class="btn btn-sm btn-danger btn-action" 
-                            onclick="confirmDelete('${hotel.id}', '${hotel.name}')">
-                                <ion-icon name="trash-outline"></ion-icon> Delete
-                            </button>
-                        </td>
-                    </tr>
-                `);
-            });
-        } else {
+        if (!hotelsArray || hotelsArray.length === 0) {
             table.append('<tr><td colspan="8" class="text-center py-4">No hotels found</td></tr>');
+            $('#pagination').empty();
+            $('#pagination-info').text('');
+            return;
+        }
+
+        const totalPages = Math.ceil(hotelsArray.length / rowsPerPage);
+        if (currentPage > totalPages) currentPage = totalPages;
+
+        const start = (currentPage - 1) * rowsPerPage;
+        const end = start + rowsPerPage;
+        const paginatedHotels = hotelsArray.slice(start, end);
+
+        paginatedHotels.forEach(hotel => {
+            table.append(`
+                <tr>
+                    <td>${hotel.id}</td>
+                    <td>${hotel.name}</td>
+                    <td>${hotel.location}</td>
+                    <td>${hotel.description || ''}</td>
+                    <td>${hotel.amenities || ''}</td>
+                    <td>${hotel.phoneNumber}</td>
+                    <td>
+                        <img src="${hotel.image}" class="hotel-image" alt="Hotel Image"
+                        onerror="this.onerror=null; this.src='assets/images/default.jpg';">
+                    </td>
+                    <td class="action-buttons">
+                        <button type="button" class="btn btn-sm btn-primary btn-action"
+                        data-bs-toggle="modal" data-bs-target="#updateModal"
+                        onclick="prepareEdit('${hotel.id}', '${hotel.name}', '${hotel.location}', 
+                        '${hotel.description || ''}', '${hotel.amenities || ''}', 
+                        '${hotel.phoneNumber}', '${hotel.image || ''}')">
+                            <ion-icon name="create-outline"></ion-icon> Edit
+                        </button>
+                        <button type="button" class="btn btn-sm btn-danger btn-action" 
+                        onclick="confirmDelete('${hotel.id}', '${hotel.name}')">
+                            <ion-icon name="trash-outline"></ion-icon> Delete
+                        </button>
+                    </td>
+                </tr>
+            `);
+        });
+
+        renderPagination(totalPages);
+        $('#pagination-info').text(`Showing ${start + 1} to ${Math.min(end, hotelsArray.length)} of ${hotelsArray.length} entries`);
+    }
+
+    function renderPagination(totalPages) {
+        let pagination = $('#pagination');
+        pagination.empty();
+
+        if (totalPages <= 1) return;
+
+        for (let i = 1; i <= totalPages; i++) {
+            pagination.append(`
+                <li class="page-item ${i === currentPage ? 'active' : ''}">
+                    <a class="page-link" href="#" onclick="goToPage(${i})">${i}</a>
+                </li>
+            `);
         }
     }
-    
+
+    function goToPage(page) {
+        currentPage = page;
+        populateHotelTable(hotels);
+    }
+
+    function searchHotel() {
+        let input = document.getElementById("search").value.toLowerCase();
+        let filteredHotels = hotels.filter(hotel => 
+            hotel.name.toLowerCase().includes(input) || hotel.location.toLowerCase().includes(input)
+        );
+        currentPage = 1;
+        populateHotelTable(filteredHotels);
+    }
     function saveHotel() {
     let name = $("#name").val().trim();
     let location = $("#location").val().trim();

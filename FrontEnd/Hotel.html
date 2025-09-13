@@ -7,536 +7,627 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title> Hotel </title>
 
-    <!--
-      - favicon
-    -->
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    
+    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    
+    <!-- SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    
+    <!-- Favicon -->
     <link rel="shortcut icon" href="./favicon.svg" type="image/svg+xml">
 
-    <!--
-      - custom css link
-    -->
+    <!-- Custom CSS -->
     <link rel="stylesheet" href="css/hotelSearch.css">
 
-    <!--
-      - google font link
-    -->
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
             href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Poppins:wght@400;500;600;700&display=swap"
             rel="stylesheet">
     <style>
-        .logo-hotel {
-            width: 300px;
-            height: 53px;
+        :root {
+            --primary-color: #3a86ff;
+            --secondary-color: #ff9e01;
+            --dark-color: #1a1a2e;
+            --light-color: #f8f9fa;
         }
+        
+         
 
         ol, ul {
             padding-left: 0rem;
         }
 
         .btnn {
-            background-color: #0d6efd;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
             color: white;
             border-radius: 15px;
-            padding: 10px 20px;
+            padding: 12px 25px;
             text-align: center;
             text-decoration: none;
             display: inline-block;
             font-size: 16px;
             margin: 4px 2px;
             cursor: pointer;
+            border: none;
+            transition: all 0.3s ease;
+            font-weight: 600;
         }
-        .btnn-write{
-            background-color: #0d6efd;
+        
+        .btnn-write {
+            background: var(--primary-color);
             color: white;
             border-radius: 7px;
-            padding: 6px 11px;
+            padding: 8px 15px;
             text-align: center;
             text-decoration: none;
             display: inline-block;
-            font-size: 10px;
+            font-size: 12px;
             margin: 4px 2px;
             cursor: pointer;
             position: absolute;
             right: 20px;
+            border: none;
+            transition: all 0.3s ease;
         }
 
         .btnn:hover {
-            background-color: transparent;
-            border: solid 1px #0a0d14;
-            color: black;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(58, 134, 255, 0.3);
+            color: white;
         }
+        
         .btnn-write:hover {
-            background-color: transparent;
-            border: solid 1px #0a0d14;
-            color: black;
+            background-color: #2a75ff;
+            color: white;
+            transform: translateY(-2px);
         }
+        
         .star-rating i {
-            color: gray;
+            color: #ddd;
             cursor: pointer;
+            transition: color 0.2s;
+            font-size: 1.5rem;
         }
 
         .star-rating .checked {
-            color: orange;
+            color: #ffc107;
+        }
+        
+        .star-rating i:hover {
+            color: #ffc107;
+        }
+        
+        /* Header Styles */
+        .header {
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-top {
+            /* background: var(--dark-color); */
+            padding: 10px 0;
+            width: 100%;
+            height: 85px;
+        }
+        
+       
+        
+        .helpline-box {
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .helpline-box:hover {
+            color: var(--secondary-color);
+        }
+        
+        .social-link {
+            color: white;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+        
+        .social-link:hover {
+            color: var(--secondary-color);
+            transform: translateY(-3px);
+        }
+        
+        .navbar-link {
+            color: black;
+            text-transform: capitalize;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .navbar-link:hover {
+            color: #0f0754;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background-color: #2a75ff;
+            border-color: #2a75ff;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-secondary {
+            background-color:  #0f0754;
+            border-color:  #0f0754;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #0f0754;
+            border-color:  #0f0754;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Hero Section */
+        .hero {
+            background-image: url("../assets/images/image.png");
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: center;
+            background-color: hsla(0, 2%, 28%, 0.7);
+            background-blend-mode: overlay;
+            display: grid;
+            place-items: center;
+            min-height: 750px;
+            text-align: center;
+            padding-top: 125px;
+        }
+        
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+        
+        .hero-text {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        /* Hotel Container */
+        .HotelContainer {
+            padding: 50px 0;
+        }
+        
+        .room-image {
+            height: 200px;
+            width: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            transition: transform 0.3s ease;
+        }
+        
+        .room-image:hover {
+            transform: scale(1.05);
+        }
+        
+        /* Review Cards */
+        .review-card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            margin-bottom: 20px;
+            transition: transform 0.3s ease;
+        }
+        
+        .review-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        /* Table Styles */
+        .table-hover tbody tr:hover {
+            background-color: rgba(58, 134, 255, 0.1);
+        }
+        
+        .table-gradient {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+        }
+        
+        /* Footer Styles */
+        .footer {
+            background: var(--dark-color);
+            color: white;
+        }
+        
+        .footer-top {
+            padding: 60px 0 30px;
+        }
+        
+        .footer-brand img {
+            max-width: 200px;
+            margin-bottom: 20px;
+        }
+        
+        .footer-text {
+            color: #aaa;
+            margin-bottom: 20px;
+        }
+        
+        .contact-title {
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: white;
+        }
+        
+        .contact-text {
+            color: #aaa;
+            margin-bottom: 20px;
+        }
+        
+        .contact-item {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .contact-item ion-icon {
+            margin-right: 10px;
+            color: var(--primary-color);
+        }
+        
+        .contact-link {
+            color: #aaa;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .contact-link:hover {
+            color: var(--primary-color);
+        }
+        
+        .footer-bottom {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 20px 0;
+        }
+          .logo-hotel {
+            width: 100px;
+            height: 100px;
         }
     </style>
 </head>
 
 <body id="top">
 
-<!--
-  - #HEADER
--->
-
+<!-- HEADER -->
 <header class="header" data-header>
-
     <div class="overlay" data-overlay></div>
-
     <div class="header-top">
         <div class="container">
-
             <a href="tel:+01123456790" class="helpline-box">
-
                 <div class="icon-box">
                     <ion-icon name="call-outline"></ion-icon>
                 </div>
-
                 <div class="wrapper">
                     <p class="helpline-title">For Further Inquires :</p>
-
                     <p class="helpline-number">+01 (123) 4567 90</p>
                 </div>
-
             </a>
-
             <a href="CustomerDashboard.html" class="logo logo-hotel">
                 <img src="./assets/images/HotelLogo.png" alt="Tourly logo" class="logo-hotel">
             </a>
-
             <div class="header-btn-group">
-
                 <button class="search-btn" aria-label="Search">
                     <ion-icon name="search"></ion-icon>
                 </button>
-
                 <button class="nav-open-btn" aria-label="Open Menu" data-nav-open-btn>
                     <ion-icon name="menu-outline"></ion-icon>
                 </button>
-
             </div>
-
         </div>
     </div>
 
     <div class="header-bottom">
         <div class="container">
-
             <ul class="social-list">
-
                 <li>
                     <a href="#" class="social-link">
                         <ion-icon name="logo-facebook"></ion-icon>
                     </a>
                 </li>
-
                 <li>
                     <a href="#" class="social-link">
                         <ion-icon name="logo-twitter"></ion-icon>
                     </a>
                 </li>
-
                 <li>
                     <a href="#" class="social-link">
                         <ion-icon name="logo-youtube"></ion-icon>
                     </a>
                 </li>
-
             </ul>
 
             <nav class="navbar" data-navbar>
-
                 <div class="navbar-top">
-
                     <a href="#" class="logo">
-                        <img src="./assets/images/hotel1.jpg" alt="Tourly logo">
+                        <img src="./assets/images/HotelLogo.png" alt="Tourly logo">
                     </a>
-
                     <button class="nav-close-btn" aria-label="Close Menu" data-nav-close-btn>
                         <ion-icon name="close-outline"></ion-icon>
                     </button>
-
                 </div>
-
                 <ul class="navbar-list">
-
                     <li>
                         <a href="CustomerDashboard.html" class="navbar-link" data-nav-link>home</a>
                     </li>
-
                     <li>
                         <a href="#" class="navbar-link" data-nav-link>about us</a>
                     </li>
-
                     <li>
                         <a href="#destination" class="navbar-link" data-nav-link>Stays</a>
                     </li>
-
-                    <!-- <li>
-                      <a href="#package" class="navbar-link" data-nav-link></a>
-                    </li> -->
-
-
                     <li>
                         <a href="#contact" class="navbar-link" data-nav-link>contact us</a>
                     </li>
-
                 </ul>
-
             </nav>
-
             <button class="btn btn-primary" onclick="logout()">Log Out</button>
-
         </div>
     </div>
-
 </header>
-
 
 <main>
     <article>
-
-        <!--
-          - #HERO
-        -->
-
+        <!-- HERO SECTION -->
         <section class="hero" id="home">
             <div class="container">
-
-                <h2 class="h1 hero-title">Journey to explore Sri Lanka</h2>
-
+                <h2 class="h1 hero-title">Discover Your Perfect Stay</h2>
                 <p class="hero-text">
-                    Discover the breathtaking beauty of Sri Lanka, where golden beaches, lush mountains, and rich
-                    heritage await. Whether you're seeking adventure, relaxation, or cultural experiences, your perfect
-                    getaway starts here
+                    Experience luxury and comfort at our carefully selected hotels. 
+                    Your unforgettable journey begins here.
                 </p>
-
                 <div class="btn-group">
                     <button class="btn btn-primary">Learn more</button>
-
-                    <button class="btn btn-primary" onclick="logout()">Log Out</button>
+                    <button class="btn btn-secondary" onclick="logout()">Log Out</button>
                 </div>
-
             </div>
         </section>
 
-
-        <!--
-          - #TOUR SEARCH
-        -->
-
+        <!-- SEARCH SECTION -->
         <section class="tour-search">
             <div class="container">
-
                 <form action="" class="tour-search-form">
-
                     <div class="input-wrapper">
                         <label for="destination" class="input-label">Search Destination*</label>
-
-                        <input type="text" name="destination" id="destination" required placeholder="Enter Destination"
-                               class="input-field">
+                        <input type="text" name="destination" id="destination" required placeholder="Enter Destination" class="input-field">
                     </div>
-
                     <div class="input-wrapper">
                         <label for="people" class="input-label">Room Type*</label>
-
                         <select name="people" id="people" required class="input-field">
-                            <option value="" disabled selected>Select Room Type............</option>
-                            <option value="single">single</option>
-                            <option value="double">double</option>
-                            <option value="suite">suite</option>
+                            <option value="" disabled selected>Select Room Type</option>
+                            <option value="single">Single</option>
+                            <option value="double">Double</option>
+                            <option value="suite">Suite</option>
                         </select>
                     </div>
-
-
                     <div class="input-wrapper">
-                        <label for="checkin" class="input-label">Checkin Date**</label>
-
+                        <label for="checkin" class="input-label">Check-in Date*</label>
                         <input type="date" name="checkin" id="checkin" required class="input-field">
                     </div>
-
                     <div class="input-wrapper">
-                        <label for="checkout" class="input-label">Checkout Date*</label>
-
+                        <label for="checkout" class="input-label">Check-out Date*</label>
                         <input type="date" name="checkout" id="checkout" required class="input-field">
                     </div>
-
-                    <button type="submit" class="btn btn-secondary">Search now</button>
-
+                    <button type="submit" class="btn btn-secondary">
+                        <i class="fas fa-search me-2"></i>Search now
+                    </button>
                 </form>
-
             </div>
         </section>
 
-        <div class="HotelContainer m-5 ">
+        <!-- HOTEL DETAILS -->
+        <div class="HotelContainer">
+            <div class="container">
+                <h3 class="h3 text-center hero-title" id="HotelName" style="color: black">Hotel Details</h3>
 
-            <h3 class="h3 text-center hero-title" id="HotelName" style="color: black">Journey to explore Sri Lanka</h3>
-
-            <div class="HotelContainerHeader">
-                <div class="grid text-center d-flex justify-content-center flex-wrap" id="roomImages">
-                    <!-- Images will be loaded dynamically -->
-                </div>
-            </div>
-            <p class="mt-4 fw-lighter text-center" id="hotelDescription">
-                <!-- Description will be loaded dynamically -->
-            </p>
-
-            <div class="ReviewContainer d-flex justify-content-center flex-wrap mt-5">
-                <div class="card me-5 " style="width: 18rem;">
-                    <div class="card-body d-flex flex-column justify-content-center">
-                        <h5 class="card-title text-center">Reviews</h5>
-                        <p class="card-text">Enter Your Experience & View Reviews</p>
-                        <button class="btnn" type="button" data-bs-toggle="offcanvas"
-                                data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">View Reviews
-                        </button>
+                <div class="HotelContainerHeader">
+                    <div class="grid text-center d-flex justify-content-center flex-wrap" id="roomImages">
+                        <!-- Images will be loaded dynamically -->
                     </div>
                 </div>
+                
+                <p class="mt-4 fw-lighter text-center" id="hotelDescription">
+                    <!-- Description will be loaded dynamically -->
+                </p>
 
-                <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight"
-                     aria-labelledby="offcanvasRightLabel">
-                    <div class="offcanvas-header">
-                        <h5 class="offcanvas-title" id="offcanvasRightLabel">Gust Reviews</h5>
-                        <button class="btnn-write"  data-bs-toggle="modal" data-bs-target="#staticBackdrop" type="button">Write a reviews
-                        </button>
+                <div class="ReviewContainer d-flex justify-content-center flex-wrap mt-5">
+                    <div class="card me-5" style="width: 18rem;">
+                        <div class="card-body d-flex flex-column justify-content-center">
+                            <h5 class="card-title text-center">Reviews</h5>
+                            <p class="card-text">Enter Your Experience & View Reviews</p>
+                            <button class="btnn" type="button" data-bs-toggle="offcanvas"
+                                    data-bs-target="#offcanvasRight" aria-controls="offcanvasRight">
+                                <i class="fas fa-comments me-2"></i>View Reviews
+                            </button>
+                        </div>
                     </div>
-                    <div class="offcanvas-body">
-                        <div class="card"id="review-list">
-                            <div class="card-header">
-                                Quote
-                            </div>
-                            <div class="card-body">
-                                <blockquote class="blockquote mb-0">
-                                    <p>A well-known quote, contained in a blockquote element.</p>
-                                    <footer class="blockquote-footer">Someone famous in <cite title="Source Title">Source
-                                        Title</cite></footer>
-                                </blockquote>
+
+                    <!-- Reviews Offcanvas -->
+                    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight"
+                         aria-labelledby="offcanvasRightLabel">
+                        <div class="offcanvas-header">
+                            <h5 class="offcanvas-title" id="offcanvasRightLabel">Guest Reviews</h5>
+                            <button class="btnn-write" data-bs-toggle="modal" data-bs-target="#staticBackdrop" type="button">
+                                <i class="fas fa-pen me-1"></i>Write Review
+                            </button>
+                        </div>
+                        <div class="offcanvas-body">
+                            <div id="review-list">
+                                <!-- Reviews will be loaded here -->
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Modal -->
-                <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h1 class="modal-title fs-5" id="staticBackdropLabel">Reviews</h1>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-
-                                <div class="input-group">
-                                    <span class="input-group-text" >Write Your Comment</span>
-                                    <textarea class="form-control" id="ReviewComment" aria-label="With textarea"></textarea>
+                    <!-- Review Modal -->
+                    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Write a Review</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
+                                <div class="modal-body">
+                                    <div class="input-group">
+                                        <span class="input-group-text">Your Comment</span>
+                                        <textarea class="form-control" id="ReviewComment" aria-label="With textarea" rows="4"></textarea>
+                                    </div>
 
-                                <h3 class="mt-3">Review Rating:</h3>
-                                <div class="star-rating" id="star-rating">
-                                    <i class="fa fa-star" data-value="1"></i>
-                                    <i class="fa fa-star" data-value="2"></i>
-                                    <i class="fa fa-star" data-value="3"></i>
-                                    <i class="fa fa-star" data-value="4"></i>
-                                    <i class="fa fa-star" data-value="5"></i>
+                                    <h5 class="mt-3">Rating:</h5>
+                                    <div class="star-rating" id="star-rating">
+                                        <i class="fas fa-star" data-value="1"></i>
+                                        <i class="fas fa-star" data-value="2"></i>
+                                        <i class="fas fa-star" data-value="3"></i>
+                                        <i class="fas fa-star" data-value="4"></i>
+                                        <i class="fas fa-star" data-value="5"></i>
+                                    </div>
+                                    <input type="hidden" id="ratingValue" value="0">
                                 </div>
-                                <input type="hidden" id="ratingValue" value="0">
-
-                            </div>
-
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="button" id="ReviewSend" class="btn btn-primary">Send</button>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="button" id="ReviewSend" class="btn btn-primary">
+                                        <i class="fas fa-paper-plane me-2"></i>Submit Review
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
+
+                    <div class="MapContainer">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d63371.80392188332!2d79.81500561883568!3d6.921922085302051!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae253d10f7a7003%3A0x320b2e4d32d3838d!2sColombo!5e0!3m2!1sen!2slk!4v1743135078141!5m2!1sen!2slk"
+                                width="100%" height="150px" style="border-radius: 10px;" allowfullscreen=""
+                                loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
                 </div>
 
-                <div class="MapContainer">
-                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d63371.80392188332!2d79.81500561883568!3d6.921922085302051!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae253d10f7a7003%3A0x320b2e4d32d3838d!2sColombo!5e0!3m2!1sen!2slk!4v1743135078141!5m2!1sen!2slk"
-                            width="100%" height="150px" style="border:solid 1px black;" allowfullscreen=""
-                            loading="lazy"
-                            referrerpolicy="no-referrer-when-downgrade"></iframe>
+                <!-- AVAILABLE ROOMS -->
+                <div class="availableRooms border-top mt-5">
+                    <h4 class="mt-5 fw-bold text-center">
+                        Available Rooms
+                    </h4>
+
+                    <table class="table table-hover text-center mt-5">
+                        <thead class="table-primary table-gradient">
+                        <tr>
+                            <th scope="col">Room Type</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Room Number</th>
+                            <th scope="col">Booking</th>
+                        </tr>
+                        </thead>
+                        <tbody class="table-group-divider" id="roomTable">
+                        </tbody>
+                    </table>
                 </div>
             </div>
-
-            <div class="availableRooms border-top mt-5">
-                <h4 class="mt-5 fw-bold text-center ">
-                    Available Rooms
-                </h4>
-
-                <table class="table table-hover text-center mt-5">
-                    <thead class="table-primary table-gradient">
-                    <tr>
-                        <th scope="col">Room Type</th>
-                        <th scope="col">Price</th>
-                        <th scope="col">Room Number</th>
-                        <th scope="col">Booking</th>
-                    </tr>
-                    </thead>
-                    <tbody class="table-group-divider" id="roomTable">
-
-                    </tbody>
-                </table>
-
-            </div>
-
-
         </div>
-        <!--
-          - #CTA
-        -->
 
+        <!-- CTA SECTION -->
         <section class="cta" id="contact">
             <div class="container">
-
                 <div class="cta-content">
                     <p class="section-subtitle">Call To Action</p>
-
-                    <h2 class="h2 section-title">Ready For Unforgatable Travel. Remember Us!</h2>
-
+                    <h2 class="h2 section-title">Ready For Unforgettable Travel. Remember Us!</h2>
                     <p class="section-text">
-                        Fusce hic augue velit wisi quibusdam pariatur, iusto primis, nec nemo, rutrum. Vestibulum cumque
-                        laudantium. Sit ornare
-                        mollitia tenetur, aptent.
+                        Experience the best of Sri Lankan hospitality with our curated selection of luxury accommodations.
                     </p>
                 </div>
-
-                <button class="btn btn-secondary">Contact Us !</button>
-
+                <button class="btn btn-secondary">Contact Us!</button>
             </div>
         </section>
-
     </article>
 </main>
 
-
-<!--
-  - #FOOTER
--->
-
+<!-- FOOTER -->
 <footer class="footer">
-
     <div class="footer-top">
         <div class="container">
-
             <div class="footer-brand">
-
                 <a href="#" class="logo">
                     <img src="./assets/images/HotelLogo.png" alt="Tourly logo">
                 </a>
-
                 <p class="footer-text">
-                    Urna ratione ante harum provident, eleifend, vulputate molestiae proin fringilla, praesentium magna
-                    conubia
-                    at
-                    perferendis, pretium, aenean aut ultrices.
+                    Providing exceptional hospitality experiences across Sri Lanka. 
+                    Discover comfort, luxury, and authentic Sri Lankan culture.
                 </p>
-
             </div>
-
             <div class="footer-contact">
-
                 <h4 class="contact-title">Contact Us</h4>
-
                 <p class="contact-text">
                     Feel free to contact and reach us !!
                 </p>
-
                 <ul>
-
                     <li class="contact-item">
                         <ion-icon name="call-outline"></ion-icon>
-
                         <a href="tel:+01123456790" class="contact-link">+01 (123) 4567 90</a>
                     </li>
-
                     <li class="contact-item">
                         <ion-icon name="mail-outline"></ion-icon>
-
                         <a href="mailto:info.tourly.com" class="contact-link">SmartHotelBooking@gmail.com</a>
                     </li>
-
                     <li class="contact-item">
                         <ion-icon name="location-outline"></ion-icon>
-
                         <address>Sri Lanka</address>
                     </li>
-
                 </ul>
-
             </div>
-
             <div class="footer-form">
-
                 <p class="formm-text">
                     Subscribe our newsletter for more update & news !!
                 </p>
-
                 <form action="" class="form-wrapper">
                     <input type="email" name="email" class="input-field" placeholder="Enter Your Email" required>
-
                     <button type="submit" class="btn btn-secondary">Subscribe</button>
                 </form>
-
             </div>
-
         </div>
     </div>
-
     <div class="footer-bottom">
         <div class="container">
-
             <p class="copyright">
                 &copy; 2025 <a href="">Smart Hotel Booking</a>. All rights reserved
             </p>
-
             <ul class="footer-bottom-list">
-
                 <li>
                     <a href="#" class="footer-bottom-link">Privacy Policy</a>
                 </li>
-
                 <li>
                     <a href="#" class="footer-bottom-link">Term & Condition</a>
                 </li>
-
                 <li>
                     <a href="#" class="footer-bottom-link">FAQ</a>
                 </li>
-
             </ul>
-
         </div>
     </div>
-
 </footer>
-
 
 <a href="#top" class="go-top" data-go-top>
     <ion-icon name="chevron-up-outline"></ion-icon>
 </a>
 
-
-<!--
-  - custom js link
--->
+<!-- Scripts -->
 <script src="js/CustomerDashboard.js"></script>
-
-<!--
-  - ionicon link
--->
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
 <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
@@ -546,22 +637,40 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
         integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
         crossorigin="anonymous"></script>
+        
+<!-- SweetAlert2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 
 <script>
+    // SweetAlert notifications
+    function showAlert(icon, title, text) {
+        Swal.fire({
+            icon: icon,
+            title: title,
+            text: text,
+            timer: 3000,
+            showConfirmButton: false
+        });
+    }
+
     $(document).ready(function () {
         const token = localStorage.getItem("jwtToken");
         const email = localStorage.getItem("email");
 
         if (!token) {
-            alert("Please log in!");
-            window.location.href = "login.html";
+            showAlert('error', 'Access Denied', 'Please log in first');
+            setTimeout(() => {
+                window.location.href = "login.html";
+            }, 1500);
             return;
         }
 
         const hotelData = JSON.parse(localStorage.getItem("selectedHotel"));
         if (!hotelData) {
-            alert("No hotel data found. Please search for hotels first.");
-            window.location.href = "CustomerDashboard.html";
+            showAlert('warning', 'No Hotel Data', 'Please search for hotels first');
+            setTimeout(() => {
+                window.location.href = "CustomerDashboard.html";
+            }, 1500);
             return;
         }
 
@@ -580,25 +689,22 @@
 
         let Userid;
 
-       $.ajax({
-    url: `http://localhost:8080/api/v1/users/email/${email}`,
-    method: "GET",
-    headers: { "Authorization": `Bearer ${token}` },
-    success: function (data) {
-        if (data) {
-            $("#name").val(data.username);
-            $("#email").val(data.email);
-            Userid = data.id;
-        } else {
-            alert("User not found.");
-        }
-    },
-    error: function (xhr) {
-        console.error("Failed to fetch user info", xhr);
-        alert("Failed to fetch user info.");
-    }
-});
-
+        $.ajax({
+            url: `http://localhost:8080/api/v1/users/email/${email}`,
+            method: "GET",
+            headers: { "Authorization": `Bearer ${token}` },
+            success: function (data) {
+                if (data) {
+                    Userid = data.id;
+                } else {
+                    showAlert('error', 'Error', 'User not found');
+                }
+            },
+            error: function (xhr) {
+                console.error("Failed to fetch user info", xhr);
+                showAlert('error', 'Error', 'Failed to fetch user information');
+            }
+        });
 
         // Load rooms of the hotel
         $.ajax({
@@ -642,6 +748,7 @@
                                 <tr><td colspan="4" class="text-center text-danger">
                                     No available rooms for selected dates.
                                 </td></tr>`);
+                            showAlert('info', 'No Availability', 'No rooms available for your selected dates');
                             return;
                         }
 
@@ -649,15 +756,12 @@
                         availableRooms.forEach(room => {
                             const roomPrice = days * room.price;
                             
-                            // Get room images - try different approaches
+                            // Get room images
                             const imageUrls = [];
-                            
-                            // Try direct image URLs first
                             if (room.image1) imageUrls.push(getImageUrl(room.image1));
                             if (room.image2) imageUrls.push(getImageUrl(room.image2));
                             if (room.image3) imageUrls.push(getImageUrl(room.image3));
                             
-                            // If no images found, use a placeholder
                             if (imageUrls.length === 0) {
                                 imageUrls.push('https://via.placeholder.com/200x200/cccccc/969696?text=No+Image');
                             }
@@ -667,9 +771,8 @@
                                 $("#roomImages").append(`
                                     <div class="g-col-4 m-3">
                                         <img src="${imgUrl}" 
-                                             class="img-thumbnail" 
-                                             alt="Room Image ${index + 1}" 
-                                             style="height: 200px; width: 200px; object-fit: cover;"
+                                             class="room-image" 
+                                             alt="Room Image ${index + 1}"
                                              onerror="this.src='https://via.placeholder.com/200x200/cccccc/969696?text=Error+Loading'">
                                     </div>
                                 `);
@@ -682,9 +785,9 @@
                                     <td>$${roomPrice.toFixed(2)} (${days} nights)</td>
                                     <td>${room.roomNumber || 'N/A'}</td>
                                     <td>
-                                        <button class="btn btn-primary" style="padding: 4px 12px"
+                                        <button class="btn btn-primary book-btn" style="padding: 8px 16px"
                                                 onclick="bookRoom(${room.id})">
-                                            Book Now
+                                            <i class="fas fa-calendar-check me-2"></i>Book Now
                                         </button>
                                     </td>
                                 </tr>
@@ -694,32 +797,26 @@
                     error: function () {
                         $("#roomTable").append(`<tr><td colspan="4" class="text-center text-warning">
                             Error checking availability.</td></tr>`);
+                        showAlert('error', 'Error', 'Failed to check room availability');
                     }
                 });
             },
             error: function () {
-                alert("Failed to load room details.");
+                showAlert('error', 'Error', 'Failed to load room details');
             }
         });
 
         // Helper function to get proper image URL
         function getImageUrl(imageData) {
-            // If it's already a URL
             if (typeof imageData === 'string' && imageData.startsWith('http')) {
                 return imageData;
             }
-            
-            // If it's a base64 encoded image
             if (typeof imageData === 'string' && (imageData.startsWith('data:image/') || imageData.startsWith('/9j/') || imageData.startsWith('iVBORw'))) {
                 return imageData.startsWith('data:image/') ? imageData : `data:image/jpeg;base64,${imageData}`;
             }
-            
-            // If it's a filename, construct the URL
             if (typeof imageData === 'string') {
                 return `http://localhost:8080/uploads/rooms/${imageData}`;
             }
-            
-            // If it's binary data (array or object)
             if (Array.isArray(imageData) || (typeof imageData === 'object' && imageData !== null)) {
                 try {
                     const byteArray = new Uint8Array(imageData);
@@ -733,170 +830,185 @@
                     return 'https://via.placeholder.com/200x200/cccccc/969696?text=Invalid+Image';
                 }
             }
-            
-            // Default fallback
             return 'https://via.placeholder.com/200x200/cccccc/969696?text=No+Image';
         }
 
-
-      // Initialize star rating
-function initializeStarRating() {
-    $('#ratingValue').val(0);
-    $('#star-rating i').each(function (index) {
-        $(this).data('value', index + 1);
-    }).on('click', function () {
-        const rating = $(this).data('value');
-        $('#ratingValue').val(rating);
-        $('#star-rating i').each(function (index) {
-            $(this).toggleClass('checked', index < rating);
-        });
-    });
-}
-
-// Load Reviews
-function loadReviews() {
-    const hotelId = hotelData.id;
-    $.ajax({
-        url: `http://localhost:8080/api/v1/reviews/hotel/${hotelId}`,
-        method: "GET",
-        headers: { "Authorization": `Bearer ${token}` },
-        success: function (res) {
-            const reviews = Array.isArray(res) ? res : [];
-            $("#review-list").empty();
-
-            if (reviews.length === 0) {
-                $("#review-list").html(`<div class="text-center p-3"><p>No reviews yet.</p></div>`);
-                return;
-            }
-
-            reviews.forEach(review => {
-                const username = review.username || 'Anonymous';
-                displayReview(review, username);
+        // Initialize star rating
+        function initializeStarRating() {
+            $('#ratingValue').val(0);
+            $('#star-rating i').each(function (index) {
+                $(this).data('value', index + 1);
+            }).on('click', function () {
+                const rating = $(this).data('value');
+                $('#ratingValue').val(rating);
+                $('#star-rating i').each(function (index) {
+                    $(this).toggleClass('checked', index < rating);
+                });
             });
-        },
-        error: function (xhr) {
-            console.error("Error loading reviews:", xhr);
-            $("#review-list").html(`<div class="text-center p-3"><p>Error loading reviews. Please try again.</p></div>`);
         }
-    });
-}
 
-function displayReview(review, username) {
-    const reviewDate = new Date(review.reviewDate);
-    const formattedDate = reviewDate.toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-    });
-
-    const reviewHtml = `
-        <div class="card mb-3">
-            <div class="card-header d-flex justify-content-between">
-                <strong>${username}</strong>
-                <small>${formattedDate}</small>
-            </div>
-            <div class="card-body">
-                <blockquote class="blockquote mb-0">
-                    <p class="fw-lighter" style="font-size: 17px;">${review.comment}</p>
-                    <footer class="blockquote-footer">
-                        Rated: ${'★'.repeat(review.rating)}${'☆'.repeat(5 - review.rating)}
-                    </footer>
-                </blockquote>
-            </div>
-        </div>`;
-    $("#review-list").append(reviewHtml);
-}
-
-// Trigger load reviews when offcanvas is opened
-$('#offcanvasRight').on('shown.bs.offcanvas', function () {
-    loadReviews();
-});
-
-// Ensure the textarea is focused only after modal is shown
-$('#staticBackdrop').on('shown.bs.modal', function () {
-    $('#ReviewComment').trigger('focus');
-});
-
-// Submit review
-$("#ReviewSend").click(function () {
-    const comment = $("#ReviewComment").val().trim();
-    const rating = $('#ratingValue').val();
-    const hotelId = hotelData.id;
-    const userId = Userid;
-
-    if (!comment || rating === '0') {
-        alert("Please provide both a comment and a rating.");
-        return;
-    }
-
-    // Check if user already reviewed
-    $.ajax({
-        url: `http://localhost:8080/api/v1/reviews/exists?userId=${userId}&hotelId=${hotelId}`,
-        method: "GET",
-        headers: { "Authorization": `Bearer ${token}` },
-        success: function (exists) {
-            if (exists) {
-                alert("You have already reviewed this hotel.");
-                return;
-            }
-
-            // Save review
+        // Load Reviews
+        function loadReviews() {
+            const hotelId = hotelData.id;
             $.ajax({
-                url: "http://localhost:8080/api/v1/reviews/save",
-                method: "POST",
+                url: `http://localhost:8080/api/v1/reviews/hotel/${hotelId}`,
+                method: "GET",
                 headers: { "Authorization": `Bearer ${token}` },
-                contentType: "application/json",
-                data: JSON.stringify({
-                    comment: comment,
-                    rating: parseInt(rating),
-                    reviewDate: new Date().toISOString().split('T')[0],
-                    hotelId: hotelId,
-                    userId: userId
-                }),
-                success: function () {
-                    alert("Review submitted successfully!");
-                    $("#ReviewComment").val("");
-                    $('#ratingValue').val("0");
-                    $('#star-rating i').removeClass('checked');
-                    $('#staticBackdrop').modal('hide');
+                success: function (res) {
+                    const reviews = Array.isArray(res) ? res : [];
+                    $("#review-list").empty();
 
-                    // Reload reviews safely after modal closes
-                    $('#staticBackdrop').on('hidden.bs.modal', function () {
-                        loadReviews();
-                        $(this).off('hidden.bs.modal'); // remove listener to avoid multiple triggers
+                    if (reviews.length === 0) {
+                        $("#review-list").html(`<div class="text-center p-3"><p>No reviews yet. Be the first to review!</p></div>`);
+                        return;
+                    }
+
+                    reviews.forEach(review => {
+                        const username = review.username || 'Anonymous';
+                        displayReview(review, username);
                     });
                 },
                 error: function (xhr) {
-                    console.error("Error saving review:", xhr);
-                    alert("Failed to submit review. " + (xhr.responseJSON?.message || ""));
+                    console.error("Error loading reviews:", xhr);
+                    $("#review-list").html(`<div class="text-center p-3"><p>Error loading reviews. Please try again.</p></div>`);
+                    showAlert('error', 'Error', 'Failed to load reviews');
                 }
             });
-        },
-        error: function (xhr) {
-            console.error("Error checking existing review:", xhr);
-            alert("Error checking if you've already reviewed this hotel.");
         }
-    });
-});
 
-// Initialize star rating
-initializeStarRating();
+        function displayReview(review, username) {
+            const reviewDate = new Date(review.reviewDate);
+            const formattedDate = reviewDate.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+
+            const reviewHtml = `
+                <div class="card review-card mb-3">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <strong>${username}</strong>
+                        <small class="text-muted">${formattedDate}</small>
+                    </div>
+                    <div class="card-body">
+                        <blockquote class="blockquote mb-0">
+                            <p class="fw-lighter" style="font-size: 17px;">${review.comment}</p>
+                            <footer class="blockquote-footer mt-2">
+                                Rated: ${'★'.repeat(review.rating)}${'☆'.repeat(5 - review.rating)}
+                            </footer>
+                        </blockquote>
+                    </div>
+                </div>`;
+            $("#review-list").append(reviewHtml);
+        }
+
+        // Trigger load reviews when offcanvas is opened
+        $('#offcanvasRight').on('shown.bs.offcanvas', function () {
+            loadReviews();
+        });
+
+        // Ensure the textarea is focused only after modal is shown
+        $('#staticBackdrop').on('shown.bs.modal', function () {
+            $('#ReviewComment').trigger('focus');
+        });
+
+        // Submit review
+        $("#ReviewSend").click(function () {
+            const comment = $("#ReviewComment").val().trim();
+            const rating = $('#ratingValue').val();
+            const hotelId = hotelData.id;
+            const userId = Userid;
+
+            if (!comment || rating === '0') {
+                showAlert('warning', 'Incomplete Review', 'Please provide both a comment and a rating');
+                return;
+            }
+
+            // Check if user already reviewed
+            $.ajax({
+                url: `http://localhost:8080/api/v1/reviews/exists?userId=${userId}&hotelId=${hotelId}`,
+                method: "GET",
+                headers: { "Authorization": `Bearer ${token}` },
+                success: function (exists) {
+                    if (exists) {
+                        showAlert('warning', 'Already Reviewed', 'You have already reviewed this hotel');
+                        return;
+                    }
+
+                    // Save review
+                    $.ajax({
+                        url: "http://localhost:8080/api/v1/reviews/save",
+                        method: "POST",
+                        headers: { "Authorization": `Bearer ${token}` },
+                        contentType: "application/json",
+                        data: JSON.stringify({
+                            comment: comment,
+                            rating: parseInt(rating),
+                            reviewDate: new Date().toISOString().split('T')[0],
+                            hotelId: hotelId,
+                            userId: userId
+                        }),
+                        success: function () {
+                            showAlert('success', 'Thank You!', 'Your review has been submitted successfully');
+                            $("#ReviewComment").val("");
+                            $('#ratingValue').val("0");
+                            $('#star-rating i').removeClass('checked');
+                            $('#staticBackdrop').modal('hide');
+
+                            // Reload reviews safely after modal closes
+                            $('#staticBackdrop').on('hidden.bs.modal', function () {
+                                loadReviews();
+                                $(this).off('hidden.bs.modal');
+                            });
+                        },
+                        error: function (xhr) {
+                            console.error("Error saving review:", xhr);
+                            showAlert('error', 'Error', 'Failed to submit review. Please try again');
+                        }
+                    });
+                },
+                error: function (xhr) {
+                    console.error("Error checking existing review:", xhr);
+                    showAlert('error', 'Error', 'Error checking if you\'ve already reviewed this hotel');
+                }
+            });
+        });
+
+        // Initialize star rating
+        initializeStarRating();
 
         // Book Room
         window.bookRoom = function(roomId) {
             localStorage.setItem("selectedRoomId", roomId);
-            window.location.href = "Booking.html?roomId=" + roomId;
+            showAlert('info', 'Redirecting', 'Taking you to booking page');
+            setTimeout(() => {
+                window.location.href = "Booking.html?roomId=" + roomId;
+            }, 1500);
         };
 
         // Logout
         window.logout = function() {
-            Object.keys(localStorage).forEach(key => {
-                if (key.match(/jwt|Hotel|Room|destination|checkin|checkout|people|email|role/i)) {
-                    localStorage.removeItem(key);
+            Swal.fire({
+                title: 'Logout',
+                text: 'Are you sure you want to logout?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, logout!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Object.keys(localStorage).forEach(key => {
+                        if (key.match(/jwt|Hotel|Room|destination|checkin|checkout|people|email|role/i)) {
+                            localStorage.removeItem(key);
+                        }
+                    });
+                    showAlert('success', 'Logged Out', 'You have been successfully logged out');
+                    setTimeout(() => {
+                        window.location.href = "Login.html";
+                    }, 1500);
                 }
             });
-            alert("Logged out successfully");
-            window.location.href = "Login.html";
         };
     });
 </script>
