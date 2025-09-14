@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
@@ -19,7 +20,8 @@ import java.time.LocalDateTime;
 public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "payment_id")
+    private Long paymentId;
 
     @OneToOne
     @JoinColumn(name = "booking_id", nullable = false)
@@ -27,18 +29,25 @@ public class Payment {
     @JsonBackReference
     private Booking booking;
 
-    private double amount;
+    @Column(nullable = false)
+    private BigDecimal amount;
 
-    @Enumerated(EnumType.STRING)
-    private PaymentMethod method; // CREDIT_CARD, PAYPAL, BANK_TRANSFER
-
+    @Column(nullable = false)
     private LocalDateTime paymentDate;
 
-    public enum PaymentMethod {
-        CREDIT_CARD, PAYPAL, BANK_TRANSFER
-    }
+    @Column(length = 50)
+    private String paymentMethod; // e.g., PAYHERE, CREDIT_CARD, CASH
+
+    @Column(length = 100)
+    private String transactionId;
+
+    @Column(length = 20)
+    private String status; // PENDING, COMPLETED, FAILED
+
+
 
 
 }
+
 
 
