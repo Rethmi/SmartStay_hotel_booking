@@ -52,41 +52,54 @@ public class PaymentController {
 //    public ResponseEntity<Map<String, Object>> createPayHereForm(@PathVariable Long bookingId) {
 //        return ResponseEntity.ok(paymentService.createPayHereFormData(bookingId));
 //    }
+//    @PostMapping("/create-payhere/{bookingId}")
+//    public ResponseEntity<?> createPayHereForm(@PathVariable Long bookingId) {
+//        try {
+//            Map<String, Object> formData = paymentService.createPayHereFormData(bookingId);
+//            return ResponseEntity.ok(formData);
+//        } catch (Exception e) {
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                    .body(Map.of("error", "Failed to create payment form", "message", e.getMessage()));
+//        }
+//    }
+
+
     @PostMapping("/create-payhere/{bookingId}")
     public ResponseEntity<?> createPayHereForm(@PathVariable Long bookingId) {
         try {
-            Map<String, Object> formData = paymentService.createPayHereFormData(bookingId);
-            return ResponseEntity.ok(formData);
-        } catch (Exception e) {
+            return ResponseEntity.ok(paymentService.createPayHereFormData(bookingId));
+        } catch(Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Map.of("error", "Failed to create payment form", "message", e.getMessage()));
+                    .body(Map.of("error","Failed to create payment form", "message", e.getMessage()));
         }
     }
 
+//    @PostMapping("/notify")
+//    public ResponseEntity<String> handlePayHereNotification(@RequestParam Map<String, String> params) {
+//        paymentService.updatePaymentFromPayHere(params);
+//        return ResponseEntity.ok("OK");
+//    }
+
     @PostMapping("/notify")
-    public ResponseEntity<String> handlePayHereNotification(@RequestParam Map<String, String> params) {
+    public ResponseEntity<String> handlePayHereNotification(@RequestParam Map<String,String> params){
         paymentService.updatePaymentFromPayHere(params);
         return ResponseEntity.ok("OK");
     }
 
-    @GetMapping("/test-hash/{bookingId}")
-    public ResponseEntity<Map<String, String>> testHashGeneration(@PathVariable Long bookingId) {
-        try {
-            Map<String, Object> formData = paymentService.createPayHereFormData(bookingId);
-            Map<String, String> debugInfo = new HashMap<>();
-
-            debugInfo.put("merchant_id", formData.get("merchant_id").toString());
-            debugInfo.put("order_id", formData.get("order_id").toString());
-            debugInfo.put("amount", formData.get("amount").toString());
-            debugInfo.put("currency", formData.get("currency").toString());
-            debugInfo.put("hash", formData.get("hash").toString());
-            debugInfo.put("hash_length", String.valueOf(formData.get("hash").toString().length()));
-
-            return ResponseEntity.ok(debugInfo);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Map.of("error", e.getMessage()));
-        }
+@GetMapping("/test-hash/{bookingId}")
+public ResponseEntity<Map<String,String>> testHash(@PathVariable Long bookingId){
+    try {
+        Map<String,Object> data = paymentService.createPayHereFormData(bookingId);
+        return ResponseEntity.ok(Map.of(
+                "merchant_id", data.get("merchant_id").toString(),
+                "order_id", data.get("order_id").toString(),
+                "amount", data.get("amount").toString(),
+                "currency", data.get("currency").toString(),
+                "hash", data.get("hash").toString()
+        ));
+    } catch(Exception e){
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Map.of("error", e.getMessage()));
+    }
     }
 
 }
