@@ -17,6 +17,46 @@ public class EmailServiceImpl implements EmailService {
     @Autowired
     private JavaMailSender mailSender;
 
+    @Override
+    public void sendEmail(String to, String subject, String body) {
+        try {
+            // Use MimeMessage instead of SimpleMailMessage for HTML support
+            MimeMessage message = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+            helper.setFrom("anjanaheshan676@gmail.com");
+            helper.setTo(to);
+            helper.setSubject(subject);
+
+            // Check if content is HTML or plain text
+            if (isHtmlContent(body)) {
+                helper.setText(body, true); // true = HTML content
+            } else {
+                helper.setText(body, false); // false = plain text
+            }
+
+            mailSender.send(message);
+            System.out.println("Email sent successfully to: " + to);
+
+        } catch (MessagingException e) {
+            System.err.println("Failed to send email: " + e.getMessage());
+            e.printStackTrace();
+            throw new RuntimeException("Failed to send email: " + e.getMessage());
+        } catch (Exception e) {
+            System.err.println("Unexpected error sending email: " + e.getMessage());
+            e.printStackTrace();
+            throw new RuntimeException("Failed to send email: " + e.getMessage());
+        }
+    }
+
+    private boolean isHtmlContent(String content) {
+        return content != null &&
+                (content.toLowerCase().contains("<!doctype html") ||
+                        content.toLowerCase().contains("<html") ||
+                        content.toLowerCase().contains("<body") ||
+                        content.toLowerCase().contains("<div"));
+    }
+
     public void sendOtpEmail(String toEmail, String otp) {
         String subject = "Your OTP for Registration";
         String body = "Dear User,\n\n" +

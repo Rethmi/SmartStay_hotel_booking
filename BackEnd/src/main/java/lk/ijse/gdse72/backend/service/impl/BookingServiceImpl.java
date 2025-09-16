@@ -11,6 +11,7 @@ import lk.ijse.gdse72.backend.service.BookingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.security.auth.Subject;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -58,6 +59,8 @@ public class BookingServiceImpl implements BookingService {
     @Override
     public BookingDTO createBooking(BookingDTO bookingDTO) {
         Booking booking = convertToEntity(bookingDTO);
+        String email = bookingDTO.getEmail();
+        String subject = "Place a booking";
         return convertToDTO(bookingRepository.save(booking));
     }
 

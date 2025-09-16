@@ -6,6 +6,7 @@ import lk.ijse.gdse72.backend.entity.Payment;
 import lk.ijse.gdse72.backend.repository.BookingRepository;
 import lk.ijse.gdse72.backend.repository.PaymentRepository;
 import lk.ijse.gdse72.backend.service.PaymentService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,16 +14,19 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.time.LocalDateTime;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class PaymentServiceImpl implements PaymentService {
 
     @Value("${payhere.merchant-id}")
@@ -37,11 +41,11 @@ public class PaymentServiceImpl implements PaymentService {
     @Value("${app.base-url}")
     private String appBaseUrl;
 
-    @Autowired
-    private PaymentRepository paymentRepository;
+    private final PaymentRepository paymentRepository;
 
-    @Autowired
-    private BookingRepository bookingRepository;
+    private final BookingRepository bookingRepository;
+
+    private final EmailServiceImpl emailService;
 
     @Override
     public PaymentDTO createPayment(PaymentDTO paymentDTO) {
@@ -58,7 +62,7 @@ public class PaymentServiceImpl implements PaymentService {
         payment.setBooking(booking);
         payment.setAmount(paymentDTO.getAmount());
         payment.setPaymentDate(LocalDateTime.now());
-        payment.setPaymentMethod(paymentDTO.getPaymentMethod());
+        payment.setPaymentMethod("CARD");
         payment.setTransactionId(paymentDTO.getTransactionId());
         payment.setStatus(paymentDTO.getStatus());
 
@@ -66,6 +70,7 @@ public class PaymentServiceImpl implements PaymentService {
         bookingRepository.save(booking);
 
         return convertToDTO(paymentRepository.save(payment));
+
     }
 
     @Override
@@ -102,46 +107,140 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
 
-@Override
-public Map<String, Object> createPayHereFormData(Long bookingId) {
-    Booking booking = bookingRepository.findById(bookingId)
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Booking not found"));
+//    @Override
+//    public Map<String, Object> createPayHereFormData(Long bookingId) {
+//        Booking booking = bookingRepository.findById(bookingId)
+//                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Booking not found"));
+//
+//        // ===== Create payment if it doesn't exist =====
+//        Payment payment = paymentRepository.findByBooking_Id(bookingId).orElse(null);
+//        if (payment == null) {
+//            payment = new Payment();
+//            payment.setBooking(booking);
+//            payment.setAmount(BigDecimal.valueOf(booking.getRoom().getPrice()));
+//            payment.setPaymentDate(LocalDateTime.now());
+//            payment.setStatus("PENDING"); // Not completed yet
+//            paymentRepository.save(payment);
+//        }
+//
+//        String amount = String.format("%.2f", booking.getRoom().getPrice());
+//        String currency = "LKR";
+//        String orderId = booking.getId().toString();
+//        String hash = generatePayHereHash(merchantId, orderId, amount, currency, merchantSecret);
+//
+//        Map<String, Object> data = new LinkedHashMap<>();
+//        data.put("merchant_id", merchantId);
+//        data.put("return_url", appBaseUrl + "/payment-success.html");
+//        data.put("cancel_url", appBaseUrl + "/payment-cancel.html");
+//        data.put("notify_url", appBaseUrl + "/api/v1/payments/notify"); // Use your backend notify endpoint
+//        data.put("order_id", orderId);
+//        data.put("items", "Room Booking - Room " + booking.getRoom().getRoomNumber());
+//        data.put("amount", amount);
+//        data.put("currency", currency);
+//        data.put("hash", hash);
+//
+//        String firstName = "Customer";
+//        String lastName = "Name";
+//        if (booking.getUser() != null && booking.getUser().getUsername() != null) {
+//            String[] parts = booking.getUser().getUsername().split(" ");
+//            firstName = parts[0];
+//            lastName = parts.length > 1 ? parts[1] : "Name";
+//        }
+//
+//        data.put("first_name", firstName);
+//        data.put("last_name", lastName);
+//        data.put("email", booking.getEmail());
+//        data.put("phone", booking.getPhoneNumber());
+//        data.put("address", booking.getCity() != null ? booking.getCity() : "Colombo");
+//        data.put("city", booking.getCity() != null ? booking.getCity() : "Colombo");
+//        data.put("country", "Sri Lanka");
+//        data.put("sandbox", "1");
+//
+//        // Save payment ID in custom fields so you can track it later
+//        data.put("custom_1", payment.getPaymentId().toString());
+//        data.put("custom_2", bookingId.toString());
+//
+//        return data;
+//    }
 
-    String amount = String.format("%.2f", booking.getRoom().getPrice());
-    String currency = "LKR";
-    String orderId = booking.getId().toString();
-    String hash = generatePayHereHash(merchantId, orderId, amount, currency, merchantSecret);
-
-    Map<String,Object> data = new LinkedHashMap<>();
-    data.put("merchant_id", merchantId);
-    data.put("return_url", appBaseUrl + "/payment-success.html");
-    data.put("cancel_url", appBaseUrl + "/payment-cancel.html");
-    data.put("notify_url", payhereBaseUrl + "/api/v1/payments/notify");
-    data.put("order_id", orderId);
-    data.put("items", "Room Booking - Room " + booking.getRoom().getRoomNumber());
-    data.put("amount", amount);
-    data.put("currency", currency);
-    data.put("hash", hash);
-
-    String firstName = "Customer";
-    String lastName = "Name";
-    if(booking.getUser() != null && booking.getUser().getUsername() != null){
-        String[] parts = booking.getUser().getUsername().split(" ");
-        firstName = parts[0];
-        lastName = parts.length>1 ? parts[1] : "Name";
+    private String generateTransactionId() {
+        return "TXN" + System.currentTimeMillis() + "_" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
     }
 
-    data.put("first_name", firstName);
-    data.put("last_name", lastName);
-    data.put("email", booking.getEmail());
-    data.put("phone", booking.getPhoneNumber());
-    data.put("address", booking.getCity() != null ? booking.getCity() : "Colombo");
-    data.put("city", booking.getCity() != null ? booking.getCity() : "Colombo");
-    data.put("country", "Sri Lanka");
-    data.put("sandbox", "1");
-    return data;
-}
+    @Override
+    public Map<String, Object> createPayHereFormData(Long bookingId) {
+        Booking booking = bookingRepository.findById(bookingId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Booking not found"));
 
+        // ===== Create payment if it doesn't exist =====
+        Payment payment = paymentRepository.findByBooking_Id(bookingId).orElse(null);
+        if (payment == null) {
+            payment = new Payment();
+            payment.setBooking(booking);
+            payment.setPaymentMethod("CARD");
+            payment.setTransactionId(generateTransactionId());
+            payment.setAmount(BigDecimal.valueOf(booking.getRoom().getPrice()));
+            payment.setPaymentDate(LocalDateTime.now());
+            payment.setStatus("PENDING"); // Not completed yet
+            paymentRepository.save(payment);
+
+            // ==== Send booking confirmation email ====
+            String bookingDetails =
+                    "<p><b>Booking ID:</b> " + booking.getId() + "</p>" +
+                            "<p><b>Room Number:</b> " + booking.getRoom().getRoomNumber() + "</p>" +
+                            "<p><b>Price:</b> LKR " + booking.getRoom().getPrice() + "</p>" +
+                            "<p><b>Customer:</b> " + booking.getUser().getUsername() + "</p>";
+
+            // Payment link (optional: redirect to your frontend payment page)
+            String paymentLink = appBaseUrl + "/pay.html?bookingId=" + bookingId;
+
+            emailService.sendBookingConfirmationEmail(
+                    booking.getEmail(),
+                    bookingDetails,
+//                    paymentLink
+                    "Successfully payment"
+            );
+        }
+
+        String amount = String.format("%.2f", booking.getRoom().getPrice());
+        String currency = "LKR";
+        String orderId = booking.getId().toString();
+        String hash = generatePayHereHash(merchantId, orderId, amount, currency, merchantSecret);
+
+        Map<String, Object> data = new LinkedHashMap<>();
+        data.put("merchant_id", merchantId);
+        data.put("return_url", appBaseUrl + "/payment-success.html");
+        data.put("cancel_url", appBaseUrl + "/payment-cancel.html");
+        data.put("notify_url", appBaseUrl + "/api/v1/payments/notify");
+        data.put("order_id", orderId);
+        data.put("items", "Room Booking - Room " + booking.getRoom().getRoomNumber());
+        data.put("amount", amount);
+        data.put("currency", currency);
+        data.put("hash", hash);
+
+        String firstName = "Customer";
+        String lastName = "Name";
+        if (booking.getUser() != null && booking.getUser().getUsername() != null) {
+            String[] parts = booking.getUser().getUsername().split(" ");
+            firstName = parts[0];
+            lastName = parts.length > 1 ? parts[1] : "Name";
+        }
+
+        data.put("first_name", firstName);
+        data.put("last_name", lastName);
+        data.put("email", booking.getEmail());
+        data.put("phone", booking.getPhoneNumber());
+        data.put("address", booking.getCity() != null ? booking.getCity() : "Colombo");
+        data.put("city", booking.getCity() != null ? booking.getCity() : "Colombo");
+        data.put("country", "Sri Lanka");
+        data.put("sandbox", "1");
+
+        // Save payment ID in custom fields so you can track it later
+        data.put("custom_1", payment.getPaymentId().toString());
+        data.put("custom_2", bookingId.toString());
+
+        return data;
+    }
 
 
     @Override

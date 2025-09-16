@@ -520,7 +520,7 @@
 <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
 <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 
-<script>
+<!-- <script>
     // Toggle menu functionality
     let toggle = document.querySelector('.toggle');
     let navigation = document.querySelector('.navigation');
@@ -679,6 +679,180 @@
         alert("Logged out successfully");
         window.location.href = "Login.html";
     }
+</script> -->
+
+<script>
+    // ===== Toggle menu functionality =====
+    let toggle = document.querySelector('.toggle');
+    let navigation = document.querySelector('.navigation');
+    let main = document.querySelector('.main');
+
+    toggle.onclick = function () {
+        navigation.classList.toggle('active');
+        main.classList.toggle('active');
+    }
+
+    // ===== Document Ready =====
+    $(document).ready(function () {
+        let token = localStorage.getItem("jwtToken");
+        if (!token) {
+            alert("You are not logged in!");
+            window.location.href = "login.html";
+            return;
+        }
+
+        loadPayments();
+
+        // Auto refresh every 30s
+        setInterval(loadPayments, 30000);
+
+        // Search & filter listeners
+        $("#search").on("input", filterPayments);
+        $("#status-filter, #method-filter").change(filterPayments);
+    });
+
+    // ===== Load Payments =====
+    function loadPayments() {
+        $.ajax({
+            url: "http://localhost:8080/api/v1/payments/all",   // ✅ corrected endpoint
+            method: "GET",
+            headers: {
+                "Authorization": `Bearer ${localStorage.getItem("jwtToken")}`
+            },
+            success: (payments) => {
+                if (payments && Array.isArray(payments)) {
+                    populatePaymentTable(payments);
+                    updatePaymentStats(payments);
+                } else {
+                    console.error("Unexpected response format:", payments);
+                    alert("Unexpected response format from server.");
+                }
+            },
+            error: (error) => {
+                console.error("Error fetching payments:", error);
+                alert("Something went wrong while fetching payments.");
+            }
+        });
+    }
+
+    // ===== Update Stats =====
+    function updatePaymentStats(payments) {
+        let total = 0;
+        let completed = 0;
+        let pending = 0;
+        let failed = 0;
+        let totalAmount = 0;
+
+        payments.forEach((payment) => {
+            total++;
+            totalAmount += parseFloat(payment.amount || 0);
+
+            if (payment.status === 'COMPLETED') completed++;
+            else if (payment.status === 'PENDING') pending++;
+            else if (payment.status === 'FAILED') failed++;
+        });
+
+        $('#total-payments').text('$' + totalAmount.toFixed(2));
+        $('#completed-payments').text(completed);
+        $('#pending-payments').text(pending);
+        $('#failed-payments').text(failed);
+    }
+
+    // ===== Populate Table =====
+    function populatePaymentTable(paymentsArray) {
+        let table = $('#PaymentTable');
+        table.empty();
+
+        if (paymentsArray && Array.isArray(paymentsArray)) {
+            paymentsArray.forEach((payment) => {
+                // Status badge
+                let statusClass = '';
+                if (payment.status === 'COMPLETED') statusClass = 'completed';
+                else if (payment.status === 'PENDING') statusClass = 'pending';
+                else if (payment.status === 'FAILED') statusClass = 'failed';
+
+                // Method badge
+                let methodClass = '';
+                let methodText = '';
+                if (payment.paymentMethod === 'CREDIT_CARD') {
+                    methodClass = 'credit-card';
+                    methodText = 'Credit Card';
+                } else if (payment.paymentMethod === 'PAYPAL') {
+                    methodClass = 'paypal';
+                    methodText = 'PayPal';
+                } else if (payment.paymentMethod === 'BANK_TRANSFER') {
+                    methodClass = 'bank-transfer';
+                    methodText = 'Bank Transfer';
+                } else {
+                    methodClass = 'credit-card';
+                    methodText = payment.paymentMethod || 'Unknown';
+                }
+
+                // Format date
+                let formattedDate = '';
+                if (payment.paymentDate) {
+                    let paymentDate = new Date(payment.paymentDate);
+                    formattedDate = paymentDate.toLocaleDateString() + ' ' + paymentDate.toLocaleTimeString();
+                }
+
+                // Append row
+                table.append(`
+                    <tr>
+                        <td>${payment.paymentId}</td>
+                        <td>${payment.bookingId}</td>
+                        <td>$${payment.amount}</td>
+                        <td><span class="method-badge ${methodClass}">${methodText}</span></td>
+                        <td><span class="status ${statusClass}">${payment.status}</span></td>
+                        <td>${formattedDate}</td>
+                    </tr>
+                `);
+            });
+        } else {
+            table.append('<tr><td colspan="6" class="text-center">No payments found</td></tr>');
+        }
+    }
+
+    // ===== Filter Table =====
+    function filterPayments() {
+        let searchText = $("#search").val().toLowerCase();
+        let statusFilter = $("#status-filter").val();
+        let methodFilter = $("#method-filter").val();
+
+        let rows = $("#PaymentTable tr");
+
+        rows.each(function () {
+            let id = $(this).find("td:eq(0)").text().toLowerCase();
+            let bookingId = $(this).find("td:eq(1)").text().toLowerCase();
+            let amount = $(this).find("td:eq(2)").text().toLowerCase();
+            let method = $(this).find("td:eq(3)").text().toLowerCase();
+            let status = $(this).find("td:eq(4)").text().toLowerCase();
+            let date = $(this).find("td:eq(5)").text().toLowerCase();
+
+            let statusMatch = statusFilter === "all" || status.includes(statusFilter.toLowerCase());
+            let methodMatch = methodFilter === "all" || method.includes(methodFilter.toLowerCase());
+            let searchMatch =
+                id.includes(searchText) ||
+                bookingId.includes(searchText) ||
+                amount.includes(searchText) ||
+                method.includes(searchText) ||
+                status.includes(searchText) ||
+                date.includes(searchText);
+
+            if (statusMatch && methodMatch && searchMatch) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+    }
+
+    // ===== Logout =====
+    function logout() {
+        localStorage.removeItem("jwtToken");
+        alert("Logged out successfully");
+        window.location.href = "login.html";
+    }
 </script>
+
 </body>
 </html>
