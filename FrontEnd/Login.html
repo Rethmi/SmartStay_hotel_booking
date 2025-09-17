@@ -2,216 +2,216 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login & Sign Up</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login & Sign Up</title>
 
-    <!-- FontAwesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <!-- FontAwesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 
-    <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="./css/login.css">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="./css/login.css">
 
-    <style>
-        #sign-up-btn2:hover,
-        #btn-login2:hover,
-        #login:hover,
-        #register:hover {
-            background-color: white;
-            color: black;
-            border: 1px solid black;
-        }
-    </style>
+  <style>
+    #sign-up-btn2:hover,
+    #btn-login2:hover,
+    #login:hover,
+    #register:hover {
+      background-color: white;
+      color: black;
+      border: 1px solid black;
+    }
+  </style>
 </head>
 
 <body>
-    <div class="container" id="container">
-        <!-- Sign Up Form -->
-        <div class="form-container sign-up">
-            <form>
-                <h1>Create Account</h1>
-                <div class="social-icons">
-                    <a href="#" class="icon"><i class="fa-brands fa-google-plus-g"></i></a>
-                    <a href="#" class="icon"><i class="fa-brands fa-facebook-f"></i></a>
-                    <a href="#" class="icon"><i class="fa-brands fa-github"></i></a>
-                    <a href="#" class="icon"><i class="fa-brands fa-linkedin-in"></i></a>
-                </div>
-                <span>or use your email for registration</span>
-                <input type="text" id="nameSignUp" placeholder="Name" autocomplete="username">
-                <input type="email" id="emailSignUp" placeholder="Email" autocomplete="email">
-                <input type="password" id="passwordSignUp" placeholder="Password" autocomplete="new-password">
-                <button type="button" class="btn btn-primary" id="sign-up-btn2">Sign Up</button>
-            </form>
+  <div class="container" id="container">
+    <!-- Sign Up Form -->
+    <div class="form-container sign-up">
+      <form>
+        <h1>Create Account</h1>
+        <div class="social-icons">
+          <a href="#" class="icon"><i class="fa-brands fa-google-plus-g"></i></a>
+          <a href="#" class="icon"><i class="fa-brands fa-facebook-f"></i></a>
+          <a href="#" class="icon"><i class="fa-brands fa-github"></i></a>
+          <a href="#" class="icon"><i class="fa-brands fa-linkedin-in"></i></a>
         </div>
-
-        <!-- Sign In Form -->
-        <div class="form-container sign-in">
-            <form>
-                <h1>Sign In</h1>
-                <div class="social-icons">
-                    <a href="#" class="icon"><i class="fa-brands fa-google-plus-g"></i></a>
-                    <a href="#" class="icon"><i class="fa-brands fa-facebook-f"></i></a>
-                    <a href="#" class="icon"><i class="fa-brands fa-github"></i></a>
-                    <a href="#" class="icon"><i class="fa-brands fa-linkedin-in"></i></a>
-                </div>
-                <span>or use your email password</span>
-                <input id="emailSignIn" type="email" placeholder="Email" autocomplete="username">
-                <input id="passwordSignIn" type="password" placeholder="Password" autocomplete="current-password">
-                <a href="ForgettonPassword.html">Forget Your Password?</a>
-                <button id="btn-login2" class="btn btn-primary">Sign In</button>
-            </form>
-        </div>
-
-        <!-- Toggle Panels -->
-        <div class="toggle-container">
-            <div class="toggle">
-                <div class="toggle-panel toggle-left">
-                    <h1>Welcome Back!</h1>
-                    <p>Enter your personal details to use all of site features</p>
-                    <button class="hidden" id="login">Sign In</button>
-                </div>
-                <div class="toggle-panel toggle-right">
-                    <h2>Smart Hotel Booking</h2>
-                    <p>Register with your personal details to use all of site features</p>
-                    <button class="hidden" id="register">Sign Up</button>
-                </div>
-            </div>
-        </div>
+        <span>or use your email for registration</span>
+        <input type="text" id="nameSignUp" placeholder="Name" autocomplete="username">
+        <input type="email" id="emailSignUp" placeholder="Email" autocomplete="email">
+        <input type="password" id="passwordSignUp" placeholder="Password" autocomplete="new-password">
+        <button type="button" class="btn btn-primary" id="sign-up-btn2">Sign Up</button>
+      </form>
     </div>
 
-    <!-- Scripts -->
-     <!-- SweetAlert2 -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Sign In Form -->
+    <div class="form-container sign-in">
+      <form>
+        <h1>Sign In</h1>
+        <div class="social-icons">
+          <a href="#" class="icon"><i class="fa-brands fa-google-plus-g"></i></a>
+          <a href="#" class="icon"><i class="fa-brands fa-facebook-f"></i></a>
+          <a href="#" class="icon"><i class="fa-brands fa-github"></i></a>
+          <a href="#" class="icon"><i class="fa-brands fa-linkedin-in"></i></a>
+        </div>
+        <span>or use your email password</span>
+        <input id="emailSignIn" type="email" placeholder="Email" autocomplete="username">
+        <input id="passwordSignIn" type="password" placeholder="Password" autocomplete="current-password">
+        <a href="ForgettonPassword.html">Forget Your Password?</a>
+        <button id="btn-login2" class="btn btn-primary">Sign In</button>
+      </form>
+    </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <script src="./js/sign.js"></script>
+    <!-- Toggle Panels -->
+    <div class="toggle-container">
+      <div class="toggle">
+        <div class="toggle-panel toggle-left">
+          <h1>Welcome Back!</h1>
+          <p>Enter your personal details to use all of site features</p>
+          <button class="hidden" id="login">Sign In</button>
+        </div>
+        <div class="toggle-panel toggle-right">
+          <h2>Smart Hotel Booking</h2>
+          <p>Register with your personal details to use all of site features</p>
+          <button class="hidden" id="register">Sign Up</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <!-- SweetAlert2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <script src="./js/sign.js"></script>
+
+   
+
 <script>
-    $(document).ready(function () {
-        // Sign Up
-        $("#sign-up-btn2").on("click", function (e) {
-            e.preventDefault();
+$(document).ready(function () {
 
-            let username = $("#nameSignUp").val().trim();
-            let email = $("#emailSignUp").val().trim();
-            let password = $("#passwordSignUp").val().trim();
+    // Utility functions
+    function isValidName(name) {
+        return /^[A-Za-z\s]{3,}$/.test(name);
+    }
+    function isValidEmail(email) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+    function isValidPassword(password) {
+        return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/.test(password);
+    }
 
-            if (!username || !email || !password) {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Missing Fields',
-                    text: 'Please fill all fields!',
-                });
-                return;
+    // Show error helper
+    function showError(input, message) {
+        let errorEl = $(input).next(".error-msg");
+        if (errorEl.length === 0) {
+            $(input).after(`<small class="error-msg text-danger">${message}</small>`);
+        } else {
+            errorEl.text(message);
+        }
+    }
+    function clearError(input) {
+        $(input).next(".error-msg").remove();
+    }
+
+    // 🔹 Real-time validation
+    $("#nameSignUp").on("input", function () {
+        let val = $(this).val().trim();
+        if (!isValidName(val)) showError(this, "Name must be at least 3 letters.");
+        else clearError(this);
+    });
+
+    $("#emailSignUp, #emailSignIn").on("input", function () {
+        let val = $(this).val().trim();
+        if (!isValidEmail(val)) showError(this, "Enter a valid email.");
+        else clearError(this);
+    });
+
+    $("#passwordSignUp").on("input", function () {
+        let val = $(this).val().trim();
+        if (!isValidPassword(val)) {
+            showError(this, "Password: 6+ chars, 1 upper, 1 lower, 1 number, 1 symbol.");
+        } else clearError(this);
+    });
+
+    // 🔹 Sign Up Submit
+    $("#sign-up-btn2").on("click", function (e) {
+        e.preventDefault();
+
+        let username = $("#nameSignUp").val().trim();
+        let email = $("#emailSignUp").val().trim();
+        let password = $("#passwordSignUp").val().trim();
+
+        let valid = true;
+        if (!isValidName(username)) { showError("#nameSignUp", "Name must be at least 3 letters."); valid = false; }
+        if (!isValidEmail(email)) { showError("#emailSignUp", "Enter a valid email."); valid = false; }
+        if (!isValidPassword(password)) { showError("#passwordSignUp", "Password is too weak."); valid = false; }
+
+        if (!valid) return;
+
+        // AJAX request
+        $.ajax({
+            url: "http://localhost:8080/api/v1/auth/register",
+            method: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({ username, email, password, role: "USER" }),
+            success: function () {
+                alert("✅ Registration Successful! You can log in now.");
+                window.location.href = "Login.html";
+            },
+            error: function (xhr) {
+                alert("❌ Registration Failed. Status: " + xhr.status);
             }
-
-            $.ajax({
-                url: "http://localhost:8080/api/v1/auth/register",
-                method: "POST",
-                contentType: "application/json",
-                data: JSON.stringify({
-                    username: username,
-                    email: email,
-                    password: password,
-                    role: "USER"
-                }),
-                success: function (res) {
-                    console.log("Response:", res);
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Registration Successful!',
-                        text: 'You can now log in.',
-                        confirmButtonText: 'OK'
-                    }).then(() => {
-                        window.location.href = "Login.html";
-                    });
-                },
-                error: function (xhr) {
-                    console.error("Error:", xhr);
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Registration Failed',
-                        text: 'Status: ' + xhr.status,
-                    });
-                }
-            });
-        });
-
-        // Login
-        $("#btn-login2").click(function (e) {
-            e.preventDefault();
-
-            let email = $("#emailSignIn").val().trim();
-            let password = $("#passwordSignIn").val().trim();
-
-            if (!email || !password) {
-                Swal.fire({
-                    icon: 'warning',
-                    title: 'Missing Fields',
-                    text: 'Email and Password are required!',
-                });
-                return;
-            }
-
-            $.ajax({
-                url: "http://localhost:8080/api/v1/auth/login",
-                method: "POST",
-                contentType: "application/json",
-                data: JSON.stringify({ email: email, password: password }),
-                success: function (res) {
-                    console.log("Login Response:", res);
-
-                    if (res.status === "OK") {
-                        localStorage.setItem("jwtToken", res.data.accessToken);
-                        localStorage.setItem("role", res.data.role);
-                        localStorage.setItem("email", email);
-
-                        let userRole = res.data.role;
-
-                        Swal.fire({
-                            icon: 'success',
-                            title: 'Login Successful!',
-                            text: 'Redirecting to dashboard...',
-                            timer: 1500,
-                            showConfirmButton: false
-                        }).then(() => {
-                            if (userRole === "ADMIN") {
-                                window.location.href = "AdminDashBoard.html";
-                            } else if (userRole === "USER") {
-                                window.location.href = "CustomerDashboard.html";
-                            } else if (userRole === "MANAGER") {
-                                window.location.href = "ManagerDashBoard.html";
-                            } else {
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Invalid Role',
-                                    text: 'Please contact support.',
-                                });
-                            }
-                        });
-                    } else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Login Failed',
-                            text: res.message || "Unknown error",
-                        });
-                    }
-                },
-                error: function (xhr, status, error) {
-                    console.error("Error:", xhr.responseText || error);
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Login Error',
-                        text: 'Invalid credentials or server error. Please try again.',
-                    });
-                }
-            });
         });
     });
+
+    // 🔹 Login Submit
+    $("#btn-login2").click(function (e) {
+        e.preventDefault();
+
+        let email = $("#emailSignIn").val().trim();
+        let password = $("#passwordSignIn").val().trim();
+
+        let valid = true;
+        if (!isValidEmail(email)) { showError("#emailSignIn", "Enter a valid email."); valid = false; }
+        if (!password) { showError("#passwordSignIn", "Password required."); valid = false; }
+
+        if (!valid) return;
+
+        // AJAX request
+        $.ajax({
+            url: "http://localhost:8080/api/v1/auth/login",
+            method: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({ email, password }),
+            success: function (res) {
+                if (res.status === "OK") {
+                    localStorage.setItem("jwtToken", res.data.accessToken);
+                    localStorage.setItem("role", res.data.role);
+                    localStorage.setItem("email", email);
+
+                    let userRole = res.data.role;
+
+                    if (userRole === "ADMIN") window.location.href = "AdminDashBoard.html";
+                    else if (userRole === "USER") window.location.href = "CustomerDashboard.html";
+                    else if (userRole === "MANAGER") window.location.href = "ManagerDashBoard.html";
+                    else alert("Invalid Role. Please contact support.");
+                } else {
+                    alert("❌ Login Failed: " + (res.message || "Unknown error"));
+                }
+            },
+            error: function () {
+                alert("❌ Login Error: Invalid credentials or server error.");
+            }
+        });
+    });
+});
 </script>
 
 </body>

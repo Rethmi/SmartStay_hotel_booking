@@ -1,362 +1,823 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" href="../assets/images/titleIcon.png" type="image/x-icon">
-    <title>Payment Process</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="../css/payment.css">
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Luxury Stays - Find Your Perfect Hotel</title>
 
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- AOS Animation Library -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #3a86ff;
+      --primary-dark: #2563eb;
+      --secondary: #0f0754;
+      --accent: #ff9e01;
+      --light: #f8f9fa;
+      --dark: #212529;
+      --gray: #6c757d;
+      --light-gray: #e9ecef;
+      --border-radius: 12px;
+      --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      --transition: all 0.3s ease;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      color: var(--dark);
+      background-color: #fcfcfc;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+    }
+
+    /* Navigation */
+    .navbar {
+      padding: 1rem 0;
+      transition: var(--transition);
+      background-color: rgba(255, 255, 255, 0.95);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    .navbar-scrolled {
+      padding: 0.5rem 0;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .navbar-brand img {
+      height: 50px;
+    }
+
+    /* Hero Section */
+    .hero-section {
+      background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('./assets/images/hero-bg.jpg') center/cover no-repeat;
+      min-height: 70vh;
+      display: flex;
+      align-items: center;
+      color: white;
+      position: relative;
+      margin-top: 76px;
+    }
+
+    .hero-content {
+      max-width: 700px;
+    }
+
+    .hero-title {
+      font-size: 3.5rem;
+      margin-bottom: 1.5rem;
+      line-height: 1.2;
+    }
+
+    .hero-subtitle {
+      font-size: 1.25rem;
+      margin-bottom: 2rem;
+      font-weight: 300;
+    }
+
+    /* Search Section */
+    .search-section {
+      background: white;
+      border-radius: var(--border-radius);
+      padding: 2.5rem;
+      box-shadow: var(--box-shadow);
+      margin-top: -80px;
+      position: relative;
+      z-index: 10;
+    }
+
+    .search-form .form-control {
+      padding: 0.8rem 1.2rem;
+      border-radius: var(--border-radius);
+      border: 1px solid var(--light-gray);
+      height: calc(2.8em + 0.75rem + 2px);
+    }
+
+    .search-form .form-label {
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+      color: var(--dark);
+    }
+
+    .btn-primary {
+      background-color: var(--primary);
+      border-color: var(--primary);
+      padding: 0.8rem 1.5rem;
+      border-radius: var(--border-radius);
+      font-weight: 500;
+      transition: var(--transition);
+    }
+
+    .btn-primary:hover {
+      background-color: var(--primary-dark);
+      border-color: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background-color: var(--secondary);
+      border-color: var(--secondary);
+      padding: 0.8rem 1.5rem;
+      border-radius: var(--border-radius);
+      font-weight: 500;
+      transition: var(--transition);
+    }
+
+    .btn-secondary:hover {
+      background-color: #0a0540;
+      border-color: #0a0540;
+      transform: translateY(-2px);
+    }
+
+    /* Section Titles */
+    .section-title {
+      position: relative;
+      margin-bottom: 2.5rem;
+      padding-bottom: 1rem;
+    }
+
+    .section-title:after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 60px;
+      height: 3px;
+      background: var(--primary);
+    }
+
+    .section-title.center:after {
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    /* Hotel Cards */
+    .hotel-card {
+      border-radius: var(--border-radius);
+      overflow: hidden;
+      box-shadow: var(--box-shadow);
+      transition: var(--transition);
+      height: 100%;
+      border: none;
+      margin-bottom: 1.5rem;
+    }
+
+    .hotel-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    }
+
+    .hotel-image {
+      height: 250px;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .hotel-card:hover .hotel-image {
+      transform: scale(1.05);
+    }
+
+    .hotel-card .card-body {
+      padding: 1.5rem;
+    }
+
+    .hotel-card .card-title {
+      margin-bottom: 0.75rem;
+      font-size: 1.25rem;
+    }
+
+    .hotel-location {
+      color: var(--gray);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+    }
+
+    .hotel-description {
+      color: var(--gray);
+      margin-bottom: 1.5rem;
+      line-height: 1.6;
+    }
+
+    .rating {
+      color: #ffc107;
+      margin-bottom: 0.75rem;
+    }
+
+    .seeAvailability {
+      background: linear-gradient(45deg, var(--primary), var(--accent));
+      border: none;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border-radius: 50px;
+      font-weight: 500;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .seeAvailability:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 15px rgba(58, 134, 255, 0.3);
+      color: white;
+    }
+
+    /* Loading and No Results */
+    .hotel-loading {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 300px;
+    }
+
+    .loading-spinner {
+      width: 50px;
+      height: 50px;
+      border: 5px solid #f3f3f3;
+      border-top: 5px solid var(--primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .no-results {
+      text-align: center;
+      padding: 3rem 1rem;
+    }
+
+    .no-results i {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      color: var(--light-gray);
+    }
+
+    /* CTA Section */
+    .cta-section {
+      background: linear-gradient(rgba(15, 7, 84, 0.9), rgba(15, 7, 84, 0.9)), url('./assets/images/cta-bg.jpg') center/cover no-repeat;
+      padding: 5rem 0;
+      color: white;
+      border-radius: var(--border-radius);
+    }
+
+    /* Footer */
+    .footer {
+      background-color: var(--secondary);
+      color: white;
+      padding: 4rem 0 2rem;
+    }
+
+    .footer a {
+      color: rgba(255, 255, 255, 0.8);
+      text-decoration: none;
+      transition: var(--transition);
+    }
+
+    .footer a:hover {
+      color: white;
+    }
+
+    .footer-title {
+      font-size: 1.25rem;
+      margin-bottom: 1.5rem;
+      position: relative;
+      padding-bottom: 0.75rem;
+    }
+
+    .footer-title:after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 40px;
+      height: 2px;
+      background: var(--primary);
+    }
+
+    .social-links a {
+      display: inline-block;
+      width: 40px;
+      height: 40px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      text-align: center;
+      line-height: 40px;
+      margin-right: 0.5rem;
+    }
+
+    .social-links a:hover {
+      background: var(--primary);
+    }
+
+    /* Back to top button */
+    .back-to-top {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: var(--primary);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      z-index: 100;
+      opacity: 0;
+      transition: var(--transition);
+    }
+
+    .back-to-top.show {
+      opacity: 1;
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 992px) {
+      .hero-title {
+        font-size: 2.5rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .hero-title {
+        font-size: 2rem;
+      }
+      
+      .search-section {
+        margin-top: -40px;
+      }
+      
+      .section-title {
+        font-size: 1.75rem;
+      }
+    }
+  </style>
 </head>
+
 <body>
-
-<div class="payment-container">
-    <div class="payment-card">
-        <h4><i class="fas fa-credit-card"></i>Payment Process</h4>
-
-        <div class="mb-4">
-            <label for="paymentType" class="form-label">
-                <i class="fas fa-list"></i>Select Payment Type
-            </label>
-            <select id="paymentType" class="form-select">
-                <option value="">-- Choose Payment Method --</option>
-                <option value="cash">💵 Cash Payment</option>
-                <option value="card">💳 Card Payment</option>
-            </select>
+  <!-- Navigation -->
+  <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
+    <div class="container">
+      <a class="navbar-brand" href="CustomerDashboard.html">
+        <img src="./assets/images/HotelLogo.png" alt="Luxury Stays">
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" href="CustomerDashboard.html">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="#">Hotels</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Destinations</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">About Us</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Contact</a>
+          </li>
+        </ul>
+        <div class="d-flex align-items-center">
+          <a href="tel:+01123456790" class="text-dark me-3">
+            <i class="fas fa-phone-alt me-1"></i> +01 (123) 4567 90
+          </a>
+          <button class="btn btn-outline-primary me-2" onclick="logout()">Log Out</button>
         </div>
-
-        <!-- Cash Payment Form -->
-        <form id="cashForm" class="payment-form hidden">
-            <div class="mb-3">
-                <label for="examFee" class="form-label">
-                    <i class="fas fa-tag"></i>Exam Fee (LKR)
-                </label>
-                <div class="input-group">
-                    <i class="fas fa-rupee-sign"></i>
-                    <input type="number" id="examFee" class="form-control" value="3200.00" readonly />
-                </div>
-            </div>
-
-            <div class="mb-3">
-                <label for="cashAmount" class="form-label">
-                    <i class="fas fa-money-bill-wave"></i>Enter Amount Paid
-                </label>
-                <div class="input-group">
-                    <i class="fas fa-rupee-sign"></i>
-                    <input type="number" id="cashAmount" class="form-control" min="0" step="0.01"
-                           placeholder="Enter amount..." required />
-                </div>
-            </div>
-
-            <div class="mb-4">
-                <label for="balance" class="form-label">
-                    <i class="fas fa-calculator"></i>Balance Due
-                </label>
-                <div class="balance-display">
-                    <span id="balanceText">LKR 0.00</span>
-                </div>
-            </div>
-
-            <button type="submit" class="btn btn-success w-100">
-                <i class="fas fa-hand-holding-usd"></i>Complete Cash Payment
-            </button>
-        </form>
-
-        <!-- Card Payment Form -->
-        <form id="cardForm" class="payment-form hidden">
-            <div class="mb-3">
-                <label for="cardAmount" class="form-label">
-                    <i class="fas fa-tag"></i>Amount (LKR)
-                </label>
-                <div class="input-group">
-                    <i class="fas fa-rupee-sign"></i>
-                    <input type="number" name="amount" id="cardAmount" class="form-control"
-                           min="0" step="0.01" placeholder="Enter amount..." required />
-                </div>
-            </div>
-
-            <div class="mb-3">
-                <label for="orderId" class="form-label">
-                    <i class="fas fa-hashtag"></i>Order ID
-                </label>
-                <div class="input-group">
-                    <i class="fas fa-hashtag"></i>
-                    <input type="text" name="order_id" id="orderId" class="form-control"
-                           placeholder="Enter order ID..." required />
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label for="firstName" class="form-label">
-                        <i class="fas fa-user"></i>First Name
-                    </label>
-                    <input type="text" name="first_name" id="firstName" class="form-control"
-                           placeholder="First name..." required />
-                </div>
-
-                <div class="col-md-6 mb-3">
-                    <label for="lastName" class="form-label">
-                        <i class="fas fa-user"></i>Last Name
-                    </label>
-                    <input type="text" name="last_name" id="lastName" class="form-control"
-                           placeholder="Last name..." required />
-                </div>
-            </div>
-
-            <div class="mb-4">
-                <label for="email" class="form-label">
-                    <i class="fas fa-envelope"></i>Email Address
-                </label>
-                <div class="input-group">
-                    <i class="fas fa-envelope"></i>
-                    <input type="email" name="email" id="email" class="form-control"
-                           placeholder="Enter email..." required />
-                </div>
-            </div>
-
-            <button type="submit" class="btn btn-primary w-100">
-                <i class="fas fa-credit-card"></i>Pay with Card
-            </button>
-        </form>
+      </div>
     </div>
-</div>
+  </nav>
 
-<script>
-    const paymentTypeSelect = document.getElementById('paymentType');
-    const cashForm = document.getElementById('cashForm');
-    const cardForm = document.getElementById('cardForm');
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="container">
+      <div class="hero-content" data-aos="fade-right">
+        <h1 class="hero-title">Discover Your Perfect Stay</h1>
+        <p class="hero-subtitle">Explore the finest hotels across Sri Lanka. From beachfront resorts to mountain retreats, find the perfect accommodation for your next adventure.</p>
+        <div class="d-flex gap-3 flex-wrap">
+          <button class="btn btn-primary" onclick="scrollToSearch()">Search Hotels</button>
+          <a href="CustomerDashboard.html" class="btn btn-outline-light">
+            <i class="fas fa-arrow-left me-2"></i>Back to Home
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
 
-    const examFeeInput = document.getElementById('examFee');
-    const cashAmountInput = document.getElementById('cashAmount');
-    const balanceText = document.getElementById('balanceText');
+  <!-- Search Section -->
+  <section class="container" id="searchSection">
+    <div class="search-section" data-aos="fade-up">
+      <h3 class="text-center mb-4">Find Your Perfect Stay</h3>
+      <form class="tour-search-form row g-3">
+        <div class="col-md-4">
+          <label for="destination" class="form-label">Destination</label>
+          <input type="text" class="form-control" id="destination" placeholder="Where are you going?">
+        </div>
+        <div class="col-md-2">
+          <label for="roomType" class="form-label">Room Type</label>
+          <select class="form-select" id="roomType">
+            <option value="single">Single</option>
+            <option value="double" selected>Double</option>
+            <option value="suite">Suite</option>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <label for="checkin" class="form-label">Check In</label>
+          <input type="date" class="form-control" id="checkin">
+        </div>
+        <div class="col-md-2">
+          <label for="checkout" class="form-label">Check Out</label>
+          <input type="date" class="form-control" id="checkout">
+        </div>
+        <div class="col-md-2 d-flex align-items-end">
+          <button type="submit" class="btn btn-primary w-100">
+            <i class="fas fa-search me-2"></i>Search
+          </button>
+        </div>
+      </form>
+    </div>
+  </section>
 
-    // Payment type selection
-    paymentTypeSelect.addEventListener('change', () => {
-        const val = paymentTypeSelect.value;
+  <!-- Hotel List -->
+  <section class="py-5">
+    <div class="container">
+      <div class="text-center mb-5" data-aos="fade-up">
+        <h2 class="section-title center">Available Hotels</h2>
+        <p class="text-muted">Browse our curated selection of premium accommodations across Sri Lanka</p>
+      </div>
+      
+      <div class="row g-4 justify-content-center" id="hotelsContainer"></div>
+    </div>
+  </section>
 
-        if (val === 'cash') {
-            cashForm.classList.remove('hidden');
-            cashForm.classList.add('fade-in');
-            cardForm.classList.add('hidden');
-            cashForm.reset();
-            examFeeInput.value = '3200.00';
-            balanceText.textContent = 'Balance: LKR 3200.00';
-        } else if (val === 'card') {
-            cardForm.classList.remove('hidden');
-            cardForm.classList.add('fade-in');
-            cashForm.classList.add('hidden');
-            cardForm.reset();
-            // Auto-fill card amount with exam fee
-            document.getElementById('cardAmount').value = '3200.00';
-        } else {
-            cashForm.classList.add('hidden');
-            cardForm.classList.add('hidden');
-        }
+  <!-- CTA Section -->
+  <section class="py-5">
+    <div class="container">
+      <div class="cta-section text-center rounded-3" data-aos="fade-up">
+        <h2 class="mb-4">Ready For Unforgettable Travel?</h2>
+        <p class="mb-4 mx-auto" style="max-width: 600px;">Enjoy seamless hotel bookings with Luxury Stays. Your comfort, our priority.</p>
+        <button class="btn btn-primary btn-lg">Contact Us Now</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-4 mb-4 mb-lg-0">
+          <h4 class="footer-title">Luxury Stays</h4>
+          <p>Smart Hotel Booking brings you the best hotels in Sri Lanka with an effortless booking process.</p>
+          <div class="social-links mt-4">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+          </div>
+        </div>
+        <div class="col-lg-4 mb-4 mb-lg-0">
+          <h4 class="footer-title">Contact Info</h4>
+          <ul class="list-unstyled">
+            <li class="mb-2"><i class="fas fa-map-marker-alt me-2"></i> Sri Lanka</li>
+            <li class="mb-2"><i class="fas fa-phone me-2"></i> +01 (123) 4567 90</li>
+            <li class="mb-2"><i class="fas fa-envelope me-2"></i> SmartHotelBooking@gmail.com</li>
+          </ul>
+        </div>
+        <div class="col-lg-4">
+          <h4 class="footer-title">Newsletter</h4>
+          <p>Subscribe to our newsletter for updates and special offers!</p>
+          <form class="mt-3">
+            <div class="input-group">
+              <input type="email" class="form-control" placeholder="Your Email">
+              <button class="btn btn-primary" type="submit">Subscribe</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <hr class="my-4">
+      <div class="row align-items-center">
+        <div class="col-md-6">
+          <p class="mb-0">&copy; 2025 Luxury Stays. All rights reserved</p>
+        </div>
+        <div class="col-md-6 text-md-end">
+          <a href="#" class="me-3">Privacy Policy</a>
+          <a href="#" class="me-3">Terms & Conditions</a>
+          <a href="#">FAQ</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Back to Top Button -->
+  <a href="#" class="back-to-top">
+    <i class="fas fa-arrow-up"></i>
+  </a>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  
+  <!-- SweetAlert2 JS -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+
+  <script>
+    // Initialize AOS animation
+    AOS.init({
+      duration: 800,
+      easing: 'ease-in-out',
+      once: true
     });
 
-    // Cash amount calculation
-    cashAmountInput.addEventListener('input', () => {
-        const examFee = parseFloat(examFeeInput.value) || 0;
-        const paid = parseFloat(cashAmountInput.value) || 0;
-        const balanceDisplay = document.querySelector('.balance-display');
-
-        if (paid > examFee) {
-            // Show excess amount
-            const excess = paid - examFee;
-            balanceText.textContent = `Excess: LKR ${excess.toFixed(2)}`;
-            balanceDisplay.style.background = 'rgba(255, 99, 132, 0.3)';
-            balanceDisplay.style.borderColor = 'rgba(255, 99, 132, 0.6)';
-            balanceDisplay.style.color = '#ff6384';
-        } else {
-            // Show remaining balance
-            const balance = examFee - paid;
-            balanceText.textContent = `Balance: LKR ${balance.toFixed(2)}`;
-
-            if (balance === 0) {
-                balanceDisplay.style.background = 'rgba(75, 192, 192, 0.3)';
-                balanceDisplay.style.borderColor = 'rgba(75, 192, 192, 0.6)';
-                balanceDisplay.style.color = '#4bc0c0';
-            } else {
-                balanceDisplay.style.background = 'rgba(40, 40, 60, 0.8)';
-                balanceDisplay.style.borderColor = 'rgba(255, 215, 0, 0.4)';
-                balanceDisplay.style.color = '#ffd700';
-            }
-        }
+    // Navbar scroll effect
+    window.addEventListener('scroll', function() {
+      const navbar = document.getElementById('mainNav');
+      const backToTop = document.querySelector('.back-to-top');
+      
+      if (window.scrollY > 50) {
+        navbar.classList.add('navbar-scrolled');
+      } else {
+        navbar.classList.remove('navbar-scrolled');
+      }
+      
+      if (window.scrollY > 300) {
+        backToTop.classList.add('show');
+      } else {
+        backToTop.classList.remove('show');
+      }
     });
 
-    // Cash payment submission
-    cashForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
+    // Set default dates
+    window.onload = function() {
+      const today = new Date();
+      const tomorrow = new Date(today);
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      
+      document.getElementById('checkin').value = today.toISOString().split('T')[0];
+      document.getElementById('checkout').value = tomorrow.toISOString().split('T')[0];
+      
+      // Load saved search parameters if they exist
+      const savedDestination = localStorage.getItem("destination");
+      const savedCheckin = localStorage.getItem("checkin");
+      const savedCheckout = localStorage.getItem("checkout");
+      const savedPeople = localStorage.getItem("people");
 
-        const amountPaid = parseFloat(cashAmountInput.value);
-        const examFee = parseFloat(examFeeInput.value);
+      if (savedDestination) $("#destination").val(savedDestination);
+      if (savedCheckin) $("#checkin").val(savedCheckin);
+      if (savedCheckout) $("#checkout").val(savedCheckout);
+      if (savedPeople) $("#roomType").val(savedPeople);
 
-        if (amountPaid <= 0) {
-            await Swal.fire({
-                title: 'Invalid Amount!',
-                text: 'Please enter a valid amount greater than 0.',
-                icon: 'error',
-                confirmButtonText: 'OK',
-                background: 'rgba(255, 255, 255, 0.95)',
-                backdrop: 'rgba(0, 0, 0, 0.4)'
-            });
-            return;
-        }
+      // If we have search parameters, perform the search
+      if (savedDestination || savedCheckin || savedCheckout || savedPeople) {
+        fetchHotels();
+      }
+    };
 
-        if (amountPaid > examFee) {
-            const excess = amountPaid - examFee;
-            const result = await Swal.fire({
-                title: 'Excess Payment!',
-                html: `
-                    <div style="text-align: center; margin: 20px 0;">
-                        <p>Amount Paid: <strong>LKR ${amountPaid.toFixed(2)}</strong></p>
-                        <p>Exam Fee: <strong>LKR ${examFee.toFixed(2)}</strong></p>
-                        <p style="color: #ff6384;">Excess Amount: <strong>LKR ${excess.toFixed(2)}</strong></p>
-                    </div>
-                `,
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Accept Payment',
-                cancelButtonText: 'Cancel',
-                background: 'rgba(255, 255, 255, 0.95)',
-                backdrop: 'rgba(0, 0, 0, 0.4)'
-            });
-
-            if (!result.isConfirmed) {
-                return;
-            }
-        }
-
-        const balance = examFee - amountPaid;
-        let message = `Cash payment of LKR ${amountPaid.toFixed(2)} received successfully!`;
-
-        if (amountPaid > examFee) {
-            const excess = amountPaid - examFee;
-            message += `\nExcess amount: LKR ${excess.toFixed(2)}`;
-        } else if (balance > 0) {
-            message += `\nRemaining balance: LKR ${balance.toFixed(2)}`;
-        } else {
-            message += `\nPayment completed in full!`;
-        }
-
-        await Swal.fire({
-            title: 'Payment Successful!',
-            text: message,
-            icon: 'success',
-            confirmButtonText: 'Continue',
-            background: 'rgba(255, 255, 255, 0.95)',
-            backdrop: 'rgba(0, 0, 0, 0.4)',
-            timer: 3000,
-            timerProgressBar: true
-        });
-
-        // Reset form
-        cashForm.reset();
-        examFeeInput.value = '3200.00';
-        balanceText.textContent = 'Balance: LKR 0.00';
-        paymentTypeSelect.value = '';
-        cashForm.classList.add('hidden');
-
-        // Reset balance display style
-        const balanceDisplay = document.querySelector('.balance-display');
-        balanceDisplay.style.background = 'rgba(40, 40, 60, 0.8)';
-        balanceDisplay.style.borderColor = 'rgba(255, 215, 0, 0.4)';
-        balanceDisplay.style.color = '#ffd700';
+    // Back to top button
+    document.querySelector('.back-to-top').addEventListener('click', (e) => {
+      e.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
-    // Card payment submission
-    cardForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
+    // Scroll to search section
+    function scrollToSearch() {
+      document.getElementById('searchSection').scrollIntoView({ behavior: 'smooth' });
+    }
 
-        const amount = parseFloat(document.getElementById('cardAmount').value);
-        const orderId = document.getElementById('orderId').value.trim();
-        const firstName = document.getElementById('firstName').value.trim();
-        const lastName = document.getElementById('lastName').value.trim();
-        const email = document.getElementById('email').value.trim();
+    // Form submission
+    $(".tour-search-form").submit(function (e) {
+      e.preventDefault();
 
-        if (!amount || amount <= 0) {
-            await Swal.fire({
-                title: 'Invalid Amount!',
-                text: 'Please enter a valid amount greater than 0.',
-                icon: 'error',
-                confirmButtonText: 'OK',
-                background: 'rgba(255, 255, 255, 0.95)',
-                backdrop: 'rgba(0, 0, 0, 0.4)'
-            });
+      // Save search parameters to localStorage
+      localStorage.setItem("destination", $("#destination").val());
+      localStorage.setItem("checkin", $("#checkin").val());
+      localStorage.setItem("checkout", $("#checkout").val());
+      localStorage.setItem("people", $("#roomType").val());
+
+      fetchHotels();
+    });
+
+    // SweetAlert notifications
+    function showAlert(icon, title, text) {
+      Swal.fire({
+        icon: icon,
+        title: title,
+        text: text,
+        timer: 3000,
+        showConfirmButton: false
+      });
+    }
+
+    function fetchHotels() {
+      const people = $("#roomType").val();
+      const checkin = $("#checkin").val();
+      const checkout = $("#checkout").val();
+      const destination = $("#destination").val()?.trim().toLowerCase() || "";
+
+      if (new Date(checkin) >= new Date(checkout)) {
+        showAlert('warning', 'Invalid Dates', 'Check-out date must be after check-in date');
+        return;
+      }
+
+      $("#hotelsContainer").html(`
+        <div class="col-12 hotel-loading">
+          <div class="loading-spinner"></div>
+        </div>
+      `);
+
+      $.ajax({
+        url: "http://localhost:8080/api/v1/hotels/all",
+        method: "GET",
+        headers: { "Authorization": `Bearer ${localStorage.getItem("jwtToken")}` },
+        success: function (res) {
+          // Clear loading message
+          $("#hotelsContainer").empty();
+
+          // hotels might be in res.data or directly in res
+          const hotels = res.data || res;
+
+          if (!hotels || hotels.length === 0) {
+            $("#hotelsContainer").html(`
+              <div class="col-12 no-results">
+                <i class="fas fa-hotel"></i>
+                <h3>No Hotels Found</h3>
+                <p>We couldn't find any hotels in our database.</p>
+              </div>
+            `);
             return;
+          }
+
+          // Filter by destination
+          let filteredHotels = hotels.filter(h =>
+            h.location?.toLowerCase().includes(destination.toLowerCase())
+          );
+
+          if (filteredHotels.length === 0) {
+            $("#hotelsContainer").html(`
+              <div class="col-12 no-results">
+                <i class="fas fa-search"></i>
+                <h3>No Hotels Match Your Search</h3>
+                <p>Try adjusting your search criteria or browse all hotels.</p>
+                <button class="btn btn-primary mt-3" onclick="$('#destination').val(''); fetchHotels();">
+                  Show All Hotels
+                </button>
+              </div>
+            `);
+            return;
+          }
+
+          // Render hotels
+          renderHotels(filteredHotels, people, checkin, checkout);
+        },
+        error: function () {
+          $("#hotelsContainer").html(`
+            <div class="col-12 no-results">
+              <i class="fas fa-exclamation-triangle"></i>
+              <h3>Failed to Load Hotels</h3>
+              <p>Please try again later or contact support if the problem persists.</p>
+            </div>
+          `);
+        }
+      });
+    }
+
+    function renderHotels(hotels, roomType, checkin, checkout) {
+      const hotelsContainer = $("#hotelsContainer");
+      hotelsContainer.empty();
+
+      const fallbackImage = './assets/images/colombo.jpeg';
+
+      hotels.forEach(hotel => {
+        // Build full image URL if missing or invalid
+        let imageUrl = fallbackImage;
+        if (hotel.image) {
+          if (hotel.image.startsWith('http')) {
+            imageUrl = hotel.image;
+          } else {
+            imageUrl = `./assets/images/colombo.jpeg`;
+          }
         }
 
-        if (!orderId || !firstName || !lastName || !email) {
-            await Swal.fire({
-                title: 'Missing Information!',
-                text: 'Please fill in all required fields.',
-                icon: 'warning',
-                confirmButtonText: 'OK',
-                background: 'rgba(255, 255, 255, 0.95)',
-                backdrop: 'rgba(0, 0, 0, 0.4)'
-            });
-            return;
-        }
-
-        const result = await Swal.fire({
-            title: 'Confirm Payment',
-            html: `
-                <div style="text-align: left; margin: 20px 0;">
-                    <strong>Amount:</strong> LKR ${amount.toFixed(2)}<br>
-                    <strong>Order ID:</strong> ${orderId}<br>
-                    <strong>Name:</strong> ${firstName} ${lastName}<br>
-                    <strong>Email:</strong> ${email}
+        // Generate random rating for demo purposes
+        const rating = Math.floor(Math.random() * 2) + 4; // 4 or 5 stars
+        
+        const hotelCard = `
+          <div class="col-lg-6 col-xl-4" data-aos="fade-up">
+            <div class="hotel-card">
+              <img src="${imageUrl}" 
+                   class="hotel-image" 
+                   alt="${hotel.name}"
+                   onerror="this.onerror=null; this.src='${fallbackImage}'">
+              <div class="card-body">
+                <h5 class="card-title">${hotel.name}</h5>
+                <div class="rating">
+                  ${'<i class="fas fa-star"></i>'.repeat(rating)}
+                  ${'<i class="far fa-star"></i>'.repeat(5 - rating)}
+                  <span class="ms-2">${rating}.0</span>
                 </div>
-            `,
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonText: 'Proceed to PayHere',
-            cancelButtonText: 'Cancel',
-            background: 'rgba(255, 255, 255, 0.95)',
-            backdrop: 'rgba(0, 0, 0, 0.4)'
-        });
+                <p class="hotel-location">
+                  <i class="fas fa-map-marker-alt"></i> ${hotel.location}
+                </p>
+                <p class="hotel-description">${hotel.description || "Experience luxury and comfort at this beautiful property."}</p>
+                <button type="button" class="btn seeAvailability" 
+                        data-hotel-id="${hotel.id}" 
+                        data-hotel-name="${hotel.name}"
+                        data-hotel-location="${hotel.location}"
+                        data-hotel-description="${hotel.description}"
+                        data-hotel-image="${hotel.image}"
+                        data-room-type="${roomType}"
+                        data-checkin="${checkin}"
+                        data-checkout="${checkout}">
+                  <i class="fas fa-calendar-check me-2"></i>Check Availability
+                </button>
+              </div>
+            </div>
+          </div>
+        `;
 
+        hotelsContainer.append(hotelCard);
+      });
+    }
+
+    // Click handler for "Check Availability" button
+    $(document).on("click", ".seeAvailability", function () {
+      // Store all hotel data in localStorage
+      const hotelData = {
+        id: $(this).data("hotel-id"),
+        name: $(this).data("hotel-name"),
+        location: $(this).data("hotel-location"),
+        description: $(this).data("hotel-description"),
+        image: $(this).data("hotel-image"),
+        roomType: $(this).data("room-type"),
+        checkin: $(this).data("checkin"),
+        checkout: $(this).data("checkout")
+      };
+
+      localStorage.setItem("selectedHotel", JSON.stringify(hotelData));
+      
+      // Navigate to hotel details page after a brief delay
+      setTimeout(() => {
+        window.location.href = "Hotel.html";
+      }, 500);
+    });
+
+    function logout() {
+      Swal.fire({
+        title: 'Logout',
+        text: 'Are you sure you want to logout?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, logout!'
+      }).then((result) => {
         if (result.isConfirmed) {
-            await Swal.fire({
-                title: 'Redirecting...',
-                text: 'You will be redirected to PayHere payment gateway.',
-                icon: 'info',
-                timer: 2000,
-                timerProgressBar: true,
-                showConfirmButton: false,
-                background: 'rgba(255, 255, 255, 0.95)',
-                backdrop: 'rgba(0, 0, 0, 0.4)'
-            });
+          // Clear all stored data related to user session & search
+          localStorage.removeItem("jwtToken");
+          localStorage.removeItem("checkin");
+          localStorage.removeItem("checkout");
+          localStorage.removeItem("destination");
+          localStorage.removeItem("email");
+          localStorage.removeItem("people");
+          localStorage.removeItem("role");
+          localStorage.removeItem("selectedHotel");
 
-            // Here you would normally submit to PayHere
-            // For demo purposes, we'll just show a success message
-            setTimeout(async () => {
-                await Swal.fire({
-                    title: 'Payment Gateway Ready!',
-                    text: 'In a real implementation, you would be redirected to PayHere now.',
-                    icon: 'success',
-                    confirmButtonText: 'OK',
-                    background: 'rgba(255, 255, 255, 0.95)',
-                    backdrop: 'rgba(0, 0, 0, 0.4)'
-                });
-            }, 2000);
+          showAlert('success', 'Logged Out', 'You have been successfully logged out');
+          
+          setTimeout(() => {
+            window.location.href = "Login.html";
+          }, 1500);
         }
-    });
-
-    // Auto-generate order ID
-    document.getElementById('paymentType').addEventListener('change', () => {
-        if (paymentTypeSelect.value === 'card') {
-            setTimeout(() => {
-                const orderId = 'ORD-' + Date.now();
-                document.getElementById('orderId').value = orderId;
-            }, 100);
-        }
-    });
-</script>
-
+      });
+    }
+  </script>
 </body>
 </html>
