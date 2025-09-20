@@ -126,6 +126,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/bookings/**").permitAll()
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/uploads/**").permitAll()
+                        .requestMatchers("/api/reports/payments/**").authenticated()
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(session ->

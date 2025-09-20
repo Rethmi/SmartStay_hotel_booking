@@ -450,6 +450,44 @@
             cursor: pointer;
         }
 
+        /* Video Modal Styles */
+        .video-modal .modal-content {
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            border: none;
+        }
+        
+        .video-modal .modal-header {
+            border-bottom: none;
+            padding: 1rem 1.5rem;
+            background-color: var(--secondary);
+            color: white;
+        }
+        
+        .video-modal .modal-body {
+            padding: 0;
+        }
+        
+        .video-modal .btn-close {
+            filter: invert(1);
+        }
+        
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            height: 0;
+            overflow: hidden;
+        }
+        
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 0;
+        }
+
         /* Responsive Adjustments */
         @media (max-width: 992px) {
             .hero-title {
@@ -473,6 +511,10 @@
             .sidebar {
                 width: 100%;
                 right: -100%;
+            }
+            
+            .video-modal .modal-dialog {
+                margin: 1rem;
             }
         }
     </style>
@@ -535,7 +577,7 @@
       <p class="hero-subtitle">Experience the finest hotels in Sri Lanka...</p>
       <div class="d-flex gap-3">
         <a href="#destinations-section" class="btn btn-primary">Explore Destinations</a>
-        <button class="btn btn-outline-light">Watch Video</button>
+        <button class="btn btn-outline-light" data-bs-toggle="modal" data-bs-target="#videoModal">Watch Video</button>
       </div>
     </div>
   </div>
@@ -749,6 +791,24 @@
         </div>
     </footer>
     </section>
+
+    <!-- Video Modal -->
+    <div class="modal fade video-modal" id="videoModal" tabindex="-1" aria-labelledby="videoModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="videoModalLabel">Experience Luxury Stays in Sri Lanka</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="video-container">
+                        <!-- Replace with your actual video embed code -->
+                         <iframe width="560" height="315" src="https://www.youtube.com/embed/qemqQHaeCYo?si=MFecHVHcGJ9oRiOQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Profile Sidebar -->
     <div class="sidebar" id="profileSidebar">
