@@ -91,8 +91,6 @@
   <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
   <script src="./js/sign.js"></script>
 
-   
-
 <script>
 $(document).ready(function () {
 
@@ -162,11 +160,21 @@ $(document).ready(function () {
             contentType: "application/json",
             data: JSON.stringify({ username, email, password, role: "USER" }),
             success: function () {
-                alert("✅ Registration Successful! You can log in now.");
-                window.location.href = "Login.html";
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Registration Successful!',
+                    text: 'You can now log in to your account.',
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    window.location.href = "Login.html";
+                });
             },
             error: function (xhr) {
-                alert("❌ Registration Failed. Status: " + xhr.status);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Registration Failed',
+                    text: 'Status: ' + xhr.status
+                });
             }
         });
     });
@@ -201,13 +209,13 @@ $(document).ready(function () {
                     if (userRole === "ADMIN") window.location.href = "AdminDashBoard.html";
                     else if (userRole === "USER") window.location.href = "CustomerDashboard.html";
                     else if (userRole === "MANAGER") window.location.href = "ManagerDashBoard.html";
-                    else alert("Invalid Role. Please contact support.");
+                    else Swal.fire("Invalid Role", "Please contact support.", "warning");
                 } else {
-                    alert("❌ Login Failed: " + (res.message || "Unknown error"));
+                    Swal.fire("Login Failed", res.message || "Unknown error", "error");
                 }
             },
             error: function () {
-                alert("❌ Login Error: Invalid credentials or server error.");
+                Swal.fire("Login Error", "Invalid credentials or server error.", "error");
             }
         });
     });
