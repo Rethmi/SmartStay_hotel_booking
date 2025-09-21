@@ -59,6 +59,8 @@
 
 ![Payment](screenshot/sandbox.png)
 
+*Email*
+![Email](screenshot/email.png)
 
 *Report Invoice*
 ![Invoice](screenshot/Invoice.png)
