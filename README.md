@@ -1,6 +1,6 @@
 # 🏨 SmartStay - Hotel Management System
  
-**A complete Hotel Management System built with Spring Boot to streamline hotel operations and enhance the guest booking experience.**
+**A full-stack Hotel Management System built with Java Spring Boot and MySQL, featuring secure authentication, hotel and room management, online reservations, PayHere payment integration, email OTP verification, an AI chatbot, invoice generation, and an admin dashboard to streamline hotel operations and enhance the guest booking experience.**
  
 ---
  
